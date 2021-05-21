@@ -43,7 +43,6 @@
             }, 5000);
         }
     });
-
 </script>
 <style global lang="postcss">
     @tailwind base;
@@ -67,10 +66,10 @@
     <div class="max-w-md flex-grow my-10">
         <Form/>
     </div>
-    <footer class="p-4 text-center">
+    <footer class="p-4 text-center flex flex-row w-full justify-center flex-grow">
         <h3 on:click={() => {
                     shell.openExternal('https://github.com/LucidVR/opengloves-ui');
-                }} class="cursor-pointer text-blue-500">Source</h3>
+                }} class="cursor-pointer text-blue-500">Source code licenced under MIT</h3>
     </footer>
 </div>
 

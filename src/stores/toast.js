@@ -6,7 +6,6 @@ const severity = {
     SUCCESS: 2,
 };
 
-//Overlays are pages which should show on top of a page which is currently open, like a login page, as we want to stay on the same page as before.
 const CreateToastStore = () => {
     const {subscribe, set, update} = writable([]);
 

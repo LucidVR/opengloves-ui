@@ -1,5 +1,5 @@
 {
-  "name": "opengloves-ui",
+  "name": "openglove-ui",
   "description": "OpenGloves UI",
   "main": "main.js",
   "author": "Danwillm",
@@ -15,6 +15,7 @@
     "url": "https://github.com/LucidVR/opengloves-ui/issues"
   },
   "build": {
+    "compression": "maximum",
     "icon": "public/favicon.png",
     "productName": "OpenGloves UI",
     "files": [
@@ -22,7 +23,11 @@
       "main.js"
     ],
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "icon": "public/favicon.png"
+    },
+    "portable": {
+      "artifactName": "${name}.${ext}"
     },
     "linux": {},
     "mac": {}
@@ -39,6 +44,7 @@
   "dependencies": {
     "@tailwindcss/forms": "^0.3.2",
     "@tailwindcss/jit": "^0.1.18",
+    "@tauri-apps/cli": "^1.0.0-beta.2",
     "autoprefixer": "^10.2.5",
     "electron-serve": "^1.1.0",
     "hjson": "^3.2.2",
