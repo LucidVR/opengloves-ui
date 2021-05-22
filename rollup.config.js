@@ -58,7 +58,12 @@ export default {
 		}),
 		css({
 			output: function (styles, styleNodes) {
-				fs.writeFileSync('public/build/bundle.css', styles);
+				const outputDir = 'public/build';
+				if (!fs.existsSync(outputDir)){
+					fs.mkdirSync(outputDir);
+				}
+
+				fs.writeFileSync(outputDir + '/bundle.css', styles);
 			}
 		}),
 		resolve({

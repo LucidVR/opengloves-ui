@@ -12,9 +12,6 @@ bower_components
 node_modules/
 jspm_packages/
 
-# Svelte Distribution
-public/build/
-
 # Electron Distribution
 dist
 
