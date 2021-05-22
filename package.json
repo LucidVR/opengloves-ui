@@ -14,40 +14,23 @@
   "bugs": {
     "url": "https://github.com/LucidVR/opengloves-ui/issues"
   },
-  "build": {
-    "compression": "maximum",
-    "icon": "public/favicon.png",
-    "productName": "OpenGloves UI",
-    "files": [
-      "public/**/*",
-      "main.js"
-    ],
-    "win": {
-      "target": "portable",
-      "icon": "public/favicon.png"
-    },
-    "portable": {
-      "artifactName": "${name}.${ext}"
-    },
-    "linux": {},
-    "mac": {}
-  },
   "scripts": {
     "rollup-build": "rollup -c",
-    "dev": "rollup -c -w",
+    "rollup-dev": "rollup -c -w",
     "start": "sirv public",
-    "electron": "wait-on http://localhost:5000 && electron .",
-    "electron-dev": "concurrently \"yarn run dev\" \"yarn run electron\"",
+    "start-tauri": "wait-on http://localhost:5000 && yarn tauri dev",
+    "dev": "concurrently \"yarn run rollup-dev\" \"yarn run start-tauri\"",
     "package": "electron-packager . OpenGloves UI --platform=win32 --arch=x64",
-    "build": "yarn run rollup-build && electron-builder"
+    "build": "yarn run rollup-build && yarn tauri build"
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.3.2",
     "@tailwindcss/jit": "^0.1.18",
+    "@tauri-apps/api": "^1.0.0-beta.1",
     "@tauri-apps/cli": "^1.0.0-beta.2",
     "autoprefixer": "^10.2.5",
-    "electron-serve": "^1.1.0",
-    "hjson": "^3.2.2",
+    "hjson": "https://github.com/danwillm/hjson-js",
+    "path": "^0.12.7",
     "postcss": "8.3.0",
     "postcss-load-config": "^3.0.1",
     "postcss-nesting": "^8.0.1",
@@ -58,11 +41,6 @@
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "concurrently": "^6.1.0",
-    "electron": "^12.0.9",
-    "electron-builder": "^22.10.5",
-    "electron-packager": "^15.2.0",
-    "electron-rebuild": "^2.3.5",
-    "fa-svelte": "^3.1.0",
     "rollup": "^2.48.0",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
