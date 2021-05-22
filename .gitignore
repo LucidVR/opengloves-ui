@@ -26,3 +26,4 @@ private
 .idea/
 build/
 bin/
+src-tauri/resources/

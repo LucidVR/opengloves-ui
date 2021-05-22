@@ -1,32 +1,48 @@
-const HJSON = require('hjson');
-const fs = require('fs');
-const path = require('path');
+import HJSON from 'hjson'
+import { readTextFile, writeFile } from '@tauri-apps/api/fs'
+import {currentDir} from '@tauri-apps/api/path'
 
-//production
-let settingPath;
 
-if(process.env.PORTABLE_EXECUTABLE_DIR) {
-    console.log("production mode enabled");
-    settingPath = path.join(process.env.PORTABLE_EXECUTABLE_DIR, '../resources/settings/default.vrsettings');
-} else {
-    settingPath = '../driver/resources/settings/default.vrsettings';
+export const getSettingsPath = async () => {
+    let path = await currentDir();
+    path +=  '/resources/settings/default.vrsettings';
+
+    return path;
 }
 
-
-export const getConfiguration = () => {
-    const result = fs.readFileSync(settingPath, 'utf8');
+export const getConfiguration = async () => {
+    const result = await readTextFile(await getSettingsPath());
     return HJSON.parse(result, {keepWsc: true});
 };
 
-export const saveConfiguration = (saveObj) => {
-    const stringified = HJSON.stringify(saveObj, {
+export const createConfiguration = (configurationOptions, configurationItems) => {
+    let specialOptions = [];
+    Object.entries(configurationOptions).forEach(([key, value]) => {
+        let options = {}
+        if (value.multi) {
+            specialOptions.push({ key, value: value.selectedOption.key })
+            options = value.options[value.selectedOption.key].options
+            key = value.selectedOption.value
+        } else {
+            options = value.options
+        }
+
+        Object.entries(options).forEach(([k, v]) => configurationItems[key][k] = v.value);
+
+    })
+
+    specialOptions.forEach(v => {
+        configurationItems.driver_openglove[v.key] = v.value
+    });
+
+    return HJSON.stringify(configurationItems, {
         keepWsc: true,
         separator: true,
         quotes: 'all',
     });
-
-    fs.writeFileSync(settingPath, stringified);
 }
+
+export const saveConfiguration = async (string) => writeFile({contents: string, path: await getSettingsPath()});
 
 /***
  * Gets ids associated with each configuration object.

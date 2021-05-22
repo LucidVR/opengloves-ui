@@ -1,15 +1,15 @@
 <script>
-  import { extractItems, getConfiguration, saveConfiguration } from './utils/configurationHandler'
+  import { createConfiguration, extractItems, getConfiguration, saveConfiguration } from './utils/configurationHandler'
   import ToastStore from './stores/toast'
 
   import Select from './components/Select.svelte'
   import { writable } from 'svelte/store'
   import { onMount } from 'svelte'
-  import ConfigItem from './components/Config/ConfigItem.svelte'
   import Accordion from './components/Accordion/Accordion.svelte'
   import ConfigList from './components/Config/ConfigList.svelte'
   import DefaultButton from './components/Button/DefaultButton.svelte'
   import OrangeButton from './components/Button/OrangeButton.svelte'
+  import { getSettingsPath } from './utils/configurationHandler'
 
   const formData = writable({
     driver_config: {
@@ -26,7 +26,7 @@
 
   onMount(async () => {
     try {
-      const result = getConfiguration()
+      const result = await getConfiguration();
       configurationItems = result
 
       configurationOptions = extractItems(result)
@@ -35,30 +35,14 @@
       console.trace(e)
       ToastStore.addToast(ToastStore.severity.ERROR, 'Unable to load configuration, please open an issue on GitHub: ' + e.message)
     }
+  });
 
-  })
 
-  const onFormSubmit = () => {
+
+  const onFormSubmit = async () => {
     try {
-      let specialOptions = []
-      Object.entries(configurationOptions).forEach(([key, value]) => {
-        let options = {}
-        if (value.multi) {
-          specialOptions.push({ key, value: value.selectedOption.key })
-          options = value.options[value.selectedOption.key].options
-          key = value.selectedOption.value
-        } else {
-          options = value.options
-        }
-
-        Object.entries(options).forEach(([k, v]) => configurationItems[key][k] = v.value);
-
-      })
-
-      specialOptions.forEach(v => {
-        configurationItems.driver_openglove[v.key] = v.value
-      })
-      saveConfiguration(configurationItems)
+      const result = createConfiguration(configurationOptions, configurationItems);
+      await saveConfiguration(result);
       ToastStore.addToast(ToastStore.severity.SUCCESS, 'Success saving configuration. Please restart SteamVR for the changes to take effect.')
     } catch (e) {
       console.trace(e)
@@ -67,6 +51,22 @@
   }
 
   const copyConfigurationToClipboard = () => {
+    try {
+      const result = createConfiguration(configurationOptions, configurationItems);
+
+      const el = document.createElement('textarea');
+      el.value = result;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+
+      ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully copied to clipboard.');
+    } catch (e) {
+      console.trace(e);
+
+      ToastStore.addToast(ToastStore.severity.ERROR, 'Could not copy configuration to clipboard.');
+    }
 
   }
 </script>
