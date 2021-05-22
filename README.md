@@ -19,6 +19,17 @@ Can be opened by launching the OpenGloves app in steam.
  ## Contributing
 Pull requests are very welcome. For major changes, please open an issue first to discuss what you would like to change.
 
+### Building
+This app uses Tauri under the hood, which can be slightly tricky to get set up with.  
+Refer here for how to get started with Tauri: https://tauri.studio/en/docs/getting-started/setup-windows
+
+Once installed, to launch the dev server:
+* `yarn run dev`
+  * note: you might have to create a build folder in (`public/`)
+
+To build:
+* `yarn run build`
+  * Artifacts will be built to: `src-tauri/targets/release`
 
 ## Discord
 https://discord.gg/RjV9T8jN2G
