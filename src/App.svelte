@@ -5,7 +5,6 @@
   import { flip } from 'svelte/animate'
   import { crossfade } from 'svelte/transition'
   import { quintOut } from 'svelte/easing'
-  import { open } from '@tauri-apps/api/shell'
 
   import ToastComponent from './components/Toast/Toast.svelte'
 
@@ -65,7 +64,7 @@
         <Form/>
     </div>
     <footer class="p-4 text-center flex flex-row w-full justify-center flex-grow">
-        <h3 on:click={() => open('https://github.com/LucidVR/opengloves-ui')}
+        <h3 on:click={() => require('electron').shell.openExternal('https://github.com/LucidVR/opengloves-ui')}
             class="cursor-pointer text-blue-500">
             Source code licenced under MIT
         </h3>

@@ -1,21 +1,28 @@
-import HJSON from 'hjson'
-import { readTextFile, writeFile } from '@tauri-apps/api/fs'
-import {currentDir} from '@tauri-apps/api/path'
 
 
-export const getSettingsPath = async () => {
-    let path = await currentDir();
-    path +=  '/resources/settings/default.vrsettings';
+export const getSettingsPath = () => {
+    const path = require('path');
+    let settingPath
+    if(process.env.PORTABLE_EXECUTABLE_DIR) {
+        console.log("production mode enabled");
+        settingPath = path.join(process.env.PORTABLE_EXECUTABLE_DIR, 'resources/settings/default.vrsettings');
+    } else {
+        settingPath = './resources/settings/default.vrsettings';
+    }
 
-    return path;
+    return settingPath;
 }
 
 export const getConfiguration = async () => {
-    const result = await readTextFile(await getSettingsPath());
+    const HJSON = require('hjson');
+    const fs = require('fs');
+
+    const result = fs.readFileSync(getSettingsPath(), {encoding: 'utf-8'});
     return HJSON.parse(result, {keepWsc: true});
 };
 
 export const createConfiguration = (configurationOptions, configurationItems) => {
+    const HJSON = require('hjson');
     let specialOptions = [];
     Object.entries(configurationOptions).forEach(([key, value]) => {
         let options = {}
@@ -42,13 +49,18 @@ export const createConfiguration = (configurationOptions, configurationItems) =>
     });
 }
 
-export const saveConfiguration = async (string) => writeFile({contents: string, path: await getSettingsPath()});
+export const saveConfiguration = async (string) => {
+    const fs = require('fs');
+
+    fs.writeFileSync(getSettingsPath(), string, {encoding: 'utf-8'});
+}
 
 /***
  * Gets ids associated with each configuration object.
  * @param hjson
  */
 export const extractItems = (hjson) => {
+    const HJSON = require('hjson');
 
     const comments = HJSON.comments.extract(hjson);
 
