@@ -1,28 +1,20 @@
+import HJSON from 'hjson';
 
-
-export const getSettingsPath = () => {
-    const path = require('path');
-    let settingPath
-    if(process.env.PORTABLE_EXECUTABLE_DIR) {
-        console.log("production mode enabled");
-        settingPath = path.join(process.env.PORTABLE_EXECUTABLE_DIR, 'resources/settings/default.vrsettings');
-    } else {
-        settingPath = './resources/settings/default.vrsettings';
-    }
-
-    return settingPath;
-}
+const settingsPath = './resources/settings/default.vrsettings';
 
 export const getConfiguration = async () => {
-    const HJSON = require('hjson');
-    const fs = require('fs');
+    try {
+        const result = await Neutralino.filesystem.readFile({
+            fileName: settingsPath
+        });
+        return HJSON.parse(result.data, {keepWsc: true});
+    } catch (e) {
+        console.trace(e);
+    }
 
-    const result = fs.readFileSync(getSettingsPath(), {encoding: 'utf-8'});
-    return HJSON.parse(result, {keepWsc: true});
 };
 
 export const createConfiguration = (configurationOptions, configurationItems) => {
-    const HJSON = require('hjson');
     let specialOptions = [];
     Object.entries(configurationOptions).forEach(([key, value]) => {
         let options = {}
@@ -49,10 +41,9 @@ export const createConfiguration = (configurationOptions, configurationItems) =>
     });
 }
 
-export const saveConfiguration = async (string) => {
-    const fs = require('fs');
+export const saveConfiguration = async (data) => {
 
-    fs.writeFileSync(getSettingsPath(), string, {encoding: 'utf-8'});
+    window.fs.writeFile({fileName: settingsPath, data});
 }
 
 /***
@@ -60,8 +51,6 @@ export const saveConfiguration = async (string) => {
  * @param hjson
  */
 export const extractItems = (hjson) => {
-    const HJSON = require('hjson');
-
     const comments = HJSON.comments.extract(hjson);
 
     //merge the comments back in

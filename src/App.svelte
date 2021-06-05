@@ -64,7 +64,9 @@
         <Form/>
     </div>
     <footer class="p-4 text-center flex flex-row w-full justify-center flex-grow">
-        <h3 on:click={() => require('electron').shell.openExternal('https://github.com/LucidVR/opengloves-ui')}
+        <h3 on:click={() => Neutralino.app.open({
+  url: 'https://github.com/LucidVR/opengloves-ui'
+})}
             class="cursor-pointer text-blue-500">
             Source code licenced under MIT
         </h3>

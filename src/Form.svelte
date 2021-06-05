@@ -9,7 +9,6 @@
   import ConfigList from './components/Config/ConfigList.svelte'
   import DefaultButton from './components/Button/DefaultButton.svelte'
   import OrangeButton from './components/Button/OrangeButton.svelte'
-  import { getSettingsPath } from './utils/configurationHandler'
 
   const formData = writable({
     driver_config: {

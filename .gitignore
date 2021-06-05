@@ -12,15 +12,14 @@ bower_components
 node_modules/
 jspm_packages/
 
-# Electron Distribution
-dist
+dist/
 
-# Project Build Automation Directory
 private
 
-# Desktop Services Store on macOS
 .DS_Store
 .idea/
 build/
 bin/
-src-tauri/resources/
+
+opengloves-ui-*
+*.dll

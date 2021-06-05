@@ -74,9 +74,9 @@ export default {
 			sourceMap: false,
 		}),
 
-		!production && serve(),
+		//!production && serve(),
 
-		!production && livereload('public'),
+		//!production && livereload('public'),
 
 		production && terser()
 	],
