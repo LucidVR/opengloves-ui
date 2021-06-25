@@ -5,7 +5,7 @@ import {currentDir} from '@tauri-apps/api/path'
 
 export const getSettingsPath = async () => {
     let path = await currentDir();
-    path +=  '/resources/settings/default.vrsettings';
+    path +=  '../resources/settings/default.vrsettings';
 
     return path;
 }

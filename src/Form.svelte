@@ -9,7 +9,8 @@
   import ConfigList from './components/Config/ConfigList.svelte'
   import DefaultButton from './components/Button/DefaultButton.svelte'
   import OrangeButton from './components/Button/OrangeButton.svelte'
-  import { getSettingsPath } from './utils/configurationHandler'
+
+  import {writeText} from '@tauri-apps/api/clipboard';
 
   const formData = writable({
     driver_config: {
@@ -54,12 +55,7 @@
     try {
       const result = createConfiguration(configurationOptions, configurationItems);
 
-      const el = document.createElement('textarea');
-      el.value = result;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
+      writeText(result);
 
       ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully copied to clipboard.');
     } catch (e) {
