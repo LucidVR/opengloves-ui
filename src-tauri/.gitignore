@@ -2,3 +2,6 @@
 # will have compiled files and executables
 /target/
 WixTools
+
+openglove_ui_*
+openvr_api.dll

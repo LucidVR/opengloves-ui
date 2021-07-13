@@ -22,7 +22,9 @@
         "icons/icon.ico"
       ],
       "resources": [],
-      "externalBin": [],
+      "externalBin": [
+        "openglove_ui_sidecar"
+      ],
       "copyright": "",
       "category": "DeveloperTool",
       "shortDescription": "",
@@ -56,7 +58,8 @@
         "path": true
       },
       "shell": {
-        "open": true
+        "open": true,
+        "execute": true
       }
     },
     "windows": [

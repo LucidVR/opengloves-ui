@@ -1,26 +1,35 @@
-import HJSON from 'hjson'
-import { readTextFile, writeFile } from '@tauri-apps/api/fs'
-import {currentDir} from '@tauri-apps/api/path'
+import HJSON from 'hjson';
+import path from 'path';
 
+import {parse, stringify, assign} from "comment-json";
 
-export const getSettingsPath = async () => {
-    let path = await currentDir();
-    path +=  '../resources/settings/default.vrsettings';
+import {Command} from '@tauri-apps/api/shell'
 
-    return path;
-}
+import {readTextFile} from '@tauri-apps/api/fs'
 
 export const getConfiguration = async () => {
-    const result = await readTextFile(await getSettingsPath());
-    return HJSON.parse(result, {keepWsc: true});
+    const text = await readTextFile('../resources/settings/default.vrsettings');
+    const parsed = HJSON.parse(text, {keepWsc: true});
+    const configText = stringify(parse(text, undefined, true));
+    const configValues = await getValuesForConfiguration(configText);
+    const values = JSON.parse(configValues);
+    Object.keys(parsed).forEach(k => {
+        Object.keys(parsed[k]).forEach(k2 => {
+            parsed[k][k2] = values[k][k2];
+        });
+    });
+    return parsed;
 };
 
+export const getValuesForConfiguration = async (configObj) => {
+    return await openSidecar("get", configObj);
+}
 export const createConfiguration = (configurationOptions, configurationItems) => {
     let specialOptions = [];
     Object.entries(configurationOptions).forEach(([key, value]) => {
         let options = {}
         if (value.multi) {
-            specialOptions.push({ key, value: value.selectedOption.key })
+            specialOptions.push({key, value: value.selectedOption.key})
             options = value.options[value.selectedOption.key].options
             key = value.selectedOption.value
         } else {
@@ -36,20 +45,36 @@ export const createConfiguration = (configurationOptions, configurationItems) =>
     });
 
     return HJSON.stringify(configurationItems, {
-        keepWsc: true,
+        keepWsc: false,
         separator: true,
         quotes: 'all',
     });
 }
 
-export const saveConfiguration = async (string) => writeFile({contents: string, path: await getSettingsPath()});
+const openSidecar = async (command, data) => {
+    const sidecar = Command.sidecar('openglove_ui_sidecar');
+
+    const promiseDataReceived = new Promise((resolve, reject) => {
+        sidecar.stdout.on('data', e => resolve(e));
+        sidecar.stderr.on('data', e => reject(e));
+    });
+
+    const child = await sidecar.spawn();
+    await child.write(command + "\n");
+    await child.write(data + "\n");
+
+    return await promiseDataReceived;
+
+}
+export const saveConfiguration = async (string) => {
+    await openSidecar("set", JSON.stringify(JSON.parse(string)).replaceAll(' ', ''));
+};
 
 /***
  * Gets ids associated with each configuration object.
  * @param hjson
  */
 export const extractItems = (hjson) => {
-
     const comments = HJSON.comments.extract(hjson);
 
     //merge the comments back in
@@ -68,7 +93,6 @@ export const extractItems = (hjson) => {
         if (objValue['__type']) {
             const split = objValue['__type'].replace(' ', '').split(':');
 
-            //key: type of configuration, ie. communication_protocol, encoding_protocol...
             const key = split[0];
             const value = parseInt(split[1]);
 
@@ -79,10 +103,10 @@ export const extractItems = (hjson) => {
                     options: {},
                 };
             }
-            if(hjson.driver_openglove[key] === value) {
+            if (hjson.driver_openglove[key] === value) {
                 result[key].selectedOption = {
-                  key: value,
-                  value: objKey,
+                    key: value,
+                    value: objKey,
                 };
             }
 
@@ -100,12 +124,13 @@ export const extractItems = (hjson) => {
         }
     });
     return result;
+
 };
 
 const getAvailableConfigurationEntries = (options, comments) => {
     let result = {};
     Object.entries(options).forEach(([k, v]) => {
-        if(k !== '__type' && k !== '__title')  result[k] = {
+        if (k !== '__type' && k !== '__title') result[k] = {
             value: v,
             title: comments?.[k]?.a ? parseComment(comments?.[k]?.a).title : k,
         }
@@ -115,7 +140,6 @@ const getAvailableConfigurationEntries = (options, comments) => {
 }
 
 const parseComment = (comment) => {
-    //split at each property
     const split = comment.replace(/\/\//g, '').replace(' ', '').split(',');
 
     let result = {};
