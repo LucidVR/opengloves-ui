@@ -31,7 +31,7 @@ To build:
 * `yarn run build`
   * Artifacts will be built to: `src-tauri/targets/release`
 
-## Discord
-https://discord.gg/RjV9T8jN2G
+## Community Discord Server
+https://discord.gg/lucidvr
 
 
