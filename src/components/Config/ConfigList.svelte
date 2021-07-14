@@ -1,13 +1,13 @@
 <script>
     import ConfigItem from "./ConfigItem.svelte";
 
-    export let configItems = {};
-    export let hiddenKeys = [];
+    export let configItems;
     export let onValueChange = () => {};
+    export let hiddenKeys = [];
 </script>
 
-{#each Object.entries(configItems) as [k, v]}
+{#each Object.keys(configItems) as k}
     {#if !hiddenKeys.includes(k)}
-        <ConfigItem title={v.title} bind:value={v.value} key={k} onChange={v => onValueChange(k, v)}/>
+        <ConfigItem title={k} bind:value={configItems[k]} key={k} />
     {/if}
 {/each}

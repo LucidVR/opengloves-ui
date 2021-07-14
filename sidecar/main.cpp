@@ -62,6 +62,7 @@ int GetSettings() {
 
 int SetSettings() {
 	std::string s;
+
 	std::getline(std::cin >> std::ws, s);
 
 	try
