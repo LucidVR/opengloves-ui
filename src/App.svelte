@@ -1,45 +1,46 @@
 <script>
+    import Form from './Form.svelte'
+    import ToastStore from './stores/toast'
+    import {flip} from 'svelte/animate'
+    import {crossfade} from 'svelte/transition'
+    import {quintOut} from 'svelte/easing'
+    import {open} from '@tauri-apps/api/shell'
 
-  import Form from './Form.svelte'
-  import ToastStore from './stores/toast'
-  import { flip } from 'svelte/animate'
-  import { crossfade } from 'svelte/transition'
-  import { quintOut } from 'svelte/easing'
+    import ToastComponent from './components/Toast/Toast.svelte'
+    import DefaultButton from "./components/Button/DefaultButton.svelte";
 
-  import ToastComponent from './components/Toast/Toast.svelte'
+    const [send, receive] = crossfade({
+        duration: d => Math.sqrt(d * 200),
 
-  const [send, receive] = crossfade({
-    duration: d => Math.sqrt(d * 200),
+        fallback(node, params) {
+            const style = getComputedStyle(node)
+            const transform = style.transform === 'none' ? '' : style.transform
 
-    fallback (node, params) {
-      const style = getComputedStyle(node)
-      const transform = style.transform === 'none' ? '' : style.transform
-
-      return {
-        duration: 600,
-        easing: quintOut,
-        css: t => `
+            return {
+                duration: 600,
+                easing: quintOut,
+                css: t => `
 					transform: ${transform} scale(${t});
 					opacity: ${t}
 				`
-      }
-    }
-  })
+            }
+        }
+    })
 
-  let visibleToasts = []
-  ToastStore.subscribe(e => {
-    //we have received a toast update
-    if (e.length > visibleToasts.length) {
-      //We have a new toast, add it to the visible toasts
+    let visibleToasts = []
+    ToastStore.subscribe(e => {
+        //we have received a toast update
+        if (e.length > visibleToasts.length) {
+            //We have a new toast, add it to the visible toasts
 
-      visibleToasts = [...visibleToasts, [e[e.length - 1].message, e[e.length - 1].severity, e.length - 1, ToastComponent]]
+            visibleToasts = [...visibleToasts, [e[e.length - 1].message, e[e.length - 1].severity, e.length - 1, ToastComponent]]
 
-      window.setTimeout(() => {
-        visibleToasts = visibleToasts.slice(1, visibleToasts.length)
-        ToastStore.popToast()
-      }, 5000)
-    }
-  })
+            window.setTimeout(() => {
+                visibleToasts = visibleToasts.slice(1, visibleToasts.length)
+                ToastStore.popToast()
+            }, 5000)
+        }
+    })
 </script>
 <style global lang="postcss">
     @tailwind base;
@@ -64,9 +65,7 @@
         <Form/>
     </div>
     <footer class="p-4 text-center flex flex-row w-full justify-center flex-grow">
-        <h3 on:click={() => Neutralino.app.open({
-  url: 'https://github.com/LucidVR/opengloves-ui'
-})}
+        <h3 on:click={() => open('https://github.com/LucidVR/opengloves-ui')}
             class="cursor-pointer text-blue-500">
             Source code licenced under MIT
         </h3>

@@ -3,6 +3,8 @@
     export let value;
 
     let isNumber = typeof value === 'number';
+
+    export let onChange = () => {};
 </script>
 
 <p class="block text-sm font-medium text-gray-700">
