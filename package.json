@@ -24,14 +24,14 @@
     "build": "yarn run rollup-build && yarn tauri build"
   },
   "dependencies": {
-    "@tauri-apps/api": "^1.0.0-beta.5",
-    "@tauri-apps/cli": "^1.0.0-beta.5",
-    "autoprefixer": "^10.2.5",
+    "@tauri-apps/api": "^1.0.0-beta.4",
+    "@tauri-apps/cli": "^1.0.0-beta.4",
     "buffer": "^6.0.3",
     "comment-json": "^4.1.0",
     "svelte-loading-spinners": "^0.1.6"
   },
   "devDependencies": {
+    "autoprefixer": "^10.2.5",
     "@rollup/plugin-inject": "^4.0.2",
     "@tailwindcss/forms": "^0.3.2",
     "@tailwindcss/jit": "^0.1.18",

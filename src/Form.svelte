@@ -12,6 +12,7 @@
     import {writeText} from '@tauri-apps/api/clipboard';
     import SuspenseButton from "./components/Button/SuspenseButton.svelte";
     import Suspense from "./components/Suspense.svelte";
+    import { fade } from 'svelte/transition';
 
     const formData = writable({
         driver_config: {
@@ -71,28 +72,31 @@
             <div class="shadow rounded">
                 <div class="px-4 py-5 space-y-6">
                     <Suspense suspense={!loaded}>
-                    {#each Object.entries(configurationOptions) as [key, value]}
-                        <Accordion title={value.title}>
-                            {#if Array.isArray(value.options)}
-                                <Select
-                                        onSelectItemChanged={selectedKey => {
+                    {#each Object.entries(configurationOptions) as [key, value], i}
+                        <div in:fade="{{delay: i * 100}}">
+                            <Accordion title={value.title}>
+                                {#if Array.isArray(value.options)}
+                                    <Select
+                                            onSelectItemChanged={selectedKey => {
                                         configurationOptions.driver_openglove.options[key] = selectedKey;
                                     }}
-                                        options={Object.entries(value.options).map(([k, v]) => ({
+                                            options={Object.entries(value.options).map(([k, v]) => ({
                                         title: v.title,
                                         value: parseInt(k),
                                     }))}
-                                        defaultValue={configurationOptions.driver_openglove.options[key]}
-                                />
-                                <ConfigList
-                                        bind:configItems={value.options[configurationOptions.driver_openglove.options[key]].options} />
-                            {:else}
-                                <ConfigList
-                                        hiddenKeys={Object.keys(configurationOptions).map((k) => k)}
-                                        bind:configItems={configurationOptions[key].options}
-                                />
-                            {/if}
-                        </Accordion>
+                                            defaultValue={configurationOptions.driver_openglove.options[key]}
+                                    />
+                                    <ConfigList
+                                            bind:configItems={value.options[configurationOptions.driver_openglove.options[key]].options} />
+                                {:else}
+                                    <ConfigList
+                                            hiddenKeys={Object.keys(configurationOptions).map((k) => k)}
+                                            bind:configItems={configurationOptions[key].options}
+                                    />
+                                {/if}
+                            </Accordion>
+                        </div>
+
                     {/each}
                     </Suspense>
 
