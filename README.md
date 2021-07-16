@@ -20,24 +20,31 @@ Can be opened by launching the OpenGloves app in steam.
 Pull requests are very welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ### Building
-This app uses Tauri under the hood, which can be slightly tricky to get set up with.  
-Refer here for how to get started with Tauri: https://tauri.studio/en/docs/getting-started/setup-windows
-Once installed, to launch the dev server:
-* `yarn run dev`
-  * note: you might have to create a build folder in (`public/`)
+This app uses Tauri under the hood, which requires some extra setup.  
+* Refer here for how to get started with Tauri: https://tauri.studio/en/docs/getting-started/setup-windows
 
-To build:
-* `yarn run build`
-  * Artifacts will be built to: `src-tauri/targets/release`
 
-Once installed, to launch the dev server:
-* `yarn run dev`
-  * note: you might have to create a build folder in (`public/`)
+### Building Sidecar
+The interface uses a c++ backend (sidecar) to communicate to OpenVR, and must be built for the project to run.
+* In `sidecar/` make a directory `build/`
+* Navigate into build, run `cmake ..`
+* Open the Visual Studio project generated, build.
+* Copy build artifacts (`openglove_ui_sidecar-x86_64-pc-windows-msvc.exe` & `openvr_api.dll`) into `src-tauri/`
 
-To build:
-* `yarn run build`
-  * Artifacts will be built to: `src-tauri/targets/release`
-
+## Building the UI
+* Install dependencies
+    * `yarn install`
+    
+* Launch the dev server:
+    * `yarn run dev`
+        * This might take a while first time, but subsequent builds will be faster
+    
+* To build for production:
+    * `yarn run build`
+        * Artifacts will be built to: `src-tauri/targets/release`
+            * Webview2 is required to be installed if you are distributing just the both the ui and sidecar executables
+        * An installer is also located `src-tauri/targets/release/bundle-msi`
+           * This will install Webview2
 ## Community Discord Server
 https://discord.gg/lucidvr
 

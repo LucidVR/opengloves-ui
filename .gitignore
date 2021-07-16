@@ -21,6 +21,5 @@ private
 build/
 bin/
 
-opengloves-ui-*
-*.dll
-src-tauri/resources/
+src-tauri/openglove_ui_sidecar-x86_64-pc-windows-msvc.exe
+src-tauri/openvr_api.dll

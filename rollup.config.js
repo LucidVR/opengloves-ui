@@ -69,8 +69,7 @@ export default {
 				if (!fs.existsSync(outputDir)){
 					fs.mkdirSync(outputDir);
 				}
-
-				fs.writeFileSync(outputDir + '/bundle.css', styles);
+				fs.writeFileSync('public/build/bundle.css', styles);
 			}
 		}),
 		resolve({
@@ -78,9 +77,9 @@ export default {
 			dedupe: ['svelte']
 		}),
 
-		//!production && serve(),
+		!production && serve(),
 
-		//!production && livereload('public'),
+		!production && livereload('public'),
 
 		production && terser()
 	],
