@@ -1,6 +1,5 @@
 <script>
-    export let onClick = async () => {
-    };
+    export let onClick = async () => {};
     let loading = false;
 </script>
 <button on:click={async () => {

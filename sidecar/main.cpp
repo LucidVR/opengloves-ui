@@ -38,6 +38,7 @@ int GetSettings() {
 					json[el.key()][el2.key()] = result;
 					break;
 				}
+				case nlohmann::json::value_t::number_unsigned:
 				case nlohmann::json::value_t::number_integer: {
 					int32_t result = vr::VRSettings()->GetInt32(el.key().c_str(), el2.key().c_str(), &err);
 					json[el.key()][el2.key()] = result;
@@ -72,10 +73,10 @@ int SetSettings() {
 		{
 			for (auto& el2 : el.value().items())
 			{
-				vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
-
 				//make sure we don't have a title
 				if (el2.key().find("__") != std::string::npos) continue;
+
+				vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
 
 				switch (el2.value().type()) {
 				case nlohmann::json::value_t::string:
@@ -87,9 +88,12 @@ int SetSettings() {
 				case nlohmann::json::value_t::number_float:
 					vr::VRSettings()->SetFloat(el.key().c_str(), el2.key().c_str(), el2.value().get<float>(), &err);
 					break;
+				case nlohmann::json::value_t::number_unsigned:
 				case nlohmann::json::value_t::number_integer:
 					vr::VRSettings()->SetInt32(el.key().c_str(), el2.key().c_str(), el2.value().get<int>(), &err);
 					break;
+				default:
+					std::cerr << "Error finding configuration property value of key1: " << el.key().c_str() << " key2: " << el2.key().c_str() << " value: " << el2.value().type_name() << std::endl;
 				}
 
 				if (err != vr::EVRSettingsError::VRSettingsError_None) {
