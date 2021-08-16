@@ -1,6 +1,7 @@
 <script>
-    import TextInput from '../TextInput.svelte'
-    import Select from "../Select.svelte";
+    import TextInput from '../Input/Text.svelte'
+    import Select from "../Input/Select.svelte";
+    import CheckBox from "../Input/CheckBox.svelte";
 
     export let key;
     export let value;
@@ -10,11 +11,7 @@
 </script>
 
 {#if typeof value === 'boolean'}
-    <Select onSelectItemChanged={n => {
-        value = n;
-        onChange(key, value);
-    }} label={title} defaultValue={value}
-            options={[{title: 'True', value: true}, {title: 'False', value: false}]}/>
+    <CheckBox bind:checked={value} label={title} />
 {:else}
     <TextInput bind:value={value} label={title} />
 {/if}

@@ -7,7 +7,7 @@
     import {open} from '@tauri-apps/api/shell'
 
     import ToastComponent from './components/Toast/Toast.svelte'
-    import DefaultButton from "./components/Button/DefaultButton.svelte";
+    import DefaultButton from "./components/Input/Button/DefaultButton.svelte";
 
     const [send, receive] = crossfade({
         duration: d => Math.sqrt(d * 200),

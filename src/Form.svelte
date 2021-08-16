@@ -2,15 +2,15 @@
     import {createConfiguration, parseConfiguration, getConfiguration, saveConfiguration} from './utils/configuration'
     import ToastStore from './stores/toast'
 
-    import Select from './components/Select.svelte'
+    import Select from './components/Input/Select.svelte'
     import {writable} from 'svelte/store'
     import {onMount} from 'svelte'
     import Accordion from './components/Accordion/Accordion.svelte'
     import ConfigList from './components/Config/ConfigList.svelte'
-    import OrangeButton from './components/Button/OrangeButton.svelte'
+    import OrangeButton from './components/Input/Button/OrangeButton.svelte'
 
     import {writeText} from '@tauri-apps/api/clipboard';
-    import SuspenseButton from "./components/Button/SuspenseButton.svelte";
+    import SuspenseButton from "./components/Input/Button/SuspenseButton.svelte";
     import Suspense from "./components/Suspense.svelte";
     import { fade } from 'svelte/transition';
 
