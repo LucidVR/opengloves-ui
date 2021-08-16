@@ -3,9 +3,11 @@
 ### This repository contains the user interface for configuration of the OpenGloves OpenVR driver.  
 Find it here: https://github.com/LucidVR/opengloves-driver
 
-This interface edits the `default.vrsettings` file located in the driver, which is otherwise done manually.  
+This interface reads the configuration keys from `default.vrsettings` specified in `../resources/settings/default.vrsettings` (relative to `src-tauri/`) to fetch the settings available (OpenVR doesn't seem to be able to do this), then fetches the user configurated settings via OpenVR. The `default.vrsettings` file is for default settings only, and an OpenVR Driver will look for settings found in the `steamvr.vrsettings` file, not the `default.vrsettings` the driver provides.
+
+
 This UI is **not** required for usage of the driver but is recommended for convenience.  
-Written in Svelte with Electron.
+Written in Svelte with Tauri.
 
 ## Installation and Usage
 The UI is included in the Steam release of the driver:
@@ -13,8 +15,6 @@ https://store.steampowered.com/app/1574050/
 
 Can be opened by launching the OpenGloves app in steam. 
 (Keep in mind this does not launch the driver, that's launched with SteamVR)
-
- __Important:__ Currently, the driver settings only update after closing and reopening SteamVR.
  
  ## Contributing
 Pull requests are very welcome. For major changes, please open an issue first to discuss what you would like to change.
