@@ -1,5 +1,5 @@
 <script>
-    import ToastStore from '../../stores/toast';
+    import ToastStore from '../stores/toast';
 
     export let severity = ToastStore.severity.SUCCESS;
     export let message = '';

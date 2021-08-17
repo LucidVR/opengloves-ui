@@ -1,13 +1,16 @@
 <script>
-    import Form from './Form.svelte'
-    import ToastStore from './stores/toast'
-    import {flip} from 'svelte/animate'
-    import {crossfade} from 'svelte/transition'
-    import {quintOut} from 'svelte/easing'
-    import {open} from '@tauri-apps/api/shell'
+    import Configuration from './pages/Configuration.svelte';
+    import Functions from "./pages/Functions.svelte";
+    import Status from "./pages/Status.svelte";
 
-    import ToastComponent from './components/Toast/Toast.svelte'
-    import DefaultButton from "./components/Input/Button/DefaultButton.svelte";
+    import ToastStore from './stores/toast';
+    import {flip} from 'svelte/animate';
+    import {crossfade} from 'svelte/transition';
+    import {quintOut} from 'svelte/easing';
+    import {open} from '@tauri-apps/api/shell';
+
+    import ToastComponent from './components/Toast.svelte';
+    import Menu from "./components/Menu.svelte";
 
     const [send, receive] = crossfade({
         duration: d => Math.sqrt(d * 200),
@@ -31,23 +34,23 @@
     ToastStore.subscribe(e => {
         //we have received a toast update
         if (e.length > visibleToasts.length) {
-            //We have a new toast, add it to the visible toasts
-
-            visibleToasts = [...visibleToasts, [e[e.length - 1].message, e[e.length - 1].severity, e.length - 1, ToastComponent]]
+                                               //last toast added
+            visibleToasts = [...visibleToasts, [e[e.length - 1].message, e[e.length - 1].severity, new Date().getTime(), ToastComponent]];
 
             window.setTimeout(() => {
-                visibleToasts = visibleToasts.slice(1, visibleToasts.length)
-                ToastStore.popToast()
-            }, 5000)
+                visibleToasts = visibleToasts.slice(1, visibleToasts.length);
+                ToastStore.popToast();
+            }, 3500);
         }
-    })
+    });
+
+    let activeMenuItem = 0;
+    const menuItemComponents = [Configuration, Functions, Status];
 </script>
 <style global lang="postcss">
     @tailwind base;
     @tailwind components;
     @tailwind utilities;
-
-
 </style>
 
 <div class="fixed right-0 top-0 m-5 z-50">
@@ -61,9 +64,8 @@
 </div>
 
 <div id="content" class="font-sans min-h-screen flex flex-col justify-center items-center bg-gray-50">
-    <div class="max-w-md flex-grow my-10">
-        <Form/>
-    </div>
+    <Menu items={['Configuration', 'Functions', 'Status']} bind:active={activeMenuItem} />
+        <svelte:component this={menuItemComponents[activeMenuItem]} />
     <footer class="p-4 text-center flex flex-row w-full justify-center flex-grow">
         <h3 on:click={() => open('https://github.com/LucidVR/opengloves-ui')}
             class="cursor-pointer text-blue-500">

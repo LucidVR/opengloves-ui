@@ -1,1 +1,0 @@
-export const removeNewlines = (str) => str.replaceAll('\n', '');

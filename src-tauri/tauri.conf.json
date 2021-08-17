@@ -23,7 +23,7 @@
       ],
       "resources": [],
       "externalBin": [
-        "openglove_ui_sidecar"
+        "sidecar"
       ],
       "copyright": "",
       "category": "DeveloperTool",

@@ -1,5 +1,6 @@
 <script>
     export let onClick = async () => {};
+    export let disabled = false;
     let loading = false;
 </script>
 <button on:click={async () => {
@@ -8,7 +9,7 @@
     await onClick();
     loading = false;
 }}
-        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50" disabled={loading}>
+        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50" disabled={loading || disabled}>
     {#if !loading}
         <slot/>
     {:else}

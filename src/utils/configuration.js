@@ -1,24 +1,39 @@
-import {parse} from "comment-json";
-
-import {Command} from '@tauri-apps/api/shell'
+import {parse} from 'comment-json';
 
 import {readTextFile} from '@tauri-apps/api/fs'
-import {removeNewlines} from "./string";
 import {deepOverwrite} from "./object";
 
-const getValuesForConfiguration = async (configObj) => openSidecar("get", configObj);
+import ConfigurationStore from '../stores/configuration';
+import {openSidecar} from "./sidecar";
+
+/***
+ * Returns values for configuration properties provided using external executable
+ * @param configObj {Object} Object for properties
+ * @return {Promise<String>} Return values from properties provided
+ */
+const getValuesForConfiguration = async (configObj) => openSidecar("sidecar", "settings_get", configObj);
 
 export const getConfiguration = async () => {
-    const text = await readTextFile('../resources/settings/default.vrsettings');
-    const openVRConfigValues = await getValuesForConfiguration(removeNewlines(text));
-    const parsed = parse(text);
+    const cached = await ConfigurationStore.getConfiguration();
+    if(cached) return cached;
 
-    const result = deepOverwrite(parsed, parse(openVRConfigValues));
+    const text = await readTextFile('../resources/settings/default.vrsettings');
+    const parsedJSON = parse(text);
+    const openVRConfigValues = await getValuesForConfiguration(parsedJSON);
+
+    //passed by reference
+    deepOverwrite(parsedJSON, parse(openVRConfigValues));
+
+    const parsed = parseConfiguration(parsedJSON);
+
+    ConfigurationStore.set(parsed);
     return parsed;
 };
 
 
 export const createConfiguration = (configurationOptions) => {
+    ConfigurationStore.set(configurationOptions);
+
     const temp = JSON.parse(JSON.stringify(configurationOptions));
 
     const result = {
@@ -38,22 +53,7 @@ export const createConfiguration = (configurationOptions) => {
     return result;
 }
 
-const openSidecar = async (command, data) => {
-    const sidecar = Command.sidecar('openglove_ui_sidecar');
-
-    const promiseDataReceived = new Promise((resolve, reject) => {
-        sidecar.stdout.on('data', e => resolve(e));
-        sidecar.stderr.on('data', e => reject(e));
-    });
-
-    const child = await sidecar.spawn();
-    await child.write(command + "\n");
-    await child.write(data + "\n");
-
-    return await promiseDataReceived;
-
-}
-export const saveConfiguration = async (configObj) => openSidecar("set", JSON.stringify(configObj));
+export const saveConfiguration = async (configObj) => openSidecar("sidecar", "settings_set", configObj);
 
 /***
  * Gets ids associated with each configuration object.
