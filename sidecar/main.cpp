@@ -5,62 +5,57 @@
 
 #include <iomanip>
 #include <iostream>
-#include <string>
-
-#include "json.hpp"
-
-std::string GetLastErrorAsString() {
-  DWORD errorMessageID = ::GetLastError();
-  if (errorMessageID == 0) {
-    return std::string();
-  }
-
-  LPSTR messageBuffer = nullptr;
-
-  size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, errorMessageID,
-                               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
-
-  std::string message(messageBuffer, size);
-
-  LocalFree(messageBuffer);
-
-  return message;
-}
 
 int GetSettings(nlohmann::json& json) {
   for (auto& el : json.items()) {
+    const std::string sectionNameString = el.key();
+    const char* sectionName = sectionNameString.c_str();
+    bool sectionNameHasPrefix = sectionNameString.find(SECTION_NAME_PREFIX) == 0;
+    const std::string sectionNameWithoutPrefixString = sectionNameHasPrefix ? sectionNameString.substr(SECTION_NAME_PREFIX.length()) : sectionNameString;
+    const char* sectionNameWithoutPrefix = sectionNameWithoutPrefixString.c_str();
+
     for (auto& el2 : el.value().items()) {
+      const std::string keyNameString = el2.key();
+      const char* keyName = keyNameString.c_str();
       vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
 
-      // make sure we don't have a title
-      if (el2.key().find("__") != std::string::npos) continue;
+      // Skip __title/__type/etc. fields
+      if (keyNameString.find("__") != std::string::npos) continue;
 
       switch (el2.value().type()) {
         case nlohmann::json::value_t::string: {
           char result[256];
-          vr::VRSettings()->GetString(el.key().c_str(), el2.key().c_str(), result, sizeof(result), &err);
-          json[el.key()][el2.key()] = std::string(result);
+          vr::VRSettings()->GetString(sectionName, keyName, result, sizeof(result), &err);
+          if (sectionNameHasPrefix && err != vr::EVRSettingsError::VRSettingsError_None)
+             vr::VRSettings()->GetString(sectionNameWithoutPrefix, keyName, result, sizeof(result), &err);
+          json[sectionNameString][keyNameString] = std::string(result);
           break;
         }
         case nlohmann::json::value_t::boolean: {
-          bool result = vr::VRSettings()->GetBool(el.key().c_str(), el2.key().c_str(), &err);
-          json[el.key()][el2.key()] = result;
+          bool result = vr::VRSettings()->GetBool(sectionName, keyName, &err);
+          if (sectionNameHasPrefix && err != vr::EVRSettingsError::VRSettingsError_None)
+             result = vr::VRSettings()->GetBool(sectionNameWithoutPrefix, keyName, &err);
+          json[sectionNameString][keyNameString] = result;
           break;
         }
         case nlohmann::json::value_t::number_float: {
-          float result = vr::VRSettings()->GetFloat(el.key().c_str(), el2.key().c_str(), &err);
-          json[el.key()][el2.key()] = result;
+          float result = vr::VRSettings()->GetFloat(sectionName, keyName, &err);
+          if (sectionNameHasPrefix && err != vr::EVRSettingsError::VRSettingsError_None)
+             result = vr::VRSettings()->GetFloat(sectionNameWithoutPrefix, keyName, &err);
+          json[sectionNameString][keyNameString] = result;
           break;
         }
         case nlohmann::json::value_t::number_unsigned:
         case nlohmann::json::value_t::number_integer: {
-          int32_t result = vr::VRSettings()->GetInt32(el.key().c_str(), el2.key().c_str(), &err);
-          json[el.key()][el2.key()] = result;
+          int32_t result = vr::VRSettings()->GetInt32(sectionName, keyName, &err);
+          if (sectionNameHasPrefix && err != vr::EVRSettingsError::VRSettingsError_None)
+             result = vr::VRSettings()->GetInt32(sectionNameWithoutPrefix, keyName, &err);
+          json[sectionNameString][keyNameString] = result;
           break;
         }
       }
       if (err != vr::EVRSettingsError::VRSettingsError_None) {
-        std::cerr << "Error getting configuration property. Section: " << el.key() << " Key: " << el2.key() << " Value: " << el2.value() << std::endl;
+        std::cerr << "Error getting configuration property. Section: " << sectionNameString << " Key: " << keyNameString << " Value: " << el2.value() << std::endl;
       }
     }
   }
@@ -71,33 +66,39 @@ int GetSettings(nlohmann::json& json) {
 
 int SetSettings(const nlohmann::json& json) {
   for (auto& el : json.items()) {
-    for (auto& el2 : el.value().items()) {
-      // make sure we don't have a title
-      if (el2.key().find("__") != std::string::npos) continue;
+    const std::string sectionNameString = el.key();
+    const char* sectionName = sectionNameString.c_str();
 
+    for (auto& el2 : el.value().items()) {
+      const std::string keyNameString = el2.key();
+      const char* keyName = keyNameString.c_str();
       vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
+
+      // Skip __title/__type/etc. fields
+      if (keyNameString.find("__") != std::string::npos) continue;
 
       switch (el2.value().type()) {
         case nlohmann::json::value_t::string:
-          vr::VRSettings()->SetString(el.key().c_str(), el2.key().c_str(), el2.value().get<std::string>().c_str(), &err);
+          vr::VRSettings()->SetString(sectionName, keyName, el2.value().get<std::string>().c_str(), &err);
           break;
         case nlohmann::json::value_t::boolean:
-          vr::VRSettings()->SetBool(el.key().c_str(), el2.key().c_str(), el2.value().get<bool>(), &err);
+          vr::VRSettings()->SetBool(sectionName, keyName, el2.value().get<bool>(), &err);
           break;
         case nlohmann::json::value_t::number_float:
-          vr::VRSettings()->SetFloat(el.key().c_str(), el2.key().c_str(), el2.value().get<float>(), &err);
+          vr::VRSettings()->SetFloat(sectionName, keyName, el2.value().get<float>(), &err);
           break;
         case nlohmann::json::value_t::number_unsigned:
         case nlohmann::json::value_t::number_integer:
-          vr::VRSettings()->SetInt32(el.key().c_str(), el2.key().c_str(), el2.value().get<int>(), &err);
+          vr::VRSettings()->SetInt32(sectionName, keyName, el2.value().get<int>(), &err);
           break;
         default:
-          std::cerr << "Error finding configuration property value of key1: " << el.key().c_str() << " key2: " << el2.key().c_str()
+          std::cerr << "Error finding configuration property value of key1: " << sectionNameString << " key2: " << keyNameString
                     << " value: " << el2.value().type_name() << std::endl;
+          break;
       }
 
       if (err != vr::EVRSettingsError::VRSettingsError_None) {
-        std::cerr << "Error setting configuration property. Section: " << el.key() << " Key: " << el2.key() << " Value: " << el2.value() << std::endl;
+        std::cerr << "Error setting configuration property. Section: " << sectionNameString << " Key: " << keyNameString << " Value: " << el2.value() << std::endl;
       }
     }
   }
@@ -110,7 +111,7 @@ int SetSettings(const nlohmann::json& json) {
 }
 
 template <typename T>
-bool ConnectAndSendPipe(const std::string& pipeName, T data) {
+static bool ConnectAndSendPipe(const std::string& pipeName, T data) {
   HANDLE pipeHandle;
 
   while (1) {
@@ -141,7 +142,7 @@ struct AutoCalibrationData {
   bool start;
 };
 
-int autoCalibrate(const nlohmann::json& json) {
+int AutoCalibrate(const nlohmann::json& json) {
   const bool rightHand = json["right_hand"].get<bool>();
   const bool start = json["start"].get<bool>();
 
@@ -186,7 +187,7 @@ int main() {
     }
 
     if (type == "functions_autocalibrate") {
-      return autoCalibrate(json["data"]);
+      return AutoCalibrate(json["data"]);
     }
 
     std::cerr << "Could not find the operation type: " << type << std::endl;

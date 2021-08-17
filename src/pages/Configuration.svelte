@@ -1,5 +1,6 @@
 <script>
     import {
+        primaryConfigurationKey,
         createConfiguration,
         getConfiguration,
         saveConfiguration,
@@ -84,16 +85,16 @@
                                     {#if Array.isArray(value.options)}
                                         <Select
                                                 onSelectItemChanged={selectedKey => {
-                                        configurationOptions.driver_openglove.options[key] = selectedKey;
+                                        configurationOptions[primaryConfigurationKey].options[key] = selectedKey;
                                     }}
                                                 options={Object.entries(value.options).map(([k, v]) => ({
                                         title: v.title,
                                         value: parseInt(k),
                                     }))}
-                                                defaultValue={configurationOptions.driver_openglove.options[key]}
+                                                defaultValue={configurationOptions[primaryConfigurationKey].options[key]}
                                         />
                                         <ConfigList
-                                                bind:configItems={value.options[configurationOptions.driver_openglove.options[key]].options}/>
+                                                bind:configItems={value.options[configurationOptions[primaryConfigurationKey].options[key]].options}/>
                                     {:else}
                                         <ConfigList
                                                 hiddenKeys={Object.keys(configurationOptions).map((k) => k)}

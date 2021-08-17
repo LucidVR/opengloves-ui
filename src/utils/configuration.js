@@ -6,6 +6,8 @@ import {deepOverwrite} from "./object";
 import ConfigurationStore from '../stores/configuration';
 import {openSidecar} from "./sidecar";
 
+export const primaryConfigurationKey = 'opengloves.driver_openglove';
+
 /***
  * Returns values for configuration properties provided using external executable
  * @param configObj {Object} Object for properties
@@ -36,11 +38,10 @@ export const createConfiguration = (configurationOptions) => {
 
     const temp = JSON.parse(JSON.stringify(configurationOptions));
 
-    const result = {
-        driver_openglove: temp.driver_openglove.options,
-    };
+    const result = {};
+    result[primaryConfigurationKey] = temp[primaryConfigurationKey].options;
 
-    delete temp.driver_openglove;
+    delete temp[primaryConfigurationKey];
     Object.entries(temp).forEach(([k,v]) => {
         if(Array.isArray(v.options)) {
             v.options.forEach((v2, k2) => {
@@ -92,14 +93,13 @@ export const saveConfiguration = async (configObj) => openSidecar("sidecar", "se
     }
  */
 export const parseConfiguration = (configObj) => {
-    const result = {
-            driver_openglove: {
-                options: {},
-            },
+    const result = {};
+    result[primaryConfigurationKey] = {
+        options: {}
     };
 
-    Object.entries(configObj.driver_openglove).forEach(([k, v]) => {
-        const sectionHasOptions = configObj.driver_openglove[Symbol.for(`after:${k}`)];
+    Object.entries(configObj[primaryConfigurationKey]).forEach(([k, v]) => {
+        const sectionHasOptions = configObj[primaryConfigurationKey][Symbol.for(`after:${k}`)];
         if (sectionHasOptions) {
             result[k] = {
                 title: parseComment(sectionHasOptions[0].value).title,
@@ -108,12 +108,12 @@ export const parseConfiguration = (configObj) => {
         }
 
         if(k === '__title')
-            result.driver_openglove.title = v;
+            result[primaryConfigurationKey].title = v;
         else
-            result.driver_openglove.options[k] = v;
+            result[primaryConfigurationKey].options[k] = v;
 
     });
-    delete configObj.driver_openglove;
+    delete configObj[primaryConfigurationKey];
 
     Object.entries(configObj).forEach(([k, v]) => {
 
