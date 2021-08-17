@@ -29,7 +29,7 @@ The interface uses a c++ backend (sidecar) to communicate to OpenVR, and must be
 * In `sidecar/` make a directory `build/`
 * Navigate into build, run `cmake ..`
 * Open the Visual Studio project generated, build.
-* Copy build artifacts (`openglove_ui_sidecar-x86_64-pc-windows-msvc.exe` & `openvr_api.dll`) into `src-tauri/`
+* Copy build artifacts (`sidecar-x86_64-pc-windows-msvc.exe` & `openvr_api.dll`) into `src-tauri/`
 
 ## Building the UI
 * Install dependencies
