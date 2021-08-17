@@ -11,7 +11,7 @@
     const state = writable({
         autoCalibrate: {
             form: {
-                calibrationTimer: 10,
+                calibrationTimer: 5,
                 forRightHand: true,
             },
             timer: null,
@@ -36,7 +36,7 @@
                         right_hand: $state.autoCalibrate.form.forRightHand
                     }).then(d => {
                         clearInterval(interval);
-                        ToastStore.addToast(ToastStore.severity.SUCCESS, 'Finished calibration');
+                        ToastStore.addToast(ToastStore.severity.SUCCESS, 'Finished calibration!');
                         $state.autoCalibrate.isCalibrating = false;
                         $state.autoCalibrate.loading = false;
                     });
@@ -81,38 +81,13 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Get Serial Com Ports
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-500">
-                        Automatically set the com ports (serial only). It's a possibility that the hands might be the
-                        wrong way round using this.
-                        If so, use the function below to invert the com ports.
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <DefaultButton onClick={() => getComPorts()}>Get Com Ports</DefaultButton>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Invert Serial Com Ports
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-500">
-                        If your hands are the wrong way round, use this to invert the com ports.
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <DefaultButton onClick={() => beginCalibration()}>Invert Com Ports</DefaultButton>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         Auto Calibrate
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-500">
                         Automatically calibrate your controller offsets. Clicking the button will start a 10 second
-                        timer.
-                        During the delay, move your hand to the position of the hand in-game. Once the 10 second timer
-                        is up,
-                        you should see your virtual hand move with your real hand.
+                        timer and will freeze your in-game hand.
+                        During the delay, move your hand to the position of the hand in-game. Once the timer
+                        is up, you should see your virtual hand move with your real hand.
                         <div class="m-3">
                             <Select options={[{title: 'Left Hand', value: false}, {title: 'Right Hand', value: true}]}
                                     defaultValue={true} label="For Hand"/>
@@ -122,7 +97,8 @@
 
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-row">
-                        <SuspenseButton onClick={async () => beginCalibration()} disabled={$state.autoCalibrate.isCalibrating}>
+                        <SuspenseButton onClick={async () => beginCalibration()}
+                                        disabled={$state.autoCalibrate.isCalibrating}>
                             {#if $state.autoCalibrate.isCalibrating}
                                 {$state.autoCalibrate.timer}
                             {:else}
