@@ -1,5 +1,13 @@
 import {Command} from "@tauri-apps/api/shell";
 
+/**
+ * 
+ * @param {string} program Name of executable to run
+ * @param {string} type Command to run inside executable
+ * @param {any} data Optional data required for command
+ * @returns {Promise<string[]>} Lines from executable's stdout
+ * @throws {string} First line of executable's stderr
+ */
 export const openSidecar = async (program, type, data) => {
     const sidecar = Command.sidecar(program);
 
@@ -7,18 +15,10 @@ export const openSidecar = async (program, type, data) => {
         // Listen for output
         const stdout = [];
         sidecar.stdout.on('data', e => stdout.push(e));
-        let hadStderr = false;
-        sidecar.stderr.on('data', e => {
-            if (!hadStderr)
-                reject(e);
-            hadStderr = true;
-        });
+        sidecar.stderr.on('data', e => reject(e));
 
         // Report output on exit
-        sidecar.on('close', () => {
-            if (!hadStderr)
-                resolve(stdout);
-        });
+        sidecar.on('close', () => resolve(stdout));
     });
 
     const child = await sidecar.spawn();
