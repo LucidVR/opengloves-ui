@@ -7,15 +7,16 @@ export const openSidecar = async (program, type, data) => {
         // Listen for output
         const stdout = [];
         sidecar.stdout.on('data', e => stdout.push(e));
-        const stderr = [];
-        sidecar.stderr.on('data', e => stderr.push(e));
+        let hadStderr = false;
+        sidecar.stderr.on('data', e => {
+            hadStderr = true;
+            reject(e);
+        });
 
         // Report output on exit
         sidecar.on('close', () => {
-            if (stderr.length > 0)
-                reject(stderr.join('\n'));
-            else
-                resolve(stdout.join('\n'));
+            if (!hadStderr)
+                resolve(stdout);
         });
     });
 

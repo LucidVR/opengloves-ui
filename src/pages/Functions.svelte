@@ -25,7 +25,7 @@
         $state.autoCalibrate.timer = $state.autoCalibrate.form.calibrationTimer;
 
         try {
-            const start = await openSidecar('sidecar', 'functions_autocalibrate', {
+            await openSidecar('sidecar', 'functions_autocalibrate', {
                 start: true,
                 right_hand: $state.autoCalibrate.form.forRightHand
             });

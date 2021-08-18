@@ -13,7 +13,7 @@ export const primaryConfigurationKey = 'opengloves.driver_openglove';
  * @param configObj {Object} Object for properties
  * @return {Promise<String>} Return values from properties provided
  */
-const getValuesForConfiguration = async (configObj) => openSidecar("sidecar", "settings_get", configObj);
+const getValuesForConfiguration = async (configObj) => (await openSidecar("sidecar", "settings_get", configObj)).join('\n');
 
 export const getConfiguration = async () => {
     const cached = await ConfigurationStore.getConfiguration();
