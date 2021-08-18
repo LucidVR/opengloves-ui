@@ -9,8 +9,9 @@ export const openSidecar = async (program, type, data) => {
         sidecar.stdout.on('data', e => stdout.push(e));
         let hadStderr = false;
         sidecar.stderr.on('data', e => {
+            if (!hadStderr)
+                reject(e);
             hadStderr = true;
-            reject(e);
         });
 
         // Report output on exit
