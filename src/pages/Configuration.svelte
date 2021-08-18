@@ -2,6 +2,7 @@
     import {
         createConfiguration,
         getConfiguration,
+        primaryConfigurationSection,
         saveConfiguration,
     } from '../utils/configuration'
     import ToastStore from '../stores/toast'
@@ -84,16 +85,16 @@
                                     {#if Array.isArray(value.options)}
                                         <Select
                                                 onSelectItemChanged={selectedKey => {
-                                        configurationOptions.driver_openglove.options[key] = selectedKey;
+                                        configurationOptions[primaryConfigurationSection].options[key] = selectedKey;
                                     }}
                                                 options={Object.entries(value.options).map(([k, v]) => ({
                                         title: v.title,
                                         value: parseInt(k),
                                     }))}
-                                                defaultValue={configurationOptions.driver_openglove.options[key]}
+                                                defaultValue={configurationOptions[primaryConfigurationSection].options[key]}
                                         />
                                         <ConfigList
-                                                bind:configItems={value.options[configurationOptions.driver_openglove.options[key]].options}/>
+                                                bind:configItems={value.options[configurationOptions[primaryConfigurationSection].options[key]].options}/>
                                     {:else}
                                         <ConfigList
                                                 hiddenKeys={Object.keys(configurationOptions).map((k) => k)}
