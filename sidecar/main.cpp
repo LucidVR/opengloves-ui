@@ -138,7 +138,7 @@ bool ConnectAndSendPipe(const std::string& pipeName, T data) {
 
 struct AutoCalibrationData {
   AutoCalibrationData(bool start) : start(start){};
-  bool start;
+  uint8_t start;
 };
 
 int autoCalibrate(const nlohmann::json& json) {
