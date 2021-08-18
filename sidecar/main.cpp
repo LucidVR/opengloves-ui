@@ -6,8 +6,8 @@
 #include <iomanip>
 #include <iostream>
 
-static void TryGetSettings(nlohmann::json& json, bool removePrefix, vr::EVRSettingsError* err) {
-  *err = vr::EVRSettingsError::VRSettingsError_None;
+static vr::EVRSettingsError TryGetSettings(nlohmann::json& json, bool removePrefix) {
+  vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
   for (auto& el : json.items()) {
     const std::string sectionNameString = el.key();
     const char* sectionName = sectionNameString.c_str();
@@ -25,45 +25,45 @@ static void TryGetSettings(nlohmann::json& json, bool removePrefix, vr::EVRSetti
       switch (el2.value().type()) {
         case nlohmann::json::value_t::string: {
           char result[256];
-          vr::VRSettings()->GetString(removePrefix ? sectionNameWithoutPrefix : sectionName, keyName, result, sizeof(result), err);
-          if (*err == vr::EVRSettingsError::VRSettingsError_None)
+          vr::VRSettings()->GetString(removePrefix ? sectionNameWithoutPrefix : sectionName, keyName, result, sizeof(result), &err);
+          if (err == vr::EVRSettingsError::VRSettingsError_None)
             json[sectionNameString][keyNameString] = std::string(result);
           break;
         }
         case nlohmann::json::value_t::boolean: {
-          bool result = vr::VRSettings()->GetBool(removePrefix ? sectionNameWithoutPrefix : sectionName, keyName, err);
-          if (*err == vr::EVRSettingsError::VRSettingsError_None)
+          bool result = vr::VRSettings()->GetBool(removePrefix ? sectionNameWithoutPrefix : sectionName, keyName, &err);
+          if (err == vr::EVRSettingsError::VRSettingsError_None)
             json[sectionNameString][keyNameString] = result;
           break;
         }
         case nlohmann::json::value_t::number_float: {
-          float result = vr::VRSettings()->GetFloat(removePrefix ? sectionNameWithoutPrefix : sectionName, keyName, err);
-          if (*err == vr::EVRSettingsError::VRSettingsError_None)
+          float result = vr::VRSettings()->GetFloat(removePrefix ? sectionNameWithoutPrefix : sectionName, keyName, &err);
+          if (err == vr::EVRSettingsError::VRSettingsError_None)
             json[sectionNameString][keyNameString] = result;
           break;
         }
         case nlohmann::json::value_t::number_unsigned:
         case nlohmann::json::value_t::number_integer: {
-          int32_t result = vr::VRSettings()->GetInt32(removePrefix ? sectionNameWithoutPrefix : sectionName, keyName, err);
-          if (*err == vr::EVRSettingsError::VRSettingsError_None)
+          int32_t result = vr::VRSettings()->GetInt32(removePrefix ? sectionNameWithoutPrefix : sectionName, keyName, &err);
+          if (err == vr::EVRSettingsError::VRSettingsError_None)
             json[sectionNameString][keyNameString] = result;
           break;
         }
       }
-      if (*err != vr::EVRSettingsError::VRSettingsError_None) {
+      if (err != vr::EVRSettingsError::VRSettingsError_None) {
         if (removePrefix)
           std::cerr << "Error getting configuration property. Section: " << sectionNameString << " Key: " << keyNameString << " Value: " << el2.value() << std::endl;
-        return;
+        return err;
       }
     }
   }
+  return err;
 }
 
 int GetSettings(nlohmann::json& json) {
-  vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
-  TryGetSettings(json, false, &err);
+  vr::EVRSettingsError err = TryGetSettings(json, false);
   if (err != vr::EVRSettingsError::VRSettingsError_None)
-    TryGetSettings(json, true, &err);
+    err = TryGetSettings(json, true);
   if (err == vr::EVRSettingsError::VRSettingsError_None)
   {
     std::cout << json.dump() << std::endl;
