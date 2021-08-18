@@ -55,7 +55,7 @@
       "fs": {
         "readTextFile": true,
         "writeFile": true,
-        "path": true
+        "readDir": true
       },
       "shell": {
         "open": true,

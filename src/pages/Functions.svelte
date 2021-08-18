@@ -12,7 +12,7 @@
         autoCalibrate: {
             form: {
                 calibrationTimer: 5,
-                forRightHand: true,
+                rightHand: true,
             },
             timer: null,
             isCalibrating: false,
@@ -27,15 +27,15 @@
         try {
             const start = await openSidecar('sidecar', 'functions_autocalibrate', {
                 start: true,
-                right_hand: $state.autoCalibrate.form.forRightHand
+                right_hand: $state.autoCalibrate.form.rightHand
             });
             const interval = setInterval(() => {
                 if ($state.autoCalibrate.timer <= 0) {
+                    clearInterval(interval);
                     openSidecar('sidecar', 'functions_autocalibrate', {
                         start: false,
-                        right_hand: $state.autoCalibrate.form.forRightHand
+                        right_hand: $state.autoCalibrate.form.rightHand
                     }).then(d => {
-                        clearInterval(interval);
                         ToastStore.addToast(ToastStore.severity.SUCCESS, 'Finished calibration!');
                         $state.autoCalibrate.isCalibrating = false;
                         $state.autoCalibrate.loading = false;
@@ -48,7 +48,7 @@
             $state.autoCalibrate.isCalibrating = false;
             $state.autoCalibrate.loading = false;
             console.trace(e);
-            ToastStore.addToast(ToastStore.severity.ERROR, 'Error starting calibration. Make sure that the driver is running!: ' + e);
+            ToastStore.addToast(ToastStore.severity.ERROR, 'Error starting calibration. Make sure that the driver is running: ' + e);
         }
 
     };
@@ -90,6 +90,7 @@
                         is up, you should see your virtual hand move with your real hand.
                         <div class="m-3">
                             <Select options={[{title: 'Left Hand', value: false}, {title: 'Right Hand', value: true}]}
+                                    onSelectItemChanged={v => $state.autoCalibrate.form.rightHand = v}
                                     defaultValue={true} label="For Hand"/>
                             <div class="m-3"></div>
                             <Text label="Timer (Delay time)" bind:value={$state.autoCalibrate.form.calibrationTimer}/>

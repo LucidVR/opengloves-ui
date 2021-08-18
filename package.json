@@ -23,8 +23,8 @@
     "build": "yarn run rollup-build && yarn tauri build"
   },
   "dependencies": {
-    "@tauri-apps/api": "^1.0.0-beta.5",
-    "@tauri-apps/cli": "^1.0.0-beta.6",
+    "@tauri-apps/api": "^1.0.0-beta.6",
+    "@tauri-apps/cli": "^1.0.0-beta.9",
     "buffer": "^6.0.3",
     "comment-json": "^4.1.0",
     "svelte-loading-spinners": "^0.1.6"
