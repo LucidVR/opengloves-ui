@@ -21,7 +21,7 @@
         $state.timer = $state.form.calibrationTimer;
 
         try {
-            const start = await openSidecar('sidecar', 'functions_autocalibrate', {
+            await openSidecar('sidecar', 'functions_autocalibrate', {
                 start: true,
                 right_hand: $state.form.rightHand
             });
@@ -55,18 +55,17 @@
         Pose Auto-Calibration
     </td>
     <td class="px-6 py-4 text-sm text-gray-500">
-        Automatically calibrate your controller offsets. Clicking the button will start a 10 second
-        timer and will freeze your in-game hand.
-        During the delay, move your hand to the position of the hand in-game. Once the timer
-        is up, you should see your virtual hand move with your real hand.
-        <div class="m-3">
+        <div class="mb-3">
             <Select options={[{title: 'Left Hand', value: false}, {title: 'Right Hand', value: true}]}
                     onSelectItemChanged={v => $state.form.rightHand = v}
                     defaultValue={true} label="For Hand"/>
             <div class="m-3"></div>
             <Text label="Timer (Delay time)" bind:value={$state.form.calibrationTimer}/>
         </div>
-
+        Automatically calibrate your controller offsets. Clicking the button will start a 10 second
+        timer and will freeze your in-game hand.
+        During the delay, move your hand to the position of the hand in-game. Once the timer
+        is up, you should see your virtual hand move with your real hand.
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-row">
         <SuspenseButton onClick={async () => beginCalibration()}

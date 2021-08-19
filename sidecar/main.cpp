@@ -88,8 +88,7 @@ int SetSettings(const nlohmann::json& json) {
           vr::VRSettings()->SetInt32(c_sectionName, c_keyName, value.get<int>(), &err);
           break;
         default:
-          std::cerr << "Error finding configuration property value of key1: " << s_sectionName << " key2: " << s_keyName
-                    << " value: " << value.type_name() << std::endl;
+          std::cerr << "Error finding configuration property value of key1: " << s_sectionName << " key2: " << s_keyName << " value: " << value.type_name() << std::endl;
           return 1;
       }
 
@@ -156,6 +155,36 @@ int AutoCalibrate(const nlohmann::json& json) {
   return 1;
 }
 
+struct VRFFBData_t {
+  VRFFBData_t(short thumbCurl, short indexCurl, short middleCurl, short ringCurl, short pinkyCurl)
+      : thumbCurl(thumbCurl), indexCurl(indexCurl), middleCurl(middleCurl), ringCurl(ringCurl), pinkyCurl(pinkyCurl){};
+
+  short thumbCurl;
+  short indexCurl;
+  short middleCurl;
+  short ringCurl;
+  short pinkyCurl;
+};
+
+int ServoTest(const nlohmann::json& json) {
+  const bool rightHand = json["right_hand"].get<bool>();
+  const bool extend = json["extend"].get<bool>();
+
+  const short setCurl = extend ? 1000 : 0;
+
+  VRFFBData_t data(setCurl, setCurl, setCurl, setCurl, setCurl);
+
+  const bool success = ConnectAndSendPipe("\\\\.\\pipe\\vrapplication\\ffb\\curl\\" + std::string(rightHand ? "right" : "left"), data);
+
+  if (success) {
+    std::cout << "Successfully activated force feedback" << std::endl;
+    return 0;
+  }
+
+  std::cerr << "Failed to send force feedback message to pipe" << std::endl;
+  return 1;
+}
+
 int main() {
   vr::EVRInitError error;
 
@@ -185,6 +214,10 @@ int main() {
 
     if (type == "functions_autocalibrate") {
       return AutoCalibrate(json["data"]);
+    }
+
+    if (type == "functions_servotest") {
+      return ServoTest(json["data"]);
     }
 
     std::cerr << "Could not find the operation type: " << type << std::endl;
