@@ -1,7 +1,6 @@
 <script>
     import Configuration from './pages/Configuration.svelte';
     import Functions from "./pages/Functions.svelte";
-    import Status from "./pages/Status.svelte";
 
     import ToastStore from './stores/toast';
     import {flip} from 'svelte/animate';
@@ -34,7 +33,7 @@
     ToastStore.subscribe(e => {
         //we have received a toast update
         if (e.length > visibleToasts.length) {
-                                               //last toast added
+            //last toast added
             visibleToasts = [...visibleToasts, [e[e.length - 1].message, e[e.length - 1].severity, new Date().getTime(), ToastComponent]];
 
             window.setTimeout(() => {
@@ -45,7 +44,7 @@
     });
 
     let activeMenuItem = 0;
-    const menuItemComponents = [Configuration, Functions, Status];
+    const menuItemComponents = [Configuration, Functions];
 </script>
 <style global lang="postcss">
     @tailwind base;
@@ -63,10 +62,10 @@
     {/each}
 </div>
 
-<div id="content" class="font-sans min-h-screen flex flex-col justify-center items-center bg-gray-50">
-    <Menu items={['Configuration', 'Functions', 'Status']} bind:active={activeMenuItem} />
-        <svelte:component this={menuItemComponents[activeMenuItem]} />
-    <footer class="p-4 text-center flex flex-row w-full justify-center flex-grow">
+<div id="content" class="font-sans min-h-screen flex flex-col justify-center items-center bg-gray-50 overflow-hidden">
+    <Menu items={['Configuration', 'Functions']} bind:active={activeMenuItem}/>
+    <svelte:component this={menuItemComponents[activeMenuItem]}/>
+    <footer class="p-4 text-center flex flex-row items-end">
         <h3 on:click={() => open('https://github.com/LucidVR/opengloves-ui')}
             class="cursor-pointer text-blue-500">
             Source code licenced under MIT
