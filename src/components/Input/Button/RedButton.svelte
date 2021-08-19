@@ -1,6 +1,4 @@
 <script>
-  export let text = '';
-
   export let onClick = () => {};
 
 </script>
