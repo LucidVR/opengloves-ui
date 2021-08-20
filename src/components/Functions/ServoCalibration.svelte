@@ -41,9 +41,11 @@
                     onSelectItemChanged={v => $state.form.rightHand = v}
                     defaultValue={true} label="For Hand"/>
         </div>
-        Calibrate your servos for Force Feedback. The buttons on the right give the options to either extend the servos
-        fully, or retract them fully. As a guide, when the servos extended all the way, place the servo horn to where you
-        want the fingers to be fully restricted. Then, retract the servos. They should not impede on any finger movement.
+        <b>Calibrate your servos for Force Feedback</b>
+        <br />
+        The buttons on the right give the options to either extend the servos fully, or retract them fully. As a guide, when
+        the servos extended all the way, place the servo horn to where you want the fingers to be fully restricted. Then,
+        retract the servos. They should not impede on any finger movement.
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-col">
         <div class="my-3">
