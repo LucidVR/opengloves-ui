@@ -1,5 +1,3 @@
-#include "main.h"
-
 #include <openvr.h>
 #include <windows.h>
 
@@ -107,9 +105,8 @@ int SetSettings(const nlohmann::json& json) {
 }
 
 template <typename T>
-static bool ConnectAndSendPipe(const std::string& pipeName, T data) {
+static bool ConnectAndSendPipe(const std::string& pipeName, T& data) {
   HANDLE pipeHandle;
-
   while (1) {
     pipeHandle = CreateFile(pipeName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 
