@@ -62,8 +62,9 @@
             <div class="m-3"></div>
             <Text label="Timer (Delay time)" bind:value={$state.form.calibrationTimer}/>
         </div>
-        Automatically calibrate your controller offsets. Clicking the button will start a 10 second
-        timer and will freeze your in-game hand.
+        <b>Automatically calibrate your controller offsets:</b>
+        <br />
+        Clicking the button will start a 10 second timer and will freeze your in-game hand.
         During the delay, move your hand to the position of the hand in-game. Once the timer
         is up, you should see your virtual hand move with your real hand.
     </td>
