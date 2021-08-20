@@ -17,7 +17,7 @@ const getValuesForConfiguration = async (configObj) => (await openSidecar("sidec
 
 export const getConfiguration = async () => {
     const cached = await ConfigurationStore.getConfiguration();
-    if(cached) return cached;
+    if(cached) return {configurationOptions: cached, fromCache: true};
 
     const text = await readTextFile('../resources/settings/default.vrsettings');
     const parsedJSON = parse(text);
@@ -29,7 +29,7 @@ export const getConfiguration = async () => {
     const parsed = parseConfiguration(parsedJSON);
 
     ConfigurationStore.set(parsed);
-    return parsed;
+    return {configurationOptions: parsed, fromCache: false};
 };
 
 

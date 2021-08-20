@@ -1,5 +1,3 @@
-#include "main.h"
-
 #include <openvr.h>
 #include <windows.h>
 
@@ -88,8 +86,7 @@ int SetSettings(const nlohmann::json& json) {
           vr::VRSettings()->SetInt32(c_sectionName, c_keyName, value.get<int>(), &err);
           break;
         default:
-          std::cerr << "Error finding configuration property value of key1: " << s_sectionName << " key2: " << s_keyName
-                    << " value: " << value.type_name() << std::endl;
+          std::cerr << "Error finding configuration property value of key1: " << s_sectionName << " key2: " << s_keyName << " value: " << value.type_name() << std::endl;
           return 1;
       }
 
@@ -108,9 +105,8 @@ int SetSettings(const nlohmann::json& json) {
 }
 
 template <typename T>
-static bool ConnectAndSendPipe(const std::string& pipeName, T data) {
+static bool ConnectAndSendPipe(const std::string& pipeName, T& data) {
   HANDLE pipeHandle;
-
   while (1) {
     pipeHandle = CreateFile(pipeName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 
@@ -134,16 +130,16 @@ static bool ConnectAndSendPipe(const std::string& pipeName, T data) {
   return true;
 }
 
-struct AutoCalibrationData {
-  AutoCalibrationData(bool start) : start(start){};
+struct PoseCalibrationData {
+  PoseCalibrationData(bool start) : start(start){};
   uint8_t start;
 };
 
-int AutoCalibrate(const nlohmann::json& json) {
+int PoseCalibration(const nlohmann::json& json) {
   const bool rightHand = json["right_hand"].get<bool>();
   const bool start = json["start"].get<bool>();
 
-  AutoCalibrationData data(start);
+  PoseCalibrationData data(start);
 
   const bool success = ConnectAndSendPipe("\\\\.\\pipe\\vrapplication\\functions\\autocalibrate\\" + std::string(rightHand ? "right" : "left"), data);
 
@@ -153,6 +149,36 @@ int AutoCalibrate(const nlohmann::json& json) {
   }
 
   std::cerr << "Failed to send message" << std::endl;
+  return 1;
+}
+
+struct VRFFBData_t {
+  VRFFBData_t(short thumbCurl, short indexCurl, short middleCurl, short ringCurl, short pinkyCurl)
+      : thumbCurl(thumbCurl), indexCurl(indexCurl), middleCurl(middleCurl), ringCurl(ringCurl), pinkyCurl(pinkyCurl){};
+
+  short thumbCurl;
+  short indexCurl;
+  short middleCurl;
+  short ringCurl;
+  short pinkyCurl;
+};
+
+int ServoTest(const nlohmann::json& json) {
+  const bool rightHand = json["right_hand"].get<bool>();
+  const bool extend = json["extend"].get<bool>();
+
+  const short setCurl = extend ? 1000 : 0;
+
+  VRFFBData_t data(setCurl, setCurl, setCurl, setCurl, setCurl);
+
+  const bool success = ConnectAndSendPipe("\\\\.\\pipe\\vrapplication\\ffb\\curl\\" + std::string(rightHand ? "right" : "left"), data);
+
+  if (success) {
+    std::cout << "Successfully activated force feedback" << std::endl;
+    return 0;
+  }
+
+  std::cerr << "Failed to send force feedback message to pipe" << std::endl;
   return 1;
 }
 
@@ -183,8 +209,12 @@ int main() {
       return SetSettings(json["data"]);
     }
 
-    if (type == "functions_autocalibrate") {
-      return AutoCalibrate(json["data"]);
+    if (type == "functions_posecalibration") {
+      return PoseCalibration(json["data"]);
+    }
+
+    if (type == "functions_servotest") {
+      return ServoTest(json["data"]);
     }
 
     std::cerr << "Could not find the operation type: " << type << std::endl;

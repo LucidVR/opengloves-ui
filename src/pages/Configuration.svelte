@@ -17,8 +17,7 @@
     import {writeText} from '@tauri-apps/api/clipboard';
     import SuspenseButton from "../components/Input/Button/SuspenseButton.svelte";
     import Suspense from "../components/Suspense.svelte";
-    import {fade} from 'svelte/transition';
-    import RedButton from "../components/Input/Button/RedButton.svelte";
+    import {fade, fly} from 'svelte/transition';
 
     const formData = writable({
         driver_config: {
@@ -34,9 +33,10 @@
     let loaded = false;
     onMount(async () => {
         try {
-            configurationOptions = await getConfiguration();
-            console.log(configurationOptions);
-            ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully loaded configuration');
+            let fromCache;
+            ({configurationOptions, fromCache} = await getConfiguration());
+
+            if(!fromCache) ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully loaded configuration');
             loaded = true;
         } catch (e) {
             console.trace(e)
@@ -70,7 +70,7 @@
         }
     }
 </script>
-<div class="max-w-md flex-grow my-10 w-full">
+<div class="max-w-md flex-grow my-10 w-full" in:fly="{{x: -300, delay:400}}" out:fly="{{x: -300}}">
     <div class="w-full flex flex-col justify-center items-center">
         <div class="mx-10 w-full overflow-auto">
             <h2 class="mb-5 text-center text-3xl font-extrabold text-gray-900">

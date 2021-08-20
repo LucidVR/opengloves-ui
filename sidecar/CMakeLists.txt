@@ -25,7 +25,7 @@ endif()
 find_library(OPENVR_LIB openvr_api HINTS "${CMAKE_CURRENT_SOURCE_DIR}/libraries/openvr/lib/${PLATFORM_NAME}${PROCESSOR_ARCH}/" NO_DEFAULT_PATH )
 
 # Add source to this project's executable.
-add_executable (sidecar-x86_64-pc-windows-msvc "main.cpp" "main.h")
+add_executable (sidecar-x86_64-pc-windows-msvc "main.cpp")
 
 target_include_directories(sidecar-x86_64-pc-windows-msvc PUBLIC "${OPENVR_INCLUDE_DIR}" "${JSON_INCLUDE_DIR}")
 target_link_libraries(sidecar-x86_64-pc-windows-msvc PUBLIC "${OPENVR_LIB}")
