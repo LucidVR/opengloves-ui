@@ -7,13 +7,12 @@
 
     const state = writable({
             form: {
-                calibrationTimer: 5,
                 rightHand: true,
             },
             loading: false,
     });
 
-    const beginCalibration = async (extend) => {
+    const servoTest = async (extend) => {
         try {
             $state.loading = true;
             const result = await openSidecar('sidecar', 'functions_servotest', {
@@ -41,21 +40,21 @@
                     onSelectItemChanged={v => $state.form.rightHand = v}
                     defaultValue={true} label="For Hand"/>
         </div>
-        <b>Calibrate your servos for Force Feedback</b>
+        <b>Test or Calibrate your servos for Force Feedback</b>
         <br />
-        The buttons on the right give the options to either extend the servos fully, or retract them fully. As a guide, when
-        the servos extended all the way, place the servo horn to where you want the fingers to be fully restricted. Then,
+        The buttons on the right give the options to either extend the servos fully, or retract them fully. As a guide,
+        extend the servos fully, then place the servo horn to where you want the fingers to be fully restricted. After,
         retract the servos. They should not impede on any finger movement.
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-col">
         <div class="my-3">
-            <SuspenseButton onClick={async () => beginCalibration(true)}>
+            <SuspenseButton onClick={async () => servoTest(true)}>
                 Extend Servos fully
             </SuspenseButton>
         </div>
 
         <div class="my-3">
-            <SuspenseButton onClick={async () => beginCalibration(false)}>
+            <SuspenseButton onClick={async () => servoTest(false)}>
                 Retract Servos fully
             </SuspenseButton>
         </div>
