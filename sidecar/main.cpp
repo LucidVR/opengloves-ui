@@ -130,16 +130,16 @@ static bool ConnectAndSendPipe(const std::string& pipeName, T& data) {
   return true;
 }
 
-struct AutoCalibrationData {
-  AutoCalibrationData(bool start) : start(start){};
+struct PoseCalibrationData {
+  PoseCalibrationData(bool start) : start(start){};
   uint8_t start;
 };
 
-int AutoCalibrate(const nlohmann::json& json) {
+int PoseCalibration(const nlohmann::json& json) {
   const bool rightHand = json["right_hand"].get<bool>();
   const bool start = json["start"].get<bool>();
 
-  AutoCalibrationData data(start);
+  PoseCalibrationData data(start);
 
   const bool success = ConnectAndSendPipe("\\\\.\\pipe\\vrapplication\\functions\\autocalibrate\\" + std::string(rightHand ? "right" : "left"), data);
 
@@ -209,8 +209,8 @@ int main() {
       return SetSettings(json["data"]);
     }
 
-    if (type == "functions_autocalibrate") {
-      return AutoCalibrate(json["data"]);
+    if (type == "functions_posecalibration") {
+      return PoseCalibration(json["data"]);
     }
 
     if (type == "functions_servotest") {

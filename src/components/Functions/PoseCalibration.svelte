@@ -21,14 +21,14 @@
         $state.timer = $state.form.calibrationTimer;
 
         try {
-            await openSidecar('sidecar', 'functions_autocalibrate', {
+            await openSidecar('sidecar', 'functions_posecalibration', {
                 start: true,
                 right_hand: $state.form.rightHand
             });
             const interval = setInterval(() => {
                 if ($state.timer <= 0) {
                     clearInterval(interval);
-                    openSidecar('sidecar', 'functions_autocalibrate', {
+                    openSidecar('sidecar', 'functions_posecalibration', {
                         start: false,
                         right_hand: $state.form.rightHand
                     }).then(d => {
