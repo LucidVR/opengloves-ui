@@ -19,23 +19,28 @@
     "rollup-dev": "rollup -c -w",
     "start": "sirv public",
     "start-tauri": "wait-on http://localhost:5000 && yarn tauri dev",
-    "dev": "concurrently \"yarn run rollup-dev\" \"yarn run start-tauri\"",
-    "build": "yarn run rollup-build && yarn tauri build"
+    "build-tauri": "tauri build",
+    "dev": "npm-run-all --parallel rollup-dev start-tauri",
+    "build": "run-s rollup-build build-tauri"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@tauri-apps/api": "^1.0.0-beta.6",
     "@tauri-apps/cli": "^1.0.0-beta.9",
     "buffer": "^6.0.3",
     "comment-json": "^4.1.0",
+    "fontawesome-svelte": "^2.0.1",
     "svelte-loading-spinners": "^0.1.6"
   },
   "devDependencies": {
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-inject": "^4.0.2",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@tailwindcss/forms": "^0.3.2",
     "autoprefixer": "^10.2.5",
-    "concurrently": "^6.1.0",
+    "npm-run-all": "^4.1.5",
     "postcss": "8.3.0",
     "postcss-load-config": "^3.0.1",
     "postcss-nesting": "^8.0.1",

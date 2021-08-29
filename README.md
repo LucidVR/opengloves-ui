@@ -32,6 +32,8 @@ The interface uses a c++ backend (sidecar) to communicate to OpenVR, and must be
 * Copy build artifacts (`sidecar-x86_64-pc-windows-msvc.exe` & `openvr_api.dll`) into `src-tauri/`
 
 ## Building the UI
+**Ensure that you have completed the `Building Sidecar` steps before running**  
+
 * Install dependencies
     * `yarn install`
     
