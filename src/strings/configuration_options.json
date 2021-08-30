@@ -1,0 +1,48 @@
+{
+  "left_enabled": {
+    "title": "Left Hand Enabled"
+  },
+  "right_enabled": {
+    "title": "Right Hand Enabled"
+  },
+  "hardware_calibration_button_enabled": {
+    "description": "Whether the hardware calibration button should also calibrate the pose.<br>The pose can also be calibrated in the functions section in this UI."
+  },
+  "left_port": {
+    "title": "Left Serial Port",
+    "description": "Left serial port for the device.<br>Serial port values should start with a \\\\.\\COM."
+  },
+  "right_port": {
+    "title": "Right Serial Port",
+    "description": "Right serial port for the device.<br>Serial port values should start with a \\\\.\\COM."
+  },
+  "baud_rate": {
+    "description": "Baud rate for the device."
+  },
+  "left_serial_number": {
+    "description": "Serial number for the left controller.<br>This can typically be left as default."
+  },
+  "right_serial_number": {
+    "description": "Serial number for the right controller.<br>This can typically be left as default."
+  },
+  "max_analog_value": {
+    "title": "Maximum Analog Value",
+    "description": "Maximum analog value.<br>For an ESP32, the maximum value should be 4095.<br>For an Arduino Nano, the maximum value should be 1023."
+  },
+  "controller_override_left": {
+    "title": "Left Controller Override Id",
+    "description": "If the driver isn't picking up your default controllers correctly,<br>you can override it by entering the steamvr id of the controller here."
+  },
+  "controller_override_right": {
+    "title": "Right Controller Override Id",
+    "description": "If the driver isn't picking up your default controllers correctly,<br>you can override it by entering the steamvr id of the controller here."
+  },
+  "controller_override": {
+    "title": "Enable Controller Override",
+    "description": "If the driver isn't picking up your default controllers correctly,<br>enable this and set the ids of your default controllers."
+  },
+  "pose_time_offset": {
+    "title": "Predicted Pose Time Offset",
+    "description": "The amount of time in the future to predict where the controller is.<br>If your glove is lagging behind your controller, try changing this value."
+  }
+}

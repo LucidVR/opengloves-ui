@@ -1,6 +1,5 @@
 <script>
     import TextInput from '../Input/Text.svelte'
-    import Select from "../Input/Select.svelte";
     import CheckBox from "../Input/CheckBox.svelte";
 
     export let key;
@@ -10,8 +9,8 @@
     export let onChange = () => {};
 </script>
 
-{#if typeof value === 'boolean'}
-    <CheckBox bind:checked={value} label={title} />
-{:else}
-    <TextInput bind:value={value} label={title} />
-{/if}
+    {#if typeof value === 'boolean'}
+        <CheckBox bind:checked={value} label={title} />
+    {:else}
+        <TextInput bind:value={value} label={title} />
+    {/if}

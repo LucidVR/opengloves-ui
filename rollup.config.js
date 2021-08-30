@@ -7,6 +7,7 @@ import sveltePreprocess from "svelte-preprocess";
 import css from 'rollup-plugin-css-only';
 import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
+import json from '@rollup/plugin-json';
 
 const fs = require('fs');
 
@@ -47,6 +48,7 @@ export default {
 			sourceMap: false,
 		}),
 		globals(),
+		json(),
 		builtins(),
 		svelte({
 			compilerOptions: {

@@ -45,11 +45,6 @@ int GetSettings(nlohmann::json& json) {
           break;
         }
       }
-
-      if (err != vr::EVRSettingsError::VRSettingsError_None) {
-        std::cerr << "Error getting configuration property. Section: " << s_sectionName << " Key: " << s_keyName << " Value: " << value << std::endl;
-        return 1;
-      }
     }
   }
 
