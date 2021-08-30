@@ -1,11 +1,9 @@
 {
   "left_enabled": {
-    "title": "Left Hand Enabled",
-    "description": "Enable the left hand \uD83E\uDD14."
+    "title": "Left Hand Enabled"
   },
   "right_enabled": {
-    "title": "Right Hand Enabled",
-    "description": "Enable the right hand \uD83E\uDD14."
+    "title": "Right Hand Enabled"
   },
   "hardware_calibration_button_enabled": {
     "description": "Whether the hardware calibration button should also calibrate the pose.<br>The pose can also be calibrated in the functions section in this UI."
