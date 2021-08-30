@@ -15,11 +15,11 @@
                class="form-tick appearance-none h-5 w-5 border border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none cursor-pointer">
         <span class="text-gray-900 font-medium text-sm">{configurationOptionStrings[label]?.title ?? prettyPrintLabel(label)}</span>
     </label>
-    <div class="p-2">
-        {#if configurationOptionStrings[label]?.description}
-            <ToolTip title={configurationOptionStrings[label].description}>
+    {#if configurationOptionStrings[label]?.description}
+        <div class="p-2">
+            <ToolTip text={configurationOptionStrings[label].description}>
                 <FontAwesomeIcon icon={faQuestionCircle}/>
             </ToolTip>
-        {/if}
-    </div>
+        </div>
+    {/if}
 </div>

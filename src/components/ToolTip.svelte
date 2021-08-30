@@ -1,5 +1,5 @@
 <script>
-    export let title = '';
+    export let text = '';
     let isHovered = false;
     let x;
     let y;
@@ -28,7 +28,7 @@
 </div>
 
 {#if isHovered}
-    <div style="top: {y}px; left: {x}px;" class="tooltip">{@html title}</div>
+    <div style="top: {y}px; left: {x}px;" class="tooltip">{@html text}</div>
 {/if}
 
 <style>

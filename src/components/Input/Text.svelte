@@ -16,13 +16,13 @@
         <p class="block text-sm font-medium text-gray-700">
             {configurationOptionStrings[label]?.title ?? prettyPrintLabel(label)}
         </p>
-        <div class="px-1">
-            {#if configurationOptionStrings[label]?.description}
-                <ToolTip title={configurationOptionStrings[label].description}>
+        {#if configurationOptionStrings[label]?.description}
+            <div class="px-1">
+                <ToolTip text={configurationOptionStrings[label].description}>
                     <FontAwesomeIcon icon={faQuestionCircle}/>
                 </ToolTip>
-            {/if}
-        </div>
+            </div>
+        {/if}
     </div>
 
     <div class="mt-1 flex rounded-md shadow-sm">
