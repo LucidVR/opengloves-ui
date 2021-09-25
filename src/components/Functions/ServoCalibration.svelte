@@ -24,7 +24,10 @@
         } catch (e) {
             $state.loading = false;
             console.trace(e);
-            ToastStore.addToast(ToastStore.severity.ERROR, 'Error starting servo calibration. Make sure that the driver is running: ' + e);
+            if (Array.isArray(e))
+                e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
+            else
+                ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
 
     };

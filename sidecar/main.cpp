@@ -177,24 +177,36 @@ int ServoTest(const nlohmann::json& json) {
   return 1;
 }
 
-int main() {
+void initOpenVR(bool asOverlay) {
   vr::EVRInitError error;
 
-  VR_Init(&error, vr::VRApplication_Utility);
+  VR_Init(&error, asOverlay ? vr::VRApplication_Overlay : vr::VRApplication_Utility);
 
   if (error != vr::EVRInitError::VRInitError_None) {
-    std::cerr << "OpenVR Init Error" << std::endl;
-    return 0;
+    std::cerr << "OpenVR Init Error! Err: " << error << std::endl;
+    switch (error) {
+      case 108:
+      case 126:
+        std::cerr << "A HMD was not found. Please plug it in before trying to use functions" << std::endl;
+        break;
+      default:
+        std::cerr << "Please kill SteamVR processes (VR Server) in Task Manager and try again." << std::endl;
+    }
   }
+}
 
+int main() {
   std::string s;
-
   std::getline(std::cin >> std::ws, s);
 
   try {
     auto json = nlohmann::json::parse(s, nullptr, true, true);
 
     const std::string type = json["type"].get<std::string>();
+
+    // If we are trying to execute a "function", we most likely require SteamVR to be running, so open it as an overlay, else open it in the background (so the window
+    // doesn't appear)
+    initOpenVR(type.find("functions") != std::string::npos);
 
     if (type == "settings_get") {
       return GetSettings(json["data"]);

@@ -40,7 +40,10 @@
             loaded = true;
         } catch (e) {
             console.trace(e)
-            ToastStore.addToast(ToastStore.severity.ERROR, 'Unable to load configuration, please open an issue on GitHub: ' + e);
+            if (Array.isArray(e))
+                e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
+            else
+                ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
     });
 
@@ -52,7 +55,10 @@
             ToastStore.addToast(ToastStore.severity.SUCCESS, 'Success saving configuration. Please restart SteamVR for the changes to take effect.');
         } catch (e) {
             console.trace(e);
-            ToastStore.addToast(ToastStore.severity.ERROR, 'Unable to save configuration, please open an issue on GitHub: ' + e);
+            if (Array.isArray(e))
+                e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
+            else
+                ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
     }
 
