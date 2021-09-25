@@ -7,13 +7,13 @@
     import SuspenseButton from "../Input/Button/SuspenseButton.svelte";
 
     const state = writable({
-            form: {
-                calibrationTimer: 5,
-                rightHand: true,
-            },
-            timer: null,
-            calibrating: false,
-            loading: false,
+        form: {
+            calibrationTimer: 5,
+            rightHand: true,
+        },
+        timer: null,
+        calibrating: false,
+        loading: false,
     });
 
     const beginCalibration = async () => {
@@ -44,7 +44,10 @@
             $state.calibrating = false;
             $state.loading = false;
             console.trace(e);
-            ToastStore.addToast(ToastStore.severity.ERROR, 'Error starting calibration. Make sure that the driver is running: ' + e);
+            if (Array.isArray(e))
+                e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
+            else
+                ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
 
     };
@@ -63,7 +66,7 @@
             <Text label="Timer (Delay time)" bind:value={$state.form.calibrationTimer}/>
         </div>
         <b>Automatically calibrate your controller offsets:</b>
-        <br />
+        <br/>
         Clicking the button will start a 10 second timer and will freeze your in-game hand.
         During the delay, move your hand to the position of the hand in-game. Once the timer
         is up, you should see your virtual hand move with your real hand.

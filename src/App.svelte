@@ -34,12 +34,14 @@
         //we have received a toast update
         if (e.length > visibleToasts.length) {
             //last toast added
-            visibleToasts = [...visibleToasts, [e[e.length - 1].message, e[e.length - 1].severity, new Date().getTime(), ToastComponent]];
+            visibleToasts = [...visibleToasts, [e[e.length - 1].message, e[e.length - 1].severity, Math.random(), ToastComponent]];
 
             window.setTimeout(() => {
                 visibleToasts = visibleToasts.slice(1, visibleToasts.length);
                 ToastStore.popToast();
-            }, 3500);
+
+                //success or error timeout length
+            }, e[e.length - 1].severity === 2 ? 2000 : 5000);
         }
     });
 

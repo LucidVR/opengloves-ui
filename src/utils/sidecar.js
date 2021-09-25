@@ -14,11 +14,12 @@ export const openSidecar = async (program, type, data) => {
     const promiseDataReceived = new Promise((resolve, reject) => {
         // Listen for output
         const stdout = [];
+        const stderr = [];
         sidecar.stdout.on('data', e => stdout.push(e));
-        sidecar.stderr.on('data', e => reject(e));
+        sidecar.stderr.on('data', e => stderr.push(e));
 
         // Report output on exit
-        sidecar.on('close', () => resolve(stdout));
+        sidecar.on('close', () => stderr.length > 0 ? reject(stderr) : resolve(stdout));
     });
 
     const child = await sidecar.spawn();
