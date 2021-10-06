@@ -3,6 +3,8 @@
     import Functions from "./pages/Functions.svelte";
 
     import ToastStore from './stores/toast';
+    import SplashStore from './stores/splash';
+
     import {flip} from 'svelte/animate';
     import {crossfade} from 'svelte/transition';
     import {quintOut} from 'svelte/easing';
@@ -65,8 +67,12 @@
 </div>
 
 <div id="content" class="font-sans min-h-screen flex flex-col justify-center items-center bg-gray-50 overflow-hidden">
-    <Menu items={['Configuration', 'Functions']} bind:active={activeMenuItem}/>
-    <svelte:component this={menuItemComponents[activeMenuItem]}/>
+    {#if $SplashStore.length > 0}
+        <svelte:component this={$SplashStore[$SplashStore.length-1].component} {...$SplashStore[$SplashStore.length-1].props}/>
+    {:else}
+        <Menu items={['Configuration', 'Functions']} bind:active={activeMenuItem}/>
+        <svelte:component this={menuItemComponents[activeMenuItem]}/>
+    {/if}
     <Footer />
 </div>
 
