@@ -6,10 +6,10 @@
     import {flip} from 'svelte/animate';
     import {crossfade} from 'svelte/transition';
     import {quintOut} from 'svelte/easing';
-    import {open} from '@tauri-apps/api/shell';
 
     import ToastComponent from './components/Toast.svelte';
     import Menu from "./components/Menu.svelte";
+    import Footer from "./components/Footer.svelte";
 
     const [send, receive] = crossfade({
         duration: d => Math.sqrt(d * 200),
@@ -67,11 +67,6 @@
 <div id="content" class="font-sans min-h-screen flex flex-col justify-center items-center bg-gray-50 overflow-hidden">
     <Menu items={['Configuration', 'Functions']} bind:active={activeMenuItem}/>
     <svelte:component this={menuItemComponents[activeMenuItem]}/>
-    <footer class="p-4 text-center flex flex-row items-end">
-        <h3 on:click={() => open('https://github.com/LucidVR/opengloves-ui')}
-            class="cursor-pointer text-blue-500">
-            Source code licenced under MIT
-        </h3>
-    </footer>
+    <Footer />
 </div>
 
