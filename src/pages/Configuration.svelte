@@ -6,6 +6,7 @@
         saveConfiguration,
     } from '../utils/configuration'
     import ToastStore from '../stores/toast'
+    import SplashStore from '../stores/splash';
 
     import Select from '../components/Input/Select.svelte'
     import {writable} from 'svelte/store'
@@ -18,6 +19,8 @@
     import SuspenseButton from "../components/Input/Button/SuspenseButton.svelte";
     import Suspense from "../components/Suspense.svelte";
     import {fade, fly} from 'svelte/transition';
+    import Init from "../splashscreens/Init.svelte";
+    import {process} from "@tauri-apps/api";
 
     const formData = writable({
         driver_config: {
@@ -29,23 +32,8 @@
         },
     });
 
-    let configurationOptions = [];
-    let loaded = false;
-    onMount(async () => {
-        try {
-            let fromCache;
-            ({configurationOptions, fromCache} = await getConfiguration());
 
-            if(!fromCache) ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully loaded configuration');
-            loaded = true;
-        } catch (e) {
-            console.trace(e)
-            if (Array.isArray(e))
-                e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
-            else
-                ToastStore.addToast(ToastStore.severity.ERROR, e);
-        }
-    });
+    let configurationOptions = [];
 
 
     const onFormSubmit = async () => {
@@ -61,6 +49,34 @@
                 ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
     }
+
+    let loaded = false;
+    onMount(async () => {
+        try {
+            let fromCache;
+            ({configurationOptions, fromCache} = await getConfiguration());
+            const driver_openglove = configurationOptions.driver_openglove.options;
+            if(!driver_openglove.left_enabled && !driver_openglove.right_enabled) {
+                SplashStore.addSplash(Init, {
+                    onActivate: async () => {
+                        driver_openglove.left_enabled = true;
+                        driver_openglove.right_enabled = true;
+                        await onFormSubmit();
+                        SplashStore.popSplash();
+                    }
+                });
+            }
+
+            if(!fromCache) ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully loaded configuration');
+            loaded = true;
+        } catch (e) {
+            console.trace(e)
+            if (Array.isArray(e))
+                e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
+            else
+                ToastStore.addToast(ToastStore.severity.ERROR, e);
+        }
+    });
 
     const copyConfigurationToClipboard = () => {
         try {
