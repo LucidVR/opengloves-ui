@@ -2,8 +2,8 @@
   "driver_openglove":
   {
     "__title": "OpenGlove Configuration",
-    "left_enabled": true,
-    "right_enabled": true,
+    "left_enabled": false,
+    "right_enabled": false,
     "communication_protocol": 0, //title:Communication Method
     "device_driver": 1, //title:Device Driver Emulation
     "encoding_protocol": 1 //title:Encoding Protocol
