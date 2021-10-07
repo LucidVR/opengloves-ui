@@ -26,17 +26,17 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@tauri-apps/api": "^1.0.0-beta.6",
-    "@tauri-apps/cli": "^1.0.0-beta.9",
+    "@tauri-apps/api": "^1.0.0-beta.8",
+    "@tauri-apps/cli": "^1.0.0-beta.10",
     "buffer": "^6.0.3",
     "comment-json": "^4.1.0",
     "fontawesome-svelte": "^2.0.1",
     "svelte-loading-spinners": "^0.1.6"
   },
   "devDependencies": {
-    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-inject": "^4.0.2",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@tailwindcss/forms": "^0.3.2",
     "autoprefixer": "^10.2.5",

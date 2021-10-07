@@ -21,6 +21,7 @@
     import {fade, fly} from 'svelte/transition';
     import Init from "../splashscreens/Init.svelte";
     import {process} from "@tauri-apps/api";
+    import {getLocalStorageKey, setLocalStorageKey} from "../utils/storage";
 
     const formData = writable({
         driver_config: {
@@ -56,9 +57,11 @@
             let fromCache;
             ({configurationOptions, fromCache} = await getConfiguration());
             const driver_openglove = configurationOptions.driver_openglove.options;
-            if(!driver_openglove.left_enabled && !driver_openglove.right_enabled) {
+
+            if(!(getLocalStorageKey('initialised') === 'true') && !driver_openglove.left_enabled && !driver_openglove.right_enabled) {
                 SplashStore.addSplash(Init, {
                     onActivate: async () => {
+                        setLocalStorageKey('initialised', true);
                         driver_openglove.left_enabled = true;
                         driver_openglove.right_enabled = true;
                         await onFormSubmit();
