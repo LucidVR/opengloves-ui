@@ -57,7 +57,7 @@
             let fromCache;
             ({configurationOptions, fromCache} = await getConfiguration());
             const driver_openglove = configurationOptions.driver_openglove.options;
-
+          
             if(!(getLocalStorageKey('initialised') === 'true') && !driver_openglove.left_enabled && !driver_openglove.right_enabled) {
                 SplashStore.addSplash(Init, {
                     onActivate: async () => {
