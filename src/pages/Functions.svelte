@@ -1,10 +1,11 @@
 <script>
     import {fly} from "svelte/transition";
 
-    import PoseCalibration from "../components/Functions/PoseCalibration.svelte";
-    import ServoCalibration from "../components/Functions/ServoCalibration.svelte";
+    import PoseCalibration from "../components/Functions/PoseCalibrationFunction.svelte";
+    import ServoCalibration from "../components/Functions/ServoCalibrationFunction.svelte";
+    import Reset from "../components/Functions/ResetFunction.svelte";
 
-    const functionList = [PoseCalibration, ServoCalibration];
+    const functionList = [Reset, PoseCalibration, ServoCalibration];
 </script>
 
 <div class="flex-grow my-10 w-full">

@@ -15,18 +15,21 @@ export const primaryConfigurationSection = "driver_openglove";
  */
 const getValuesForConfiguration = async (configObj) => (await openSidecar("sidecar", "settings_get", configObj)).pop();
 
+export const readDefaultConfiguration = async () => {
+    const text = await readTextFile('../resources/settings/default.vrsettings');
+    return parse(text);
+}
+
 export const getConfiguration = async () => {
     const cached = await ConfigurationStore.getConfiguration();
     if(cached) return {configurationOptions: cached, fromCache: true};
 
-    const text = await readTextFile('../resources/settings/default.vrsettings');
-    const parsedJSON = parse(text);
-    const openVRConfigValues = await getValuesForConfiguration(parsedJSON);
+    const defaultConfig = await readDefaultConfiguration();
+    const openVRConfigValues = await getValuesForConfiguration(defaultConfig);
 
-    //passed by reference
-    deepOverwrite(parsedJSON, parse(openVRConfigValues));
+    deepOverwrite(defaultConfig, parse(openVRConfigValues));
 
-    const parsed = parseConfiguration(parsedJSON);
+    const parsed = parseConfiguration(defaultConfig);
 
     ConfigurationStore.set(parsed);
     return {configurationOptions: parsed, fromCache: false};
