@@ -8,6 +8,10 @@
   "hardware_calibration_button_enabled": {
     "description": "Whether the hardware calibration button should also calibrate the pose.<br>The pose can also be calibrated in the functions section in this UI."
   },
+  "approximate_thumb": {
+    "title": "Approximate Thumb Position",
+    "description": "On games that don't support smooth thumb positions, approximate the position of the thumb with capacitive touch emulation."
+  },
   "left_port": {
     "title": "Left Serial Port",
     "description": "Left serial port for the device.<br>Serial port values should start with a \\\\.\\COM."
