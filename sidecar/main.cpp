@@ -7,6 +7,22 @@
 
 #include "json.hpp"
 
+std::string GetLastErrorAsString() {
+  const DWORD errorMessageId = ::GetLastError();
+  if (errorMessageId == 0) return std::string();
+
+  LPSTR messageBuffer = nullptr;
+  const size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, errorMessageId,
+                                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&messageBuffer), 0, nullptr);
+
+  std::string message(messageBuffer, size);
+
+  LocalFree(messageBuffer);
+
+  return message;
+}
+
+
 int GetSettings(nlohmann::json& json) {
   for (auto& el : json.items()) {
     const std::string& s_sectionName = el.key();
@@ -143,7 +159,8 @@ int PoseCalibration(const nlohmann::json& json) {
     return 0;
   }
 
-  std::cerr << "Failed to send message" << std::endl;
+  std::cerr << "Failed to send pose calibration message" << std::endl;
+  std::cerr << "Error: " << GetLastErrorAsString() << "Please notify the developers of this problem." << std::endl;
   return 1;
 }
 
@@ -174,10 +191,12 @@ int ServoTest(const nlohmann::json& json) {
   }
 
   std::cerr << "Failed to send force feedback message to pipe" << std::endl;
+  std::cerr << "Error: " << GetLastErrorAsString() << "Please notify the developers of this problem." << std::endl;
+
   return 1;
 }
 
-void initOpenVR(bool asOverlay) {
+void InitOpenVR(bool asOverlay) {
   vr::EVRInitError error;
 
   VR_Init(&error, asOverlay ? vr::VRApplication_Overlay : vr::VRApplication_Utility);
@@ -206,7 +225,7 @@ int main() {
 
     // If we are trying to execute a "function", we most likely require SteamVR to be running, so open it as an overlay, else open it in the background (so the window
     // doesn't appear)
-    initOpenVR(type.find("functions") != std::string::npos);
+    InitOpenVR(type.find("functions") != std::string::npos);
 
     if (type == "settings_get") {
       return GetSettings(json["data"]);
@@ -226,7 +245,7 @@ int main() {
 
     std::cerr << "Could not find the operation type: " << type << std::endl;
   } catch (nlohmann::json::exception& e) {
-    std::cerr << "Error decoding JSON! What: " << e.what() << std::endl;
+    std::cerr << "Error decoding JSON! Error: " << e.what() << std::endl;
     return 1;
   }
 
