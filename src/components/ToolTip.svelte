@@ -29,7 +29,7 @@
 
 {#if isHovered}
     <div class="absolute mx-2 shadow" style="top: {y}px; left: {x}px;">
-        <div class="bg-black text-white text-sm rounded py-1 px-4 right-0 bottom-full">
+        <div class="bg-black text-gray-200 text-sm rounded py-1 px-4 right-0 bottom-full">
             {@html text}
         </div>
     </div>

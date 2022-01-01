@@ -1,78 +1,12 @@
 <script>
-    import Configuration from './pages/Configuration.svelte';
-    import Functions from "./pages/Functions.svelte";
-
-    import ToastStore from './stores/toast';
-    import SplashStore from './stores/splash';
-
-    import {flip} from 'svelte/animate';
-    import {crossfade} from 'svelte/transition';
-    import {quintOut} from 'svelte/easing';
-
-    import ToastComponent from './components/Toast.svelte';
-    import Menu from "./components/Menu.svelte";
-    import Footer from "./components/Footer.svelte";
-
-    const [send, receive] = crossfade({
-        duration: d => Math.sqrt(d * 200),
-
-        fallback(node, params) {
-            const style = getComputedStyle(node)
-            const transform = style.transform === 'none' ? '' : style.transform
-
-            return {
-                duration: 600,
-                easing: quintOut,
-                css: t => `
-					transform: ${transform} scale(${t});
-					opacity: ${t}
-				`
-            }
-        }
-    })
-
-    let visibleToasts = []
-    ToastStore.subscribe(e => {
-        //we have received a toast update
-        if (e.length > visibleToasts.length) {
-            //last toast added
-            visibleToasts = [...visibleToasts, [e[e.length - 1].message, e[e.length - 1].severity, Math.random(), ToastComponent]];
-
-            window.setTimeout(() => {
-                visibleToasts = visibleToasts.slice(1, visibleToasts.length);
-                ToastStore.popToast();
-
-                //success or error timeout length
-            }, e[e.length - 1].severity === 2 ? 2000 : 5000);
-        }
-    });
-
-    let activeMenuItem = 0;
-    const menuItemComponents = [Configuration, Functions];
+    import {Router} from "@roxi/routify";
+    import {routes} from "../.routify/routes";
 </script>
+
 <style global lang="postcss">
     @tailwind base;
     @tailwind components;
     @tailwind utilities;
 </style>
-
-<div class="fixed right-0 top-0 m-5 z-50">
-    {#each visibleToasts as [message, severity, id, ToastComponent], index (id)}
-        <div in:receive="{{key: id}}"
-             out:send="{{key: id}}"
-             animate:flip>
-            <ToastComponent message={message} severity={severity}/>
-        </div>
-    {/each}
-</div>
-
-<div id="content" class="font-sans min-h-screen flex flex-col justify-center items-center bg-gray-50 overflow-hidden">
-    {#if $SplashStore.length > 0}
-        <svelte:component this={$SplashStore[$SplashStore.length-1].component} {...$SplashStore[$SplashStore.length-1].props}/>
-    {:else}
-        <Menu items={['Configuration', 'Functions']} bind:active={activeMenuItem}/>
-        <svelte:component this={menuItemComponents[activeMenuItem]}/>
-    {/if}
-    <Footer />
-</div>
-
+<Router {routes}
+/>

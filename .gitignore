@@ -23,3 +23,4 @@ bin/
 
 src-tauri/sidecar-x86_64-pc-windows-msvc.exe
 src-tauri/openvr_api.dll
+.routify/

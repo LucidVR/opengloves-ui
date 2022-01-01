@@ -20,7 +20,6 @@
     import Suspense from "../components/Suspense.svelte";
     import {fade, fly} from 'svelte/transition';
     import Init from "../splashscreens/Init.svelte";
-    import {process} from "@tauri-apps/api";
     import {getLocalStorageKey, setLocalStorageKey} from "../utils/storage";
 
     const formData = writable({
@@ -52,12 +51,12 @@
     }
 
     let loaded = false;
+    let fromCache = false;
     onMount(async () => {
         try {
-            let fromCache;
             ({configurationOptions, fromCache} = await getConfiguration());
             const driver_openglove = configurationOptions.driver_openglove.options;
-          
+
             if(!(getLocalStorageKey('initialised') === 'true') && !driver_openglove.left_enabled && !driver_openglove.right_enabled) {
                 SplashStore.addSplash(Init, {
                     onActivate: async () => {
@@ -95,17 +94,17 @@
         }
     }
 </script>
-<div class="max-w-md flex-grow my-10 w-full" in:fly="{{x: -300, delay:400}}" out:fly="{{x: -300}}">
+<div class="flex-grow max-w-md my-10 w-full">
     <div class="w-full flex flex-col justify-center items-center">
         <div class="mx-10 w-full overflow-auto">
-            <h2 class="mb-5 text-center text-3xl font-extrabold text-gray-900">
-                Configure your driver
+            <h2 class="mb-5 text-center text-3xl font-extrabold  ">
+                Driver Configuration
             </h2>
             <div class="shadow rounded">
                 <div class="px-4 py-5 space-y-6">
                     <Suspense suspense={!loaded}>
                         {#each Object.entries(configurationOptions) as [key, value], i}
-                            <div in:fade="{{delay: i * 100}}">
+                            <div>
                                 <Accordion title={value.title}>
                                     {#if Array.isArray(value.options)}
                                         <Select

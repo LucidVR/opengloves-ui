@@ -8,26 +8,25 @@
     export let defaultValue = 0;
 
     $: selectedId = options.findIndex(e => e.value === defaultValue);
-
     let visible = false;
 
 
 </script>
 
 <div class="z-30">
-    <label id="listbox-label" class="block text-sm font-medium text-gray-700">
+    <label id="listbox-label" class="block text-sm font-medium">
         {label}
     </label>
     <div class="mt-1 w-full relative">
         <button type="button"
                 on:click={() => visible = !visible}
-                class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                class="relative w-full bg-white border border-gray-300 dark:border-gray-600 dark:bg-gray-600 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
         <span class="ml-3 block truncate">
             {options[selectedId]?.title}
         </span>
             <span class="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                <svg class="h-5 w-5 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                      fill="currentColor"
                      aria-hidden="true">
                   <path fill-rule="evenodd"
@@ -38,10 +37,10 @@
         </button>
         <div class="absolute w-full">
             {#if visible && options.length > 0}
-                <ul class="mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm cursor-pointer z-50"
+                <ul class="mt-1 w-full bg-white border-gray-300 dark:border-gray-800 dark:bg-gray-600 shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm cursor-pointer z-50"
                     tabindex="-1" role="listbox" aria-labelledby="listbox-label">
                     {#each options as option, i}
-                        <li class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9" id="listbox-option-0"
+                        <li class="  cursor-default select-none relative py-2 pl-3 pr-9" id="listbox-option-0"
                             on:click={() => {
                             onSelectItemChanged(option.value);
                             selectedId = i;
