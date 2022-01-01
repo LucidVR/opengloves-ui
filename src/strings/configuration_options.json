@@ -48,5 +48,9 @@
   "pose_time_offset": {
     "title": "Predicted Pose Time Offset",
     "description": "The amount of time in the future to predict where the controller is.<br>If your glove is lagging behind your controller, try changing this value."
+  },
+  "feedback_enabled": {
+    "title": "Feedback Enabled",
+    "description": "Whether the driver should send back information (like force feedback data) to the glove. You should make sure that the firmware is not expecting data to be sent from the driver if you disable this option."
   }
 }
