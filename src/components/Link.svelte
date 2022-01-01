@@ -3,7 +3,7 @@
 
     export let url = "";
 
-    export let colour = 'blue';
+    export let colour = 'blue-500';
 </script>
 
-<a class="cursor-pointer text-{colour}-500" on:click={() => open(url)}><slot/></a>
+<a class="cursor-pointer text-{colour}" on:click={() => open(url)}><slot/></a>

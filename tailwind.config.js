@@ -16,7 +16,11 @@ module.exports = {
     },
     darkMode: false, // or 'media' or 'class'
     theme: {
-        extend: {},
+        extend: {
+            textColor: {
+                'blurple': '#5865F2'
+            }
+        },
     },
     variants: {
         extend: {

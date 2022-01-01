@@ -13,7 +13,7 @@
     </Link>
     </ToolTip>
     <ToolTip text="Join our discord server">
-        <Link url="https://discord.gg/favJqS2k4X" colour="blue">
+        <Link url="https://discord.gg/favJqS2k4X" colour="blurple">
             <Fa icon={faDiscord} size="2x"/>
         </Link>
     </ToolTip>
