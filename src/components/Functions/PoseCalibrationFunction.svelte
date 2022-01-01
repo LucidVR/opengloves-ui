@@ -54,10 +54,10 @@
 </script>
 
 <tr>
-    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+    <td class="px-6 py-4 whitespace-nowrap text-sm">
         Pose Auto-Calibration
     </td>
-    <td class="px-6 py-4 text-sm text-gray-500">
+    <td class="px-6 py-4 text-sm">
         <div class="mb-3">
             <Select options={[{title: 'Left Hand', value: false}, {title: 'Right Hand', value: true}]}
                     onSelectItemChanged={v => $state.form.rightHand = v}
@@ -71,7 +71,7 @@
         During the delay, move your hand to the position of the hand in-game. Once the timer
         is up, you should see your virtual hand move with your real hand.
     </td>
-    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-row">
+    <td class="px-6 py-4 whitespace-nowrap text-sm flex flex-row">
         <SuspenseButton onClick={async () => beginCalibration()}
                         disabled={$state.calibrating}>
             {#if $state.calibrating}

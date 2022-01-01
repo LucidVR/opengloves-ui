@@ -15,12 +15,13 @@
     "url": "https://github.com/LucidVR/opengloves-ui/issues"
   },
   "scripts": {
-    "rollup-build": "rollup -c",
+    "rollup-build": "routify -b && rollup -c",
     "rollup-dev": "rollup -c -w",
-    "start": "sirv public",
+    "routify-dev": "routify",
+    "start": "sirv public --single",
     "start-tauri": "wait-on http://localhost:5000 && yarn tauri dev",
     "build-tauri": "tauri build",
-    "dev": "npm-run-all --parallel rollup-dev start-tauri",
+    "dev": "npm-run-all --parallel routify-dev rollup-dev start-tauri",
     "build": "run-s rollup-build build-tauri"
   },
   "dependencies": {
@@ -56,6 +57,7 @@
     "svelte": "^3.38.2",
     "svelte-preprocess": "^4.7.3",
     "tailwindcss": "^2.2.7",
-    "wait-on": "^5.3.0"
+    "wait-on": "^5.3.0",
+    "@roxi/routify": "^2.18.4"
   }
 }

@@ -34,10 +34,10 @@
 </script>
 
 <tr>
-    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+    <td class="px-6 py-4 whitespace-nowrap text-sm">
         Servo Testing for Manual Calibration
     </td>
-    <td class="px-6 py-4 text-sm text-gray-500">
+    <td class="px-6 py-4 text-sm">
         <div class="mb-3">
             <Select options={[{title: 'Left Hand', value: false}, {title: 'Right Hand', value: true}]}
                     onSelectItemChanged={v => $state.form.rightHand = v}
@@ -49,7 +49,7 @@
         extend the servos fully, then place the servo horn to where you want the fingers to be fully restricted. After,
         retract the servos. They should not impede on any finger movement.
     </td>
-    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-col">
+    <td class="px-6 py-4 whitespace-nowrap text-sm flex flex-col">
         <div class="my-3">
             <SuspenseButton onClick={async () => servoTest(true)}>
                 Extend Servos fully

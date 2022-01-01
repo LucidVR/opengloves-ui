@@ -24,15 +24,15 @@
 </script>
 
 <tr>
-    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+    <td class="px-6 py-4 whitespace-nowrap text-sm">
         Reset Configuration
     </td>
-    <td class="px-6 py-4 text-sm text-gray-500">
+    <td class="px-6 py-4 text-sm">
         <b>Reset Configuration to default</b>
         <br />
-        If you've somehow messed up your configuration, you can reset it to default below.
+        If you've somehow messed up your configuration, reset it to default.
     </td>
-    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-col">
+    <td class="px-6 py-4 whitespace-nowrap text-sm flex flex-col">
         <div class="my-3">
             <SuspenseButton onClick={resetConfiguration} colour="red">
                 Reset Configuration

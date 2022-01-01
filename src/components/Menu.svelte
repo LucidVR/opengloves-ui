@@ -10,11 +10,15 @@
                 <div class="flex space-x-4">
                     {#each items as item, i}
                         {#if i === active}
-                            <a class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
-                               aria-current="page">{item}</a>
+                            <a
+                                    on:click={item.onClick}
+                                    class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
+                                    aria-current="page">{item.title}</a>
                         {:else}
-                            <a class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                               on:click={() => active = i}>{item}</a>
+                            <a
+                                    on:click={item.onClick}
+                                    class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                                    on:click={() => active = i}>{item.title}</a>
                         {/if}
                     {/each}
                 </div>
