@@ -28,16 +28,9 @@
 </div>
 
 {#if isHovered}
-    <div style="top: {y}px; left: {x}px;" class="tooltip">{@html text}</div>
+    <div class="absolute mx-2 shadow" style="top: {y}px; left: {x}px;">
+        <div class="bg-black text-white text-sm rounded py-1 px-4 right-0 bottom-full">
+            {@html text}
+        </div>
+    </div>
 {/if}
-
-<style>
-    .tooltip {
-        border: 1px solid #ddd;
-        box-shadow: 1px 1px 1px #ddd;
-        background: white;
-        border-radius: 4px;
-        padding: 4px;
-        position: absolute;
-    }
-</style>
