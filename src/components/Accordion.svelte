@@ -3,7 +3,7 @@
 
     export let title;
 
-    let expanded = false;
+    export let expanded = false;
 
 </script>
 <style>

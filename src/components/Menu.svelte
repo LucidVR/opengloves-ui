@@ -9,7 +9,7 @@
             <div class="flex-1 flex items-center justify-center">
                 <div class="flex space-x-4">
                     {#each items as item, i}
-                        {#if i === active}
+                        {#if item.active}
                             <a
                                     on:click={item.onClick}
                                     class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"

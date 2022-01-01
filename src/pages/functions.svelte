@@ -8,6 +8,9 @@
 
 <div class="flex-grow my-10 w-full">
     <div class="flex flex-col">
+        <h2 class="mb-5 text-center text-3xl font-extrabold  ">
+            Functions
+        </h2>
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div class="shadow overflow-x-auto border-b border-gray-200 sm:rounded-lg">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-900">

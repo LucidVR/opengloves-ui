@@ -8,7 +8,6 @@
     export let defaultValue = 0;
 
     $: selectedId = options.findIndex(e => e.value === defaultValue);
-
     let visible = false;
 
 
