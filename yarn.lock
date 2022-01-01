@@ -35,6 +35,13 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.36"
 
+"@fortawesome/free-brands-svg-icons@^5.15.4":
+  version "5.15.4"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-brands-svg-icons/-/free-brands-svg-icons-5.15.4.tgz#ec8a44dd383bcdd58aa7d1c96f38251e6fec9733"
+  integrity sha512-f1witbwycL9cTENJegcmcZRYyawAFbm8+c6IirLmwbbpqz46wyjbQYLuxOc7weXFXfB7QR8/Vd2u5R3q6JYD9g==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.36"
+
 "@fortawesome/free-solid-svg-icons@^5.15.4":
   version "5.15.4"
   resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.15.4.tgz#2a68f3fc3ddda12e52645654142b9e4e8fbb6cc5"
@@ -1799,11 +1806,6 @@ follow-redirects@^1.10.0:
   version "1.14.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.0.tgz#f5d260f95c5f8c105894491feee5dc8993b402fe"
   integrity sha512-0vRwd7RKQBTt+mgu87mtYeofLFZpTas2S9zY+jIeuLJMNvudIgF52nr19q40HOwH5RrhWIPuj9puybzSJiRrVg==
-
-fontawesome-svelte@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/fontawesome-svelte/-/fontawesome-svelte-2.0.1.tgz#1e878f474e0c89ac3d044d0528cc31753584a4c8"
-  integrity sha512-6OSbpfBFiQA4fcrj5CvJBx36iVYfdvQY8xEdcsQNhWk6FjdwoiWkjxOIvSsr6v1KI2fM9xr99z7uRJHLSsxreQ==
 
 foreach@~2.0.1:
   version "2.0.5"
@@ -4665,6 +4667,11 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   integrity sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==
   dependencies:
     has-flag "^4.0.0"
+
+svelte-fa@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/svelte-fa/-/svelte-fa-2.4.0.tgz#d94285151a975b92b29efec6ec9e2c11c57780ef"
+  integrity sha512-0bnbMGbsE1LUnlioDcf27tl2O8kjuXlTXMXzIxC7LoIOWmqn0D+zd539HfLiQbdLuOHGTaynwN9V+4ehhEu1Jw==
 
 svelte-loading-spinners@^0.1.6:
   version "0.1.6"

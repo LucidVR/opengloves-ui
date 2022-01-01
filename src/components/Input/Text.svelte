@@ -1,5 +1,5 @@
 <script>
-    import {FontAwesomeIcon} from 'fontawesome-svelte';
+    import Fa from 'svelte-fa';
     import {faQuestionCircle} from '@fortawesome/free-solid-svg-icons';
     import ToolTip from '../ToolTip.svelte';
     import configurationOptionStrings from '../../strings/configuration_options.json';
@@ -19,7 +19,7 @@
         {#if configurationOptionStrings[label]?.description}
             <div class="px-1">
                 <ToolTip text={configurationOptionStrings[label].description}>
-                    <FontAwesomeIcon icon={faQuestionCircle}/>
+                    <Fa icon={faQuestionCircle}/>
                 </ToolTip>
             </div>
         {/if}
