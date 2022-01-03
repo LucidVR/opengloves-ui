@@ -15,7 +15,7 @@
     </Link>
     </ToolTip>
     <ToolTip text="Join our discord server">
-        <Link url="https://discord.gg/favJqS2k4X">
+        <Link url="https://discord.gg/lucidvr">
             <div class="text-blurple">
                 <Fa icon={faDiscord} size="2x"/>
             </div>
