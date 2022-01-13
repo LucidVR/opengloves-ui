@@ -22,7 +22,7 @@ with **OpenVR** and must be built first for the project to run.
 
 4. Open the generated **Visual Studio** project.
 
-5. **Build** the project.
+5. **Build** the project in a `Release` / `MinSizeRel` mode.
 
 6. Copy the build **Artifacts** into `src-tauri`.
     - `sidecar-x86_64-pc-windows-msvc.exe`
@@ -64,9 +64,10 @@ with **OpenVR** and must be built first for the project to run.
 Using the **Installer** will automatically install `Webview2`.
 
 If you only plan on distributing the **UI** & **Sidecar** <br>
-binaries, you will have to manually install `Webview2`.
+binaries, you will have to manually install [`Webview2`].
 
 
 <!----------------------------------------------------------------------------->
 
 [some extra setup]: https://tauri.studio/en/docs/getting-started/setup-windows
+[`Webview2`]: https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section

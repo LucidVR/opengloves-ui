@@ -26,9 +26,11 @@ and afterwards the **OpenVR** user configuration.
 The default config is located relative to `src-tauri` <br>
 at `../resources/settings/default.vrsettings`.
 
-The default configuration is for default settings only, <br>
-**OpenVR** driver will not check this file, instead they <br>
-search in the `steamvr.vrsettings` config.
+The default configuration is used only for the <br>
+settings keys, the values however are retrieved <br>
+from the users `steamvr.vrsettings` file.
+
+<br>
 
 ---
 
