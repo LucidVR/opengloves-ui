@@ -10,7 +10,7 @@ This interface utilizes **Tauri** and requires ***[some extra setup]***.
 The interface uses **Sidecar** as it's backend for communication <br>
 with **OpenVR** and must be built first for the project to run.
 
-1. Navigate to `sidecar/`.
+1. Navigate to `/sidecar/`.
 
 2. **Create** & **Enter** a folder named `build`.
 
@@ -24,7 +24,7 @@ with **OpenVR** and must be built first for the project to run.
 
 5. **Build** the project in a `Release` / `MinSizeRel` mode.
 
-6. Copy the build **Artifacts** into `src-tauri`.
+6. Copy the build **Artifacts** into `/src-tauri/`.
     - `sidecar-x86_64-pc-windows-msvc.exe`
     - `openvr_api.dll`
 
@@ -32,7 +32,7 @@ with **OpenVR** and must be built first for the project to run.
 
 ## Interface
 
-1. Have **Sidecar** built.
+1. Have **[Sidecar]** built.
 
 2. Install dependencies with:
 
@@ -69,5 +69,7 @@ binaries, you will have to manually install [`Webview2`].
 
 <!----------------------------------------------------------------------------->
 
-[some extra setup]: https://tauri.studio/en/docs/getting-started/setup-windows
+[Sidecar]: #Sidecar
+
+[some extra setup]: https://tauri.studio/en/docs/get-started/intro
 [`Webview2`]: https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section

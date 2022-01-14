@@ -1,20 +1,22 @@
 
 # OpenGloves UI [![Steam Badge]][Steam] [![Discord Badge]][Discord]
 
-*This repository is the user interface of the* ***[OpenGloves]*** *OpenVR driver.*
-
-
+*This repository is the* ***User Interface*** *of the* ***[OpenGloves]*** *driver.*
 
 *While this* ***UI*** *is not required, it is strongly* <br>
 *recommended for use with our driver.*
 
+<br>
+
+*Written in* ***Svelte*** *&* ***Tauri*** *.*
+
+---
+
+**This is not the [OpenGloves] driver itself.**
+
 ---
 
 **⸢ [Installation] ⸥ ⸢ [Building] ⸥**
-
----
-
-Written in **Svelte** & **Tauri**.
 
 ---
 
@@ -41,8 +43,6 @@ from the users `steamvr.vrsettings` file.
 *For major changes, please open* <br>
 *an* ***[Issue]*** *first to discuss what* <br>
 *would like to change.*
-
-
 
 
 <!----------------------------------------------------------------------------->
