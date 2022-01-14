@@ -3,8 +3,10 @@
 
 *This repository is the* ***User Interface*** *of the* ***[OpenGloves]*** *driver.*
 
-*While this* ***UI*** *is not required, it is strongly* <br>
-*recommended for use with our driver.*
+<br>
+
+While this **UI** is not required, it is strongly <br>
+recommended for use with our driver.
 
 <br>
 
@@ -25,7 +27,7 @@
 This interface fetches the `default.vrsettings` <br>
 and afterwards the **OpenVR** user configuration.
 
-The default config is located relative to `src-tauri` <br>
+The default config is located relative to `/src-tauri/` <br>
 at `../resources/settings/default.vrsettings`.
 
 The default configuration is used only for the <br>
