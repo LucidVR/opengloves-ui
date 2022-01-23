@@ -14,11 +14,6 @@
 #include "json.hpp"
 #include "openvr.h"
 
-void AddResponseHeaders(crow::response& res) {
-  res.add_header("Access-Control-Allow-Origin", "*");
-  res.add_header("Access-Control-Allow-Headers", "Content-Type");
-}
-
 static std::string GetLastErrorAsString() {
   const DWORD errorMessageId = ::GetLastError();
   if (errorMessageId == 0) return std::string();
@@ -250,33 +245,25 @@ int main() {
   CROW_ROUTE(app, "/settings/get").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
     auto json = nlohmann::json::parse(req.body, nullptr, true, true);
 
-    crow::response res = GetSettings(json);
-    AddResponseHeaders(res);
-    return res;
+    return GetSettings(json);
   });
 
   CROW_ROUTE(app, "/settings/set").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
     auto json = nlohmann::json::parse(req.body, nullptr, true, true);
 
-    crow::response res = SetSettings(json);
-    AddResponseHeaders(res);
-    return res;
+    return SetSettings(json);
   });
 
   CROW_ROUTE(app, "/functions/pose_calibration").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
     auto json = nlohmann::json::parse(req.body, nullptr, true, true);
 
-    crow::response res = PoseCalibration(json);
-    AddResponseHeaders(res);
-    return res;
+    return PoseCalibration(json);
   });
 
   CROW_ROUTE(app, "/functions/servo_test").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
     auto json = nlohmann::json::parse(req.body, nullptr, true, true);
 
-    crow::response res = ServoTest(json);
-    AddResponseHeaders(res);
-    return res;
+    return ServoTest(json);
   });
 
   CROW_ROUTE(app, "/")([]() { return "Pong"; });

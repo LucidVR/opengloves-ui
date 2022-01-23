@@ -9911,10 +9911,7 @@ namespace crow
                         allow = allow.substr(0, allow.size()-2);
                         res = response(204);
                         res.set_header("Allow", allow);
-                        res.set_header("Access-Control-Allow-Origin", "*");
-                        res.set_header("Access-Control-Allow-Headers", "Content-Type");
-                        res.set_header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS,PATCH");
-
+                    
                         res.manual_length_header = true;
                         res.end();
                         return;
