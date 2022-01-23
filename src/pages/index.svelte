@@ -10,7 +10,7 @@
 
     import Select from '../components/Input/Select.svelte'
     import {writable} from 'svelte/store'
-    import {onMount} from 'svelte'
+    import {onDestroy, onMount} from 'svelte'
     import Accordion from '../components/Accordion.svelte'
     import ConfigList from '../components/Config/ConfigList.svelte'
     import OrangeButton from '../components/Input/Button/OrangeButton.svelte'
@@ -18,23 +18,18 @@
     import {writeText} from '@tauri-apps/api/clipboard';
     import SuspenseButton from "../components/Input/Button/SuspenseButton.svelte";
     import Suspense from "../components/Suspense.svelte";
-    import {fade, fly} from 'svelte/transition';
     import Init from "../splashscreens/Init.svelte";
     import {getLocalStorageKey, setLocalStorageKey} from "../utils/storage";
+    import {openSidecar} from "../utils/sidecar";
 
-    const formData = writable({
-        driver_config: {
-            left_enabled: true,
-            right_enabled: true,
-            communication_protocol: 0,
-            device_driver: 0,
-            encoding_protocol: 0,
-        },
-    });
-
+    const state = writable({
+        loading: true,
+        successfullyLoaded: false,
+        loadedFromCache: false,
+        sidecarProcess: null,
+    })
 
     let configurationOptions = [];
-
 
     const onFormSubmit = async () => {
         try {
@@ -50,14 +45,27 @@
         }
     }
 
-    let loaded = false;
-    let fromCache = false;
-    onMount(async () => {
+    const awaitSidecarInit = () => new Promise((resolve, reject) => {
+        openSidecar('sidecar', e => {
+            console.log(e);
+            resolve(e)
+        }, e => reject(e)).then(child => $state.sidecarProcess = child);
+    })
+
+    const init = async () => {
+        $state.loading = true;
+
+        if ($state.sidecarProcess) $state.sidecarProcess.kill();
+
+        await awaitSidecarInit();
         try {
+            let fromCache;
             ({configurationOptions, fromCache} = await getConfiguration());
+            $state.loadedFromCache = fromCache;
+
             const driver_openglove = configurationOptions.driver_openglove.options;
 
-            if(!(getLocalStorageKey('initialised') === 'true') && !driver_openglove.left_enabled && !driver_openglove.right_enabled) {
+            if (!(getLocalStorageKey('initialised') === 'true') && !driver_openglove.left_enabled && !driver_openglove.right_enabled) {
                 SplashStore.addSplash(Init, {
                     onActivate: async () => {
                         setLocalStorageKey('initialised', true);
@@ -69,15 +77,22 @@
                 });
             }
 
-            if(!fromCache) ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully loaded configuration');
-            loaded = true;
+            if (!fromCache) ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully loaded configuration');
+            $state.loading = false;
+            $state.successfullyLoaded = true;
         } catch (e) {
+            $state.loading = false;
+            $state.successfullyLoaded = false;
             console.trace(e)
             if (Array.isArray(e))
                 e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
             else
                 ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
+    }
+
+    onMount(async () => {
+        await init();
     });
 
     const copyConfigurationToClipboard = () => {
@@ -102,40 +117,47 @@
             </h2>
             <div class="shadow rounded">
                 <div class="px-4 py-5 space-y-6">
-                    <Suspense suspense={!loaded}>
-                        {#each Object.entries(configurationOptions) as [key, value], i}
-                            <div>
-                                <Accordion title={value.title}>
-                                    {#if Array.isArray(value.options)}
-                                        <Select
-                                                onSelectItemChanged={selectedKey => {
+                    <Suspense suspense={$state.loading}>
+                        {#if $state.successfullyLoaded}
+                            {#each Object.entries(configurationOptions) as [key, value], i}
+                                <div>
+                                    <Accordion title={value.title}>
+                                        {#if Array.isArray(value.options)}
+                                            <Select
+                                                    onSelectItemChanged={selectedKey => {
                                         configurationOptions[primaryConfigurationSection].options[key] = selectedKey;
                                     }}
-                                                options={Object.entries(value.options).map(([k, v]) => ({
+                                                    options={Object.entries(value.options).map(([k, v]) => ({
                                         title: v.title,
                                         value: parseInt(k),
                                     }))}
-                                                defaultValue={configurationOptions[primaryConfigurationSection].options[key]}
-                                        />
-                                        <ConfigList
-                                                bind:configItems={value.options[configurationOptions[primaryConfigurationSection].options[key]].options}/>
-                                    {:else}
-                                        <ConfigList
-                                                hiddenKeys={Object.keys(configurationOptions).map((k) => k)}
-                                                bind:configItems={configurationOptions[key].options}
-                                        />
-                                    {/if}
-                                </Accordion>
-                            </div>
+                                                    defaultValue={configurationOptions[primaryConfigurationSection].options[key]}
+                                            />
+                                            <ConfigList
+                                                    bind:configItems={value.options[configurationOptions[primaryConfigurationSection].options[key]].options}/>
+                                        {:else}
+                                            <ConfigList
+                                                    hiddenKeys={Object.keys(configurationOptions).map((k) => k)}
+                                                    bind:configItems={configurationOptions[key].options}
+                                            />
+                                        {/if}
+                                    </Accordion>
+                                </div>
 
-                        {/each}
+                            {/each}
+                            <div class="flex flex-row px-4">
+                                <OrangeButton onClick={copyConfigurationToClipboard}>Copy Config to Clipboard
+                                </OrangeButton>
+                                <div class="flex-grow"></div>
+                                <SuspenseButton onClick={onFormSubmit}>Save</SuspenseButton>
+                            </div>
+                        {:else}
+                            <div class="flex items-center justify-center">
+                                <OrangeButton onClick={init}>Retry Load</OrangeButton>
+                            </div>
+                        {/if}
                     </Suspense>
 
-                </div>
-                <div class="flex flex-row px-4">
-                    <OrangeButton onClick={copyConfigurationToClipboard}>Copy Config to Clipboard</OrangeButton>
-                    <div class="flex-grow"></div>
-                    <SuspenseButton onClick={onFormSubmit}>Save</SuspenseButton>
                 </div>
             </div>
         </div>
