@@ -173,7 +173,7 @@ crow::response PoseCalibration(const nlohmann::json& json) {
   }
 
   std::stringstream ss;
-  ss << "Error! Please make sure that SteamVR is running and the driver is enabled." << std::endl;
+  ss << "Please make sure that SteamVR is running and the driver is enabled." << std::endl;
   ss << "Error: " << GetLastErrorAsString() << std::endl;
   return {500, ss.str()};
 }
@@ -204,7 +204,7 @@ crow::response ServoTest(const nlohmann::json& json) {
   }
 
   std::stringstream ss;
-  ss << "Error! Please make sure that SteamVR is running and the driver is enabled." << std::endl;
+  ss << "Please make sure that SteamVR is running and the driver is enabled." << std::endl;
   ss << "Error: " << GetLastErrorAsString() << std::endl;
 
   return {500, ss.str()};
