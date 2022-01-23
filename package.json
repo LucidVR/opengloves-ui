@@ -30,7 +30,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@tauri-apps/api": "^1.0.0-beta.8",
     "@tauri-apps/cli": "^1.0.0-beta.10",
-    "axios": "^0.25.0",
     "buffer": "^6.0.3",
     "comment-json": "^4.1.0",
     "svelte-fa": "^2.4.0",
