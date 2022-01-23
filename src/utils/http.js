@@ -10,6 +10,9 @@ export const makeHTTPRequest = async (url, method = "POST", body) => {
         },
         mode: 'cors'
     }).then(response => {
-        return response.json();
+        if (!response.ok) {
+            throw new Error(response.body ?? "An unknown error occurred.");
+        }
+        return response.text();
     });
 }

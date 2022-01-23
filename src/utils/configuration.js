@@ -4,7 +4,6 @@ import {readTextFile} from '@tauri-apps/api/fs'
 import {deepOverwrite} from "./object";
 
 import ConfigurationStore from '../stores/configuration';
-import {openSidecar} from "./sidecar";
 import {makeHTTPRequest} from "./http";
 
 export const primaryConfigurationSection = "driver_openglove";
@@ -27,7 +26,7 @@ export const getConfiguration = async () => {
 
     const defaultConfig = await readDefaultConfiguration();
     const openVRConfigValues = await getValuesForConfiguration(defaultConfig);
-    deepOverwrite(defaultConfig, parse(JSON.stringify(openVRConfigValues)));
+    deepOverwrite(defaultConfig, parse(openVRConfigValues));
 
     const parsed = parseConfiguration(defaultConfig);
 
@@ -57,7 +56,7 @@ export const createConfiguration = (configurationOptions) => {
     return result;
 }
 
-export const saveConfiguration = async (configObj) => openSidecar("sidecar", "settings_set", configObj);
+export const saveConfiguration = async (configObj) => makeHTTPRequest('settings/set', 'POST', configObj);
 
 /***
  * Gets ids associated with each configuration object.

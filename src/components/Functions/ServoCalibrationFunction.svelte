@@ -1,33 +1,30 @@
 <script>
     import {writable} from "svelte/store";
-    import {openSidecar} from "../../utils/sidecar";
     import ToastStore from "../../stores/toast";
     import Select from "../Input/Select.svelte";
     import SuspenseButton from "../Input/Button/SuspenseButton.svelte";
+    import {makeHTTPRequest} from "../../utils/http";
 
     const state = writable({
-            form: {
-                rightHand: true,
-            },
-            loading: false,
+        form: {
+            rightHand: true,
+        },
+        loading: false,
     });
 
     const servoTest = async (extend) => {
         try {
             $state.loading = true;
-            const result = await openSidecar('sidecar', 'functions_servotest', {
+            const result = await makeHTTPRequest('functions/servo_test', 'POST', {
                 extend,
                 right_hand: $state.form.rightHand
             });
-            ToastStore.addToast(ToastStore.severity.SUCCESS, result.pop());
+            ToastStore.addToast(ToastStore.severity.SUCCESS, result);
             $state.loading = false;
         } catch (e) {
             $state.loading = false;
             console.trace(e);
-            if (Array.isArray(e))
-                e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
-            else
-                ToastStore.addToast(ToastStore.severity.ERROR, e);
+            ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
 
     };
@@ -44,7 +41,7 @@
                     defaultValue={true} label="For Hand"/>
         </div>
         <b>Test or Calibrate your servos for Force Feedback:</b>
-        <br />
+        <br/>
         The buttons on the right give the options to either extend the servos fully, or retract them fully. As a guide,
         extend the servos fully, then place the servo horn to where you want the fingers to be fully restricted. After,
         retract the servos. They should not impede on any finger movement.

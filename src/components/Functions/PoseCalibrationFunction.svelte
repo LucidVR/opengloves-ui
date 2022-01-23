@@ -1,10 +1,10 @@
 <script>
     import {writable} from "svelte/store";
-    import {openSidecar} from "../../utils/sidecar";
     import ToastStore from "../../stores/toast";
     import Select from "../Input/Select.svelte";
     import Text from "../Input/Text.svelte";
     import SuspenseButton from "../Input/Button/SuspenseButton.svelte";
+    import {makeHTTPRequest} from "../../utils/http";
 
     const state = writable({
         form: {
@@ -21,18 +21,18 @@
         $state.timer = $state.form.calibrationTimer;
 
         try {
-            await openSidecar('sidecar', 'functions_posecalibration', {
+            await makeHTTPRequest('functions/pose_calibration', 'POST', {
                 start: true,
                 right_hand: $state.form.rightHand
             });
             const interval = setInterval(() => {
                 if ($state.timer <= 0) {
                     clearInterval(interval);
-                    openSidecar('sidecar', 'functions_posecalibration', {
+                    makeHTTPRequest('functions/pose_calibration', 'POST', {
                         start: false,
                         right_hand: $state.form.rightHand
                     }).then(d => {
-                        ToastStore.addToast(ToastStore.severity.SUCCESS, 'Finished calibration!');
+                        ToastStore.addToast(ToastStore.severity.SUCCESS, d);
                         $state.calibrating = false;
                         $state.loading = false;
                     });
@@ -44,10 +44,7 @@
             $state.calibrating = false;
             $state.loading = false;
             console.trace(e);
-            if (Array.isArray(e))
-                e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
-            else
-                ToastStore.addToast(ToastStore.severity.ERROR, e);
+            ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
 
     };

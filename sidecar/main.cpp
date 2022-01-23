@@ -14,7 +14,10 @@
 #include "json.hpp"
 #include "openvr.h"
 
-static void AddResponseHeaders(crow::response& res) { res.add_header("Access-Control-Allow-Origin", "*"); }
+void AddResponseHeaders(crow::response& res) {
+  res.add_header("Access-Control-Allow-Origin", "*");
+  res.add_header("Access-Control-Allow-Headers", "Content-Type");
+}
 
 static std::string GetLastErrorAsString() {
   const DWORD errorMessageId = ::GetLastError();
@@ -206,15 +209,15 @@ crow::response ServoTest(const nlohmann::json& json) {
   }
 
   std::stringstream ss;
-  ss << "Failed to send force feedback message to pipe" << std::endl;
-  ss << "Error: " << GetLastErrorAsString() << "Please notify the developers of this problem." << std::endl;
+  ss << "Error! Please make sure that SteamVR is running and the driver is enabled." << std::endl;
+  ss << "Error: " << GetLastErrorAsString() << std::endl;
 
   return {500, ss.str()};
 }
 
 vr::EVRInitError InitOpenVR() {
   vr::EVRInitError error;
-  VR_Init(&error, vr::VRApplication_Overlay);
+  VR_Init(&error, vr::VRApplication_Utility);
 
   return error;
 }
@@ -224,8 +227,12 @@ std::string GetOpenVRErrorAsString(vr::EVRInitError err) {
     case 108:
     case 126:
       return "A HMD was not found. Please plug it in before trying to use the app.";
-    default:
-      return "Unknown Error. Please kill SteamVR (VRServer.exe) in task manager and try again.";
+    default: {
+      std::stringstream ss;
+      ss << "Unknown Error: " << err << ". Please kill SteamVR (VRServer.exe) in task manager and try again.";
+
+      return ss.str();
+    }
   }
 }
 
@@ -242,28 +249,34 @@ int main() {
 
   CROW_ROUTE(app, "/settings/get").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
     auto json = nlohmann::json::parse(req.body, nullptr, true, true);
+
     crow::response res = GetSettings(json);
-    res.add_header("Access-Control-Allow-Origin", "*");
-    res.add_header("Access-Control-Allow-Headers", "Content-Type");
+    AddResponseHeaders(res);
     return res;
   });
 
   CROW_ROUTE(app, "/settings/set").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
     auto json = nlohmann::json::parse(req.body, nullptr, true, true);
 
-    return SetSettings(json);
+    crow::response res = SetSettings(json);
+    AddResponseHeaders(res);
+    return res;
   });
 
   CROW_ROUTE(app, "/functions/pose_calibration").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
     auto json = nlohmann::json::parse(req.body, nullptr, true, true);
 
-    return PoseCalibration(json);
+    crow::response res = PoseCalibration(json);
+    AddResponseHeaders(res);
+    return res;
   });
 
   CROW_ROUTE(app, "/functions/servo_test").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
     auto json = nlohmann::json::parse(req.body, nullptr, true, true);
 
-    return ServoTest(json);
+    crow::response res = ServoTest(json);
+    AddResponseHeaders(res);
+    return res;
   });
 
   CROW_ROUTE(app, "/")([]() { return "Pong"; });

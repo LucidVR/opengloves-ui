@@ -56,9 +56,8 @@
         $state.loading = true;
 
         if ($state.sidecarProcess) $state.sidecarProcess.kill();
-
-        await awaitSidecarInit();
         try {
+            await awaitSidecarInit();
             let fromCache;
             ({configurationOptions, fromCache} = await getConfiguration());
             $state.loadedFromCache = fromCache;
@@ -84,10 +83,7 @@
             $state.loading = false;
             $state.successfullyLoaded = false;
             console.trace(e)
-            if (Array.isArray(e))
-                e.forEach(v => ToastStore.addToast(ToastStore.severity.ERROR, v));
-            else
-                ToastStore.addToast(ToastStore.severity.ERROR, e);
+            ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
     }
 
