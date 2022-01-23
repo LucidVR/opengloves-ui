@@ -1,4 +1,10 @@
-#include <openvr.h>
+//clang-format off
+#define CROW_MAIN
+#define CROW_LOG_LEVEL 0
+#include "crow_all.h"
+
+//clang-format on
+
 #include <windows.h>
 
 #include <iomanip>
@@ -6,8 +12,9 @@
 #include <string>
 
 #include "json.hpp"
+#include "openvr.h"
 
-std::string GetLastErrorAsString() {
+static std::string GetLastErrorAsString() {
   const DWORD errorMessageId = ::GetLastError();
   if (errorMessageId == 0) return std::string();
 
@@ -22,8 +29,7 @@ std::string GetLastErrorAsString() {
   return message;
 }
 
-
-int GetSettings(nlohmann::json& json) {
+crow::response GetSettings(nlohmann::json& json) {
   for (auto& el : json.items()) {
     const std::string& s_sectionName = el.key();
     const char* c_sectionName = s_sectionName.c_str();
@@ -36,39 +42,43 @@ int GetSettings(nlohmann::json& json) {
       // Skip __title/__type/etc. fields
       if (s_keyName.find("__") != std::string::npos) continue;
 
-      vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
-      switch (value.type()) {
-        case nlohmann::json::value_t::string: {
-          char result[256];
-          vr::VRSettings()->GetString(c_sectionName, c_keyName, result, sizeof(result), &err);
-          json[s_sectionName][s_keyName] = std::string(result);
-          break;
+      try {
+        vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
+
+        switch (value.type()) {
+          case nlohmann::json::value_t::string: {
+            char result[256];
+            vr::VRSettings()->GetString(c_sectionName, c_keyName, result, sizeof(result), &err);
+            json[s_sectionName][s_keyName] = std::string(result);
+            break;
+          }
+          case nlohmann::json::value_t::boolean: {
+            bool result = vr::VRSettings()->GetBool(c_sectionName, c_keyName, &err);
+            json[s_sectionName][s_keyName] = result;
+            break;
+          }
+          case nlohmann::json::value_t::number_float: {
+            float result = vr::VRSettings()->GetFloat(c_sectionName, c_keyName, &err);
+            json[s_sectionName][s_keyName] = result;
+            break;
+          }
+          case nlohmann::json::value_t::number_unsigned:
+          case nlohmann::json::value_t::number_integer: {
+            int32_t result = vr::VRSettings()->GetInt32(c_sectionName, c_keyName, &err);
+            json[s_sectionName][s_keyName] = result;
+            break;
+          }
         }
-        case nlohmann::json::value_t::boolean: {
-          bool result = vr::VRSettings()->GetBool(c_sectionName, c_keyName, &err);
-          json[s_sectionName][s_keyName] = result;
-          break;
-        }
-        case nlohmann::json::value_t::number_float: {
-          float result = vr::VRSettings()->GetFloat(c_sectionName, c_keyName, &err);
-          json[s_sectionName][s_keyName] = result;
-          break;
-        }
-        case nlohmann::json::value_t::number_unsigned:
-        case nlohmann::json::value_t::number_integer: {
-          int32_t result = vr::VRSettings()->GetInt32(c_sectionName, c_keyName, &err);
-          json[s_sectionName][s_keyName] = result;
-          break;
-        }
+      } catch (nlohmann::json::exception e) {
+        return crow::response{500, "Error parsing json: " + std::string(e.what())};
       }
     }
   }
 
-  std::cout << json.dump() << std::endl;
-  return 0;
+  return crow::response{200, json.dump()};
 }
 
-int SetSettings(const nlohmann::json& json) {
+crow::response SetSettings(const nlohmann::json& json) {
   for (auto& el : json.items()) {
     const std::string& s_sectionName = el.key();
     const char* c_sectionName = s_sectionName.c_str();
@@ -81,38 +91,42 @@ int SetSettings(const nlohmann::json& json) {
       // Skip __title/__type/etc. fields
       if (s_keyName.find("__") != std::string::npos) continue;
 
-      vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
-      switch (value.type()) {
-        case nlohmann::json::value_t::string:
-          vr::VRSettings()->SetString(c_sectionName, c_keyName, value.get<std::string>().c_str(), &err);
-          break;
-        case nlohmann::json::value_t::boolean:
-          vr::VRSettings()->SetBool(c_sectionName, c_keyName, value.get<bool>(), &err);
-          break;
-        case nlohmann::json::value_t::number_float:
-          vr::VRSettings()->SetFloat(c_sectionName, c_keyName, value.get<float>(), &err);
-          break;
-        case nlohmann::json::value_t::number_unsigned:
-        case nlohmann::json::value_t::number_integer:
-          vr::VRSettings()->SetInt32(c_sectionName, c_keyName, value.get<int>(), &err);
-          break;
-        default:
-          std::cerr << "Error finding configuration property value of key1: " << s_sectionName << " key2: " << s_keyName << " value: " << value.type_name() << std::endl;
-          return 1;
-      }
+      try {
+        vr::EVRSettingsError err = vr::EVRSettingsError::VRSettingsError_None;
+        switch (value.type()) {
+          case nlohmann::json::value_t::string:
+            vr::VRSettings()->SetString(c_sectionName, c_keyName, value.get<std::string>().c_str(), &err);
+            break;
+          case nlohmann::json::value_t::boolean:
+            vr::VRSettings()->SetBool(c_sectionName, c_keyName, value.get<bool>(), &err);
+            break;
+          case nlohmann::json::value_t::number_float:
+            vr::VRSettings()->SetFloat(c_sectionName, c_keyName, value.get<float>(), &err);
+            break;
+          case nlohmann::json::value_t::number_unsigned:
+          case nlohmann::json::value_t::number_integer:
+            vr::VRSettings()->SetInt32(c_sectionName, c_keyName, value.get<int>(), &err);
+            break;
+          default:
+            std::stringstream ss;
+            ss << "Error finding configuration property value of key1: " << s_sectionName << " key2: " << s_keyName << " value: " << value.type_name() << std::endl;
 
-      if (err != vr::EVRSettingsError::VRSettingsError_None) {
-        std::cerr << "Error setting configuration property. Section: " << s_sectionName << " Key: " << s_keyName << " Value: " << value << std::endl;
-        return 1;
+            return crow::response{500, ss.str()};
+        }
+
+        if (err != vr::EVRSettingsError::VRSettingsError_None) {
+          std::stringstream ss;
+          ss << "Error setting configuration property. Section: " << s_sectionName << " Key: " << s_keyName << " Value: " << value << std::endl;
+
+          return crow::response{500, ss.str()};
+        }
+      } catch (nlohmann::json::exception e) {
+        return crow::response{500, e.what()};
       }
     }
   }
 
-  std::cout << "Success saving configuration" << std::endl;
-
-  vr::VR_Shutdown();
-
-  return 0;
+  return crow::response{200, "Successfully saved settings"};
 }
 
 template <typename T>
@@ -146,7 +160,7 @@ struct PoseCalibrationData {
   uint8_t start;
 };
 
-int PoseCalibration(const nlohmann::json& json) {
+crow::response PoseCalibration(const nlohmann::json& json) {
   const bool rightHand = json["right_hand"].get<bool>();
   const bool start = json["start"].get<bool>();
 
@@ -155,13 +169,13 @@ int PoseCalibration(const nlohmann::json& json) {
   const bool success = ConnectAndSendPipe("\\\\.\\pipe\\vrapplication\\functions\\autocalibrate\\" + std::string(rightHand ? "right" : "left"), data);
 
   if (success) {
-    std::cout << "Successfully sent message" << std::endl;
-    return 0;
+    return crow::response{200, "Successfully set pose calibration"};
   }
 
-  std::cerr << "Failed to send pose calibration message" << std::endl;
-  std::cerr << "Error: " << GetLastErrorAsString() << "Please notify the developers of this problem." << std::endl;
-  return 1;
+  std::stringstream ss;
+  ss << "Error! Please make sure that SteamVR is running and the driver is enabled." << std::endl;
+  ss << "Error: " << GetLastErrorAsString() << std::endl;
+  return {500, ss.str()};
 }
 
 struct VRFFBData_t {
@@ -175,7 +189,7 @@ struct VRFFBData_t {
   short pinkyCurl;
 };
 
-int ServoTest(const nlohmann::json& json) {
+crow::response ServoTest(const nlohmann::json& json) {
   const bool rightHand = json["right_hand"].get<bool>();
   const bool extend = json["extend"].get<bool>();
 
@@ -186,68 +200,73 @@ int ServoTest(const nlohmann::json& json) {
   const bool success = ConnectAndSendPipe("\\\\.\\pipe\\vrapplication\\ffb\\curl\\" + std::string(rightHand ? "right" : "left"), data);
 
   if (success) {
-    std::cout << "Successfully activated force feedback" << std::endl;
-    return 0;
+    return {200, "Successfully activated servos"};
   }
 
-  std::cerr << "Failed to send force feedback message to pipe" << std::endl;
-  std::cerr << "Error: " << GetLastErrorAsString() << "Please notify the developers of this problem." << std::endl;
+  std::stringstream ss;
+  ss << "Error! Please make sure that SteamVR is running and the driver is enabled." << std::endl;
+  ss << "Error: " << GetLastErrorAsString() << std::endl;
 
-  return 1;
+  return {500, ss.str()};
 }
 
-void InitOpenVR(bool asOverlay) {
+vr::EVRInitError InitOpenVR() {
   vr::EVRInitError error;
+  VR_Init(&error, vr::VRApplication_Utility);
 
-  VR_Init(&error, asOverlay ? vr::VRApplication_Overlay : vr::VRApplication_Utility);
+  return error;
+}
 
-  if (error != vr::EVRInitError::VRInitError_None) {
-    std::cerr << "OpenVR Init Error! Err: " << error << std::endl;
-    switch (error) {
-      case 108:
-      case 126:
-        std::cerr << "A HMD was not found. Please plug it in before trying to use functions" << std::endl;
-        break;
-      default:
-        std::cerr << "Please kill SteamVR processes (VR Server) in Task Manager and try again." << std::endl;
+std::string GetOpenVRErrorAsString(vr::EVRInitError err) {
+  switch (err) {
+    case 108:
+    case 126:
+      return "A HMD was not found. Please plug it in before trying to use the app.";
+    default: {
+      std::stringstream ss;
+      ss << "Unknown Error: " << err << ". Please kill SteamVR (VRServer.exe) in task manager and try again.";
+
+      return ss.str();
     }
   }
 }
 
 int main() {
-  std::string s;
-  std::getline(std::cin >> std::ws, s);
-
-  try {
-    auto json = nlohmann::json::parse(s, nullptr, true, true);
-
-    const std::string type = json["type"].get<std::string>();
-
-    // If we are trying to execute a "function", we most likely require SteamVR to be running, so open it as an overlay, else open it in the background (so the window
-    // doesn't appear)
-    InitOpenVR(type.find("functions") != std::string::npos);
-
-    if (type == "settings_get") {
-      return GetSettings(json["data"]);
-    }
-
-    if (type == "settings_set") {
-      return SetSettings(json["data"]);
-    }
-
-    if (type == "functions_posecalibration") {
-      return PoseCalibration(json["data"]);
-    }
-
-    if (type == "functions_servotest") {
-      return ServoTest(json["data"]);
-    }
-
-    std::cerr << "Could not find the operation type: " << type << std::endl;
-  } catch (nlohmann::json::exception& e) {
-    std::cerr << "Error decoding JSON! Error: " << e.what() << std::endl;
+  vr::EVRInitError initErr = InitOpenVR();
+  if (initErr != vr::EVRInitError::VRInitError_None) {
+    std::cerr << GetOpenVRErrorAsString(initErr) << std::endl;
     return 1;
   }
 
-  return 1;
+  std::cout << "initialised" << std::endl;
+
+  crow::SimpleApp app;
+
+  CROW_ROUTE(app, "/settings/get").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
+    auto json = nlohmann::json::parse(req.body, nullptr, true, true);
+
+    return GetSettings(json);
+  });
+
+  CROW_ROUTE(app, "/settings/set").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
+    auto json = nlohmann::json::parse(req.body, nullptr, true, true);
+
+    return SetSettings(json);
+  });
+
+  CROW_ROUTE(app, "/functions/pose_calibration").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
+    auto json = nlohmann::json::parse(req.body, nullptr, true, true);
+
+    return PoseCalibration(json);
+  });
+
+  CROW_ROUTE(app, "/functions/servo_test").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
+    auto json = nlohmann::json::parse(req.body, nullptr, true, true);
+
+    return ServoTest(json);
+  });
+
+  CROW_ROUTE(app, "/")([]() { return "Pong"; });
+
+  app.port(18080).multithreaded().run();
 }

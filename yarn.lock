@@ -145,7 +145,7 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@roxi/routify@^2.18.3":
+"@roxi/routify@^2.18.4":
   version "2.18.4"
   resolved "https://registry.yarnpkg.com/@roxi/routify/-/routify-2.18.4.tgz#537ecc458f92336637bc7e073506cb89e281cbf8"
   integrity sha512-FoG5/f+jG+RtShs4wmkfY7Jf9THCtmEZ8XMmYxLPevYWkgpmmoflPjNm5dbQg/W2gYkP4snRKWft6gMcvEMIxw==
@@ -543,6 +543,13 @@ axios@^0.21.1:
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   dependencies:
     follow-redirects "^1.10.0"
+
+axios@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.25.0.tgz#349cfbb31331a9b4453190791760a8d35b093e0a"
+  integrity sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==
+  dependencies:
+    follow-redirects "^1.14.7"
 
 balanced-match@^1.0.0:
   version "1.0.2"
@@ -2006,6 +2013,11 @@ follow-redirects@^1.10.0:
   version "1.14.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.0.tgz#f5d260f95c5f8c105894491feee5dc8993b402fe"
   integrity sha512-0vRwd7RKQBTt+mgu87mtYeofLFZpTas2S9zY+jIeuLJMNvudIgF52nr19q40HOwH5RrhWIPuj9puybzSJiRrVg==
+
+follow-redirects@^1.14.7:
+  version "1.14.7"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.7.tgz#2004c02eb9436eee9a21446a6477debf17e81685"
+  integrity sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==
 
 foreach@~2.0.1:
   version "2.0.5"

@@ -1,34 +1,20 @@
 import {Command} from "@tauri-apps/api/shell";
 
 /**
- * 
+ *
  * @param {string} program Name of executable to run
- * @param {string} type Command to run inside executable
- * @param {any} data Optional data required for command
- * @returns {Promise<string[]>} Lines from executable's stdout
+ * @param onData {function} Callback for when data received
+ * @param onError {function} Callback for when error received
+ * @returns {Promise<Child>} Lines from executable's stdout
  * @throws {string} First line of executable's stderr
  */
-export const openSidecar = async (program, type, data) => {
+export const openSidecar = async (program, onData, onError) => {
     const sidecar = Command.sidecar(program);
 
-    const promiseDataReceived = new Promise((resolve, reject) => {
-        // Listen for output
-        const stdout = [];
-        const stderr = [];
-        sidecar.stdout.on('data', e => stdout.push(e));
-        sidecar.stderr.on('data', e => stderr.push(e));
-
-        // Report output on exit
-        sidecar.on('close', () => stderr.length > 0 ? reject(stderr) : resolve(stdout));
-    });
+    sidecar.stdout.on('data', e => onData(e));
+    sidecar.stderr.on('data', e => onError(e));
 
     const child = await sidecar.spawn();
-    const input = JSON.stringify({
-        type,
-        data,
-    });
 
-    await child.write(input + "\n");
-
-    return await promiseDataReceived;
+    return child;
 }
