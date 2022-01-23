@@ -60,6 +60,10 @@
       "shell": {
         "open": true,
         "execute": true
+      },
+      "http": {
+        "all": true,
+        "request": true
       }
     },
     "windows": [

@@ -82,7 +82,7 @@
         } catch (e) {
             $state.loading = false;
             $state.successfullyLoaded = false;
-            console.trace(e)
+            console.error(e);
             ToastStore.addToast(ToastStore.severity.ERROR, e);
         }
     }

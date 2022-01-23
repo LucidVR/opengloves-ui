@@ -178,7 +178,7 @@ crow::response PoseCalibration(const nlohmann::json& json) {
   }
 
   std::stringstream ss;
-  ss << "Failed to send pose calibration message" << std::endl;
+  ss << "Error! Please make sure that SteamVR is running and the driver is enabled." << std::endl;
   ss << "Error: " << GetLastErrorAsString() << std::endl;
   return {500, ss.str()};
 }
