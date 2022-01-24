@@ -68,13 +68,13 @@
             }
 
             if (!fromCache) ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully loaded configuration');
-            $state.loading = false;
             $state.successfullyLoaded = true;
         } catch (e) {
-            $state.loading = false;
             $state.successfullyLoaded = false;
             console.error(e);
             ToastStore.addToast(ToastStore.severity.ERROR, e);
+        } finally {
+            $state.loading = false;
         }
     }
 
@@ -99,53 +99,48 @@
 <div class="flex-grow max-w-md my-10 w-full">
     <div class="w-full flex flex-col justify-center items-center">
         <div class="mx-10 w-full overflow-auto">
-            <h2 class="mb-5 text-center text-3xl font-extrabold  ">
+            <h2 class="mb-5 text-center text-3xl font-extrabold">
                 Driver Configuration
             </h2>
-            <div class="shadow rounded">
-                <div class="px-4 py-5 space-y-6">
-                    <Suspense suspense={$state.loading}>
-                        {#if $state.successfullyLoaded}
-                            {#each Object.entries(configurationOptions) as [key, value], i}
-                                <div>
-                                    <Accordion title={value.title}>
-                                        {#if Array.isArray(value.options)}
-                                            <Select
-                                                    onSelectItemChanged={selectedKey => {
+            <div class="px-4 py-5 space-y-6 w-full flex flex-col justify-center items-center">
+                <Suspense suspense={$state.loading} message="Getting configuration...">
+                    {#if $state.successfullyLoaded}
+                        {#each Object.entries(configurationOptions) as [key, value], i}
+                            <Accordion title={value.title}>
+                                {#if Array.isArray(value.options)}
+                                    <Select
+                                            onSelectItemChanged={selectedKey => {
                                         configurationOptions[primaryConfigurationSection].options[key] = selectedKey;
                                     }}
-                                                    options={Object.entries(value.options).map(([k, v]) => ({
+                                            options={Object.entries(value.options).map(([k, v]) => ({
                                         title: v.title,
                                         value: parseInt(k),
                                     }))}
-                                                    defaultValue={configurationOptions[primaryConfigurationSection].options[key]}
-                                            />
-                                            <ConfigList
-                                                    bind:configItems={value.options[configurationOptions[primaryConfigurationSection].options[key]].options}/>
-                                        {:else}
-                                            <ConfigList
-                                                    hiddenKeys={Object.keys(configurationOptions).map((k) => k)}
-                                                    bind:configItems={configurationOptions[key].options}
-                                            />
-                                        {/if}
-                                    </Accordion>
-                                </div>
+                                            defaultValue={configurationOptions[primaryConfigurationSection].options[key]}
+                                    />
+                                    <ConfigList
+                                            bind:configItems={value.options[configurationOptions[primaryConfigurationSection].options[key]].options}/>
+                                {:else}
+                                    <ConfigList
+                                            hiddenKeys={Object.keys(configurationOptions).map((k) => k)}
+                                            bind:configItems={configurationOptions[key].options}
+                                    />
+                                {/if}
+                            </Accordion>
+                        {/each}
+                        <div class="flex flex-row w-full">
+                            <OrangeButton onClick={copyConfigurationToClipboard}>Copy Config to Clipboard
+                            </OrangeButton>
+                            <div class="flex-grow"></div>
+                            <SuspenseButton onClick={onFormSubmit}>Save</SuspenseButton>
+                        </div>
+                    {:else}
+                        <div class="flex items-center justify-center">
+                            <OrangeButton onClick={init}>Retry Load</OrangeButton>
+                        </div>
+                    {/if}
+                </Suspense>
 
-                            {/each}
-                            <div class="flex flex-row px-4">
-                                <OrangeButton onClick={copyConfigurationToClipboard}>Copy Config to Clipboard
-                                </OrangeButton>
-                                <div class="flex-grow"></div>
-                                <SuspenseButton onClick={onFormSubmit}>Save</SuspenseButton>
-                            </div>
-                        {:else}
-                            <div class="flex items-center justify-center">
-                                <OrangeButton onClick={init}>Retry Load</OrangeButton>
-                            </div>
-                        {/if}
-                    </Suspense>
-
-                </div>
             </div>
         </div>
     </div>

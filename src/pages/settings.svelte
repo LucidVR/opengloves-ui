@@ -16,7 +16,7 @@
             <div class="shadow rounded">
                 <div class="px-4 pb-16 space-y-6">
                     <div>
-                        <Accordion title={"UI Settings"} expanded={true}>
+                        <Accordion title={"UI Settings"} expanded={true} outAnimation={false}>
                             <Select label="Theme" options={[{
                                 title: 'Light',
                                 value: 'light',

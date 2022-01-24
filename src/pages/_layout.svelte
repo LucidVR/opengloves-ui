@@ -113,17 +113,17 @@
             <svelte:component this={$SplashStore[$SplashStore.length-1].component}
                               {...$SplashStore[$SplashStore.length - 1].props}/>
         {:else}
-                <Suspense suspense={$state.sidecar.loading}>
-                    {#if $state.sidecar.success}
-                        <Menu items={urls} bind:active={$state.activeMenuItem}/>
-                        <slot/>
-                        <Footer/>
-                    {:else}
-                        <div class="h-full w-full flex items-center justify-center">
-                            <OrangeButton onClick={init}>Retry Load</OrangeButton>
-                        </div>
-                    {/if}
-                </Suspense>
+            <Suspense suspense={$state.sidecar.loading} message="Initialising...">
+                {#if $state.sidecar.success}
+                    <Menu items={urls} bind:active={$state.activeMenuItem}/>
+                    <slot/>
+                    <Footer/>
+                {:else}
+                    <div class="h-full w-full flex items-center justify-center">
+                        <OrangeButton onClick={init}>Retry Load</OrangeButton>
+                    </div>
+                {/if}
+            </Suspense>
         {/if}
     </div>
 
