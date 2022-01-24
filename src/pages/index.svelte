@@ -45,19 +45,10 @@
         }
     }
 
-    const awaitSidecarInit = () => new Promise((resolve, reject) => {
-        openSidecar('sidecar', e => {
-            console.log(e);
-            resolve(e)
-        }, e => reject(e)).then(child => $state.sidecarProcess = child);
-    })
 
     const init = async () => {
         $state.loading = true;
-
-        if ($state.sidecarProcess) $state.sidecarProcess.kill();
         try {
-            await awaitSidecarInit();
             let fromCache;
             ({configurationOptions, fromCache} = await getConfiguration());
             $state.loadedFromCache = fromCache;
