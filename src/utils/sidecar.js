@@ -8,13 +8,13 @@ import {Command} from "@tauri-apps/api/shell";
  * @returns {Promise<Child>} Lines from executable's stdout
  * @throws {string} First line of executable's stderr
  */
-export const openSidecar = async (program, onData, onError) => {
+const openSidecar = async (program, onData, onError) => {
     const sidecar = Command.sidecar(program);
 
     sidecar.stdout.on('data', e => onData(e));
     sidecar.stderr.on('data', e => onError(e));
 
-    const child = await sidecar.spawn();
-
-    return child;
+    return await sidecar.spawn();
 }
+
+export const awaitSidecarInit = (onChildSet) => new Promise((resolve, reject) => openSidecar('sidecar', e => resolve(e), e => reject(e)).then(onChildSet));

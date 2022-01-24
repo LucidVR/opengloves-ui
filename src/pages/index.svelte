@@ -10,7 +10,7 @@
 
     import Select from '../components/Input/Select.svelte'
     import {writable} from 'svelte/store'
-    import {onDestroy, onMount} from 'svelte'
+    import {onMount} from 'svelte'
     import Accordion from '../components/Accordion.svelte'
     import ConfigList from '../components/Config/ConfigList.svelte'
     import OrangeButton from '../components/Input/Button/OrangeButton.svelte'
@@ -20,7 +20,6 @@
     import Suspense from "../components/Suspense.svelte";
     import Init from "../splashscreens/Init.svelte";
     import {getLocalStorageKey, setLocalStorageKey} from "../utils/storage";
-    import {openSidecar} from "../utils/sidecar";
 
     const state = writable({
         loading: true,

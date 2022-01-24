@@ -12,7 +12,7 @@
     import Footer from "../components/Footer.svelte";
     import {goto, isActive, url} from "@roxi/routify";
     import {writable} from "svelte/store";
-    import {openSidecar} from "../utils/sidecar";
+    import {awaitSidecarInit} from "../utils/sidecar";
     import {onMount} from "svelte";
     import Suspense from "../components/Suspense.svelte";
     import OrangeButton from "../components/Input/Button/OrangeButton.svelte";
@@ -72,10 +72,6 @@
         onClick: () => $goto(path),
         active: !!$isActive(path),
     }));
-
-    const awaitSidecarInit = (onChildSet) => new Promise((resolve, reject) => {
-        openSidecar('sidecar', e => resolve(e), e => reject(e)).then(onChildSet);
-    });
 
     const init = async () => {
         try {
