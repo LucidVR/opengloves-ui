@@ -24,15 +24,13 @@
     const state = writable({
         loading: true,
         successfullyLoaded: false,
-        loadedFromCache: false,
         sidecarProcess: null,
-    })
-
-    let configurationOptions = [];
+        configurationOptions: []
+    });
 
     const onFormSubmit = async () => {
         try {
-            const result = createConfiguration(configurationOptions);
+            const result = createConfiguration($state.configurationOptions);
             await saveConfiguration(result);
             ToastStore.addToast(ToastStore.severity.SUCCESS, 'Success saving configuration. Please restart SteamVR for the changes to take effect.');
         } catch (e) {
@@ -48,11 +46,9 @@
     const init = async () => {
         $state.loading = true;
         try {
-            let fromCache;
-            ({configurationOptions, fromCache} = await getConfiguration());
-            $state.loadedFromCache = fromCache;
+            $state.configurationOptions = await getConfiguration();
 
-            const driver_openglove = configurationOptions.driver_openglove.options;
+            const driver_openglove = $state.configurationOptions.driver_openglove.options;
 
             if (!(getLocalStorageKey('initialised') === 'true') && !driver_openglove.left_enabled && !driver_openglove.right_enabled) {
                 SplashStore.addSplash(Init, {
@@ -66,7 +62,7 @@
                 });
             }
 
-            if (!fromCache) ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully loaded configuration');
+            ToastStore.addToast(ToastStore.severity.SUCCESS, 'Successfully loaded configuration');
             $state.successfullyLoaded = true;
         } catch (e) {
             $state.successfullyLoaded = false;
@@ -83,7 +79,7 @@
 
     const copyConfigurationToClipboard = () => {
         try {
-            const result = createConfiguration(configurationOptions);
+            const result = createConfiguration($state.configurationOptions);
 
             writeText(JSON.stringify(result));
 
@@ -104,25 +100,25 @@
             <div class="px-4 py-5 space-y-6 w-full flex flex-col justify-center items-center">
                 <Suspense suspense={$state.loading} message="Getting configuration...">
                     {#if $state.successfullyLoaded}
-                        {#each Object.entries(configurationOptions) as [key, value], i}
+                        {#each Object.entries($state.configurationOptions) as [key, value], i}
                             <Accordion title={value.title}>
                                 {#if Array.isArray(value.options)}
                                     <Select
                                             onSelectItemChanged={selectedKey => {
-                                        configurationOptions[primaryConfigurationSection].options[key] = selectedKey;
+                                        $state.configurationOptions[primaryConfigurationSection].options[key] = selectedKey;
                                     }}
                                             options={Object.entries(value.options).map(([k, v]) => ({
                                         title: v.title,
                                         value: parseInt(k),
                                     }))}
-                                            defaultValue={configurationOptions[primaryConfigurationSection].options[key]}
+                                            defaultValue={$state.configurationOptions[primaryConfigurationSection].options[key]}
                                     />
                                     <ConfigList
-                                            bind:configItems={value.options[configurationOptions[primaryConfigurationSection].options[key]].options}/>
+                                            bind:configItems={value.options[$state.configurationOptions[primaryConfigurationSection].options[key]].options}/>
                                 {:else}
                                     <ConfigList
-                                            hiddenKeys={Object.keys(configurationOptions).map((k) => k)}
-                                            bind:configItems={configurationOptions[key].options}
+                                            hiddenKeys={Object.keys($state.configurationOptions).map((k) => k)}
+                                            bind:configItems={$state.configurationOptions[key].options}
                                     />
                                 {/if}
                             </Accordion>
@@ -139,7 +135,6 @@
                         </div>
                     {/if}
                 </Suspense>
-
             </div>
         </div>
     </div>

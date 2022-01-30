@@ -1,9 +1,7 @@
 
 # Building
 
-This interface utilizes **Tauri** and requires ***[some extra setup]***.
-
-<br>
+We use **Tauri** which requires ***[some extra setup]***.
 
 ## Sidecar
 
@@ -30,7 +28,7 @@ with **OpenVR** and must be built first for the project to run.
 
 <br>
 
-## Interface
+## Building the Application
 
 1. Have **[Sidecar]** built.
 

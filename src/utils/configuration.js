@@ -3,7 +3,6 @@ import {parse} from 'comment-json';
 import {readTextFile} from '@tauri-apps/api/fs'
 import {deepOverwrite} from "./object";
 
-import ConfigurationStore from '../stores/configuration';
 import {makeHTTPRequest} from "./http";
 
 export const primaryConfigurationSection = "driver_openglove";
@@ -21,23 +20,15 @@ export const readDefaultConfiguration = async () => {
 }
 
 export const getConfiguration = async () => {
-    const cached = await ConfigurationStore.getConfiguration();
-    if(cached) return {configurationOptions: cached, fromCache: true};
-
     const defaultConfig = await readDefaultConfiguration();
     const openVRConfigValues = await getValuesForConfiguration(defaultConfig);
     deepOverwrite(defaultConfig, parse(openVRConfigValues));
 
-    const parsed = parseConfiguration(defaultConfig);
-
-    ConfigurationStore.set(parsed);
-    return {configurationOptions: parsed, fromCache: false};
+    return parseConfiguration(defaultConfig);
 };
 
 
 export const createConfiguration = (configurationOptions) => {
-    ConfigurationStore.set(configurationOptions);
-
     const temp = JSON.parse(JSON.stringify(configurationOptions));
 
     const result = {}

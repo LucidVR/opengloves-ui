@@ -1,42 +1,17 @@
 
 # OpenGloves UI [![Steam Badge]][Steam] [![Discord Badge]][Discord]
 
-*This repository is the* ***User Interface*** *of the* ***[OpenGloves]*** *driver.*
+*This repository contains the* ***User Interface*** *of the* ***[OpenGloves]*** *driver.*  
 
-<br>
+The UI is shipped along with the OpenGloves driver on Steam,<br>
+and has a number of tools available to configure the driver.
 
 While this **UI** is not required, it is strongly <br>
-recommended for use with our driver.
-
-<br>
-
-*Written in* ***Svelte*** *&* ***Tauri*** *.*
-
----
-
-**This is not the [OpenGloves] driver itself.**
+recommended for use with the driver.
 
 ---
 
 **⸢ [Installation] ⸥ ⸢ [Building] ⸥**
-
----
-
-## Settings
-
-This interface fetches the `default.vrsettings` <br>
-and afterwards the **OpenVR** user configuration.
-
-The default config is located relative to `/src-tauri/` <br>
-at `../resources/settings/default.vrsettings`.
-
-The default configuration is used only for the <br>
-settings keys, the values however are retrieved <br>
-from the users `steamvr.vrsettings` file.
-
-<br>
-
----
 
 ## Contributions
 
