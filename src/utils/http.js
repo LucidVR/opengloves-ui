@@ -1,11 +1,12 @@
 import {http} from "@tauri-apps/api";
-import {awaitSidecarInit} from "./sidecar";
+import {process} from "@tauri-apps/api";
+import ToastStore from "../stores/toast";
 
-const basePath = "http://localhost:18080/";
+const port = 18080;
 
 export const makeHTTPRequest = async (url, method = "POST", body, retry = true) => {
     try {
-        const response = await http.fetch(basePath + url, {
+        const response = await http.fetch("http://localhost:" + port + "/" + url, {
             method: 'POST',
             body: {
                 type: 'Json',
@@ -17,15 +18,31 @@ export const makeHTTPRequest = async (url, method = "POST", body, retry = true) 
 
         console.error(response);
 
-        throw new Error(response.data ?? 'An unknown error occurred');
+        throw new Error(response.data ? response.data : "An unknown error occurred");
     } catch (e) {
-        //The server has closed, retry connection
+        //The server has closed
         if (typeof e === 'string' && e.includes('(os error 10061)') && retry) {
-            await awaitSidecarInit();
+            ToastStore.addToast(ToastStore.severity.WARNING, "Server has closed - closing app.");
 
-            return makeHTTPRequest(url, method, body, false);
+            setTimeout(() => process.exit(), 500);
         }
         throw e;
     }
+}
 
+export function SidecarWebsocket(onOpen = () => {
+}, onMessage = () => {
+}, onClose = () => {
+}) {
+    const socket = new WebSocket('ws://localhost:' + port + "/ws");
+
+    socket.addEventListener('open', onOpen);
+
+    socket.addEventListener('message', onMessage);
+
+    socket.addEventListener('close', onClose);
+
+    return {
+        send: async (data) => socket.send(data)
+    };
 }

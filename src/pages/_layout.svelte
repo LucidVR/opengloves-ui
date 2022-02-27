@@ -16,6 +16,10 @@
     import {onMount} from "svelte";
     import Suspense from "../components/Suspense.svelte";
     import OrangeButton from "../components/Input/Button/OrangeButton.svelte";
+    import {SidecarWebsocket} from "../utils/http";
+    import {process} from "@tauri-apps/api";
+    import {appWindow} from '@tauri-apps/api/window';
+
 
     const _urls = [
         ["./index", "Configuration"],
@@ -73,18 +77,44 @@
         active: !!$isActive(path),
     }));
 
+    let isClosing = false;
+    const closeApp = () => {
+        if (isClosing) return;
+        isClosing = true;
+        ToastStore.addToast(ToastStore.severity.WARNING, "SteamVR closed! Closing app...");
+
+        setTimeout(() => {
+            appWindow.close();
+            process.exit();
+        }, 1000);
+    }
+
     const init = async () => {
         try {
             $state.sidecar.loading = true;
             if ($state.sidecar.process) $state.sidecar.process.kill();
 
             await awaitSidecarInit((child) => $state.sidecar.process = child);
-            $state.sidecar.success = true;
+
+            const sidecarWebsocket = new SidecarWebsocket(() => {
+                $state.sidecar.success = true;
+                $state.sidecar.loading = false;
+            }, (event) => {
+                console.log(event.data);
+                if (event.data === 'shutdown') closeApp();
+            }, (event) => {
+                closeApp();
+            });
+
+            await appWindow.listen('tauri://close-requested', ({event, payload}) => {
+                sidecarWebsocket.send('shutdown');
+            })
+
+
         } catch (e) {
             console.error(e);
             $state.sidecar.success = false;
             ToastStore.addToast(ToastStore.severity.ERROR, e);
-        } finally {
             $state.sidecar.loading = false;
         }
     }

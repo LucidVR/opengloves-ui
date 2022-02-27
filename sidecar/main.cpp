@@ -1,15 +1,16 @@
 //clang-format off
 #define CROW_MAIN
 #define CROW_LOG_LEVEL 0
+#define CROW_ENFORCE_WS_SPEC
 #include "crow_all.h"
 
 //clang-format on
 
 #include <windows.h>
 
-#include <iomanip>
 #include <iostream>
 #include <string>
+#include <unordered_set>
 
 #include "json.hpp"
 #include "openvr.h"
@@ -231,6 +232,22 @@ std::string GetOpenVRErrorAsString(vr::EVRInitError err) {
   }
 }
 
+crow::SimpleApp app;
+std::mutex connectionMutex;
+std::unordered_set<crow::websocket::connection*> connections;
+
+std::atomic<bool> isRunning = true;
+
+void close() {
+  for (auto u : connections) u->send_text("shutdown");
+
+  app.stop();
+
+  vr::VR_Shutdown();
+
+  isRunning = false;
+}
+
 int main() {
   vr::EVRInitError initErr = InitOpenVR();
   if (initErr != vr::EVRInitError::VRInitError_None) {
@@ -239,8 +256,6 @@ int main() {
   }
 
   std::cout << "initialised" << std::endl;
-
-  crow::SimpleApp app;
 
   CROW_ROUTE(app, "/settings/get").methods(crow::HTTPMethod::Post)([](const crow::request& req) {
     auto json = nlohmann::json::parse(req.body, nullptr, true, true);
@@ -268,5 +283,41 @@ int main() {
 
   CROW_ROUTE(app, "/")([]() { return "Pong"; });
 
-  app.port(18080).multithreaded().run();
+  CROW_ROUTE(app, "/ws")
+      .websocket()
+      .onaccept([&](const crow::request&) { return true; })
+      .onopen([&](crow::websocket::connection& conn) {
+        std::cout << "user connected" << std::endl;
+        std::lock_guard<std::mutex> _(connectionMutex);
+        connections.insert(&conn);
+      })
+      .onclose([&](crow::websocket::connection& conn, const std::string& reason) {
+        CROW_LOG_INFO << "websocket connection closed: " << reason;
+        std::lock_guard<std::mutex> _(connectionMutex);
+        connections.erase(&conn);
+      })
+      .onmessage([&](crow::websocket::connection& /*conn*/, const std::string& data, bool is_binary) {
+        std::lock_guard<std::mutex> _(connectionMutex);
+        if (data == "shutdown") close();
+      });
+
+  std::thread serverThread = std::thread([&]() { app.port(18080).multithreaded().run(); });
+
+  while (isRunning) {
+    vr::VREvent_t event;
+    while (vr::VRSystem()->PollNextEvent(&event, sizeof event)) {
+      switch (event.eventType) {
+        case vr::VREvent_Quit:
+          vr::VRSystem()->AcknowledgeQuit_Exiting();
+          std::cout << "shutdown" << std::endl;
+          close();
+          break;
+      }
+    }
+
+    Sleep(100);
+  }
+
+  std::cout << "closing program" << std::endl;
+  return 0;
 }

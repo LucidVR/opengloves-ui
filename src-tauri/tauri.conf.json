@@ -64,6 +64,9 @@
       "http": {
         "all": true,
         "request": true
+      },
+      "window": {
+        "all": true
       }
     },
     "windows": [
