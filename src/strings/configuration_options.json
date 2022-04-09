@@ -52,5 +52,9 @@
   "feedback_enabled": {
     "title": "Feedback Enabled",
     "description": "Whether the driver should send back information (like force feedback data) to the glove. You should make sure that the firmware is not expecting data to be sent from the driver if you disable this option."
+  },
+  "index_curl_as_trigger": {
+    "title": "Use Index Curl as Trigger",
+    "description": "Force the emulated controller's trigger value to follow your index finger's curl amount. (Legacy behavior)"
   }
 }

@@ -21,12 +21,13 @@
     "__type": "device_driver:1",
     "left_serial_number": "LHR-E217CD00",
     "right_serial_number": "LHR-E217CD01",
-    "approximate_thumb": true
+	"approximate_thumb": true,
+  "index_curl_as_trigger": true
   },
   "pose_settings":
   {
     "__title": "Pose settings",
-  "hardware_calibration_button_enabled": false,
+	"hardware_calibration_button_enabled": false,
     "right_x_offset_position": -0.1,
     "right_y_offset_position": -0.08,
     "right_z_offset_position": -0.03,
