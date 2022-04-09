@@ -32,7 +32,7 @@
         try {
             const result = createConfiguration($state.configurationOptions);
             await saveConfiguration(result);
-            ToastStore.addToast(ToastStore.severity.SUCCESS, 'Success saving configuration. Automatically updated changes in SteamVR');
+            ToastStore.addToast(ToastStore.severity.SUCCESS, 'Success saving configuration and applied changes to driver!');
         } catch (e) {
             console.trace(e);
             if (Array.isArray(e))
