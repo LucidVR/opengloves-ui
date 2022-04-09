@@ -213,7 +213,7 @@ crow::response ServoTest(const nlohmann::json& json) {
 
 vr::EVRInitError InitOpenVR() {
   vr::EVRInitError error;
-  VR_Init(&error, vr::VRApplication_Utility);
+  VR_Init(&error, vr::VRApplication_Overlay);
 
   return error;
 }
