@@ -1,7 +1,7 @@
 <script>
-    import PoseCalibration from "../components/Functions/PoseCalibrationFunction.svelte";
-    import ServoCalibration from "../components/Functions/ServoCalibrationFunction.svelte";
-    import Reset from "../components/Functions/ResetFunction.svelte";
+    import PoseCalibration from "../../components/Functions/PoseCalibrationFunction.svelte";
+    import ServoCalibration from "../../components/Functions/ServoCalibrationFunction.svelte";
+    import Reset from "../../components/Functions/ResetFunction.svelte";
 
     const functionList = [Reset, PoseCalibration, ServoCalibration];
 </script>

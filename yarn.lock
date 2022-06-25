@@ -145,10 +145,10 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@roxi/routify@^2.18.4":
-  version "2.18.4"
-  resolved "https://registry.yarnpkg.com/@roxi/routify/-/routify-2.18.4.tgz#537ecc458f92336637bc7e073506cb89e281cbf8"
-  integrity sha512-FoG5/f+jG+RtShs4wmkfY7Jf9THCtmEZ8XMmYxLPevYWkgpmmoflPjNm5dbQg/W2gYkP4snRKWft6gMcvEMIxw==
+"@roxi/routify@^2.18.7":
+  version "2.18.7"
+  resolved "https://registry.yarnpkg.com/@roxi/routify/-/routify-2.18.7.tgz#1dfa34a4f008c8f1fe75713c2a7415967561fa6f"
+  integrity sha512-ep9LeUUgKQH5eDmvLIJzk3SrHMY2+Ap2VgDq1OGTI2BOfPpFCEpbdexSNz/zMlRyiadou78SeN/tW0B3JHP0hQ==
   dependencies:
     "@roxi/ssr" "^0.2.1"
     "@types/node" ">=4.2.0 < 13"

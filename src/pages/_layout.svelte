@@ -10,7 +10,6 @@
     import ToastComponent from '../components/Toast.svelte';
     import Menu from "../components/Menu.svelte";
     import Footer from "../components/Footer.svelte";
-    import {goto, isActive, url} from "@roxi/routify";
     import {writable} from "svelte/store";
     import {awaitSidecarInit} from "../utils/sidecar";
     import {onMount} from "svelte";
@@ -19,13 +18,64 @@
     import {SidecarWebsocket} from "../utils/http";
     import {process} from "@tauri-apps/api";
     import {appWindow} from '@tauri-apps/api/window';
+    import {goto, isActive, url} from "@roxi/routify";
 
 
-    const _urls = [
-        ["./index", "Configuration"],
-        ["./functions", "Functions"],
-        ["./settings", "Settings"],
+    let urls = [
+        {
+            "title": "Driver",
+            "url": "./driver",
+            "children": [
+                {
+                    "title": "Configuration",
+                    "url": "./driver/configuration",
+                },
+                {
+                    "title": "Functions",
+                    "url": "./driver/functions"
+                }
+            ]
+        },
+        {
+            "title": "Firmware",
+            "url": "./firmware",
+            "children": [
+                {
+                    "title": "Configuration",
+                    "url": "./firmware/configuration"
+                },
+                {
+                    "title": "Update",
+                    "url": "./firmware/update"
+                }
+            ]
+        },
+        {
+            "title": "UI Settings",
+            "url": "./settings"
+        }
     ];
+
+
+
+    
+    $: {
+        const mapUrls = (item) => {
+            Object.keys(item).map((k, i) => {
+                item[k] = {...item[k], ...{
+                        href: $url(item[k].url),
+                        onClick: () => $goto(item[k].url),
+                        active: !!$isActive(item[k].url),
+                    }};
+                if(item[k]?.children) mapUrls(item[k].children);
+
+            });
+        }
+
+        mapUrls(urls);
+
+        urls = urls;
+    }
 
     const state = writable({
         sidecar: {
@@ -34,7 +84,7 @@
             process: null,
         },
         visibleToasts: [],
-        activeMenuItem: 0
+        activeUrl: ''
     });
 
     const [send, receive] = crossfade({
@@ -70,12 +120,6 @@
         }
     });
 
-    $: urls = _urls.map(([path, title]) => ({
-        title,
-        href: $url(path),
-        onClick: () => $goto(path),
-        active: !!$isActive(path),
-    }));
 
     let isClosing = false;
     const closeApp = () => {
@@ -141,8 +185,10 @@
         {:else}
             <Suspense suspense={$state.sidecar.loading} message="Initialising...">
                 {#if $state.sidecar.success}
-                    <Menu items={urls} bind:active={$state.activeMenuItem}/>
-                    <slot/>
+                    <Menu items={urls} bind:activeUrl={$state.activeUrl}/>
+                    <div class="flex-grow">
+                        <slot/>
+                    </div>
                     <Footer/>
                 {:else}
                     <div class="h-full w-full flex items-center justify-center">
