@@ -5,18 +5,11 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 
 # Deps
-
-set(Boost_INCLUDE_DIR "C:/Program Files/boost/boost_1_78_0")
+set(ASIO_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries/asio/asio/include")
 set(OPENVR_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries/openvr/headers")
 set(JSON_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries/nlohmann")
 set(CROW_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries/crow")
 set(SIZEOF_VOIDP ${CMAKE_SIZEOF_VOID_P})
-
-find_package(Boost)
-IF (Boost_FOUND)
-    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-    ADD_DEFINITIONS( "-DHAS_BOOST" )
-ENDIF()
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(PROCESSOR_ARCH "64")
@@ -37,7 +30,7 @@ find_library(OPENVR_LIB openvr_api HINTS "${CMAKE_CURRENT_SOURCE_DIR}/libraries/
 # Add source to this project's executable.
 add_executable (sidecar-x86_64-pc-windows-msvc "main.cpp")
 
-target_include_directories(sidecar-x86_64-pc-windows-msvc PUBLIC "${OPENVR_INCLUDE_DIR}" "${JSON_INCLUDE_DIR}" "${CROW_INCLUDE_DIR}")
+target_include_directories(sidecar-x86_64-pc-windows-msvc PUBLIC "${OPENVR_INCLUDE_DIR}" "${JSON_INCLUDE_DIR}" "${CROW_INCLUDE_DIR}" ${ASIO_INCLUDE_DIR})
 target_link_libraries(sidecar-x86_64-pc-windows-msvc PUBLIC "${OPENVR_LIB}")
 
 add_custom_command(TARGET sidecar-x86_64-pc-windows-msvc POST_BUILD

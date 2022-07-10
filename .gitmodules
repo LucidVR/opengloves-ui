@@ -1,0 +1,3 @@
+[submodule "sidecar/libraries/asio"]
+	path = sidecar/libraries/asio
+	url = https://github.com/chriskohlhoff/asio.git

@@ -1,9 +1,11 @@
 import {parse} from 'comment-json';
 
-import {readTextFile} from '@tauri-apps/api/fs'
 import {deepOverwrite} from "./object";
 
 import {makeHTTPRequest} from "./http";
+
+import vrsettings from "../resources/vrsettings.json";
+import configuration_options from "../strings/configuration_options.json";
 
 export const primaryConfigurationSection = "driver_openglove";
 
@@ -13,17 +15,15 @@ export const primaryConfigurationSection = "driver_openglove";
  * @return {Promise<String>} Return values from properties provided
  */
 const getValuesForConfiguration = async (configObj) => makeHTTPRequest("settings/get", "POST", configObj);
+export const saveConfiguration = async (configObj) => makeHTTPRequest('settings/set', 'POST', configObj);
 
-export const readDefaultConfiguration = async () => {
-    const text = await readTextFile('../resources/settings/default.vrsettings');
-    return parse(text);
-}
+export const readDefaultConfiguration = () => vrsettings;
 
 export const getConfiguration = async () => {
     const defaultConfig = await readDefaultConfiguration();
     const openVRConfigValues = await getValuesForConfiguration(defaultConfig);
-    deepOverwrite(defaultConfig, parse(openVRConfigValues));
 
+    deepOverwrite(defaultConfig, parse(openVRConfigValues));
     return parseConfiguration(defaultConfig);
 };
 
@@ -35,8 +35,8 @@ export const createConfiguration = (configurationOptions) => {
     result[primaryConfigurationSection] = temp[primaryConfigurationSection].options;
 
     delete temp[primaryConfigurationSection];
-    Object.entries(temp).forEach(([k,v]) => {
-        if(Array.isArray(v.options)) {
+    Object.entries(temp).forEach(([k, v]) => {
+        if (Array.isArray(v.options)) {
             v.options.forEach((v2, k2) => {
                 result[v2.key] = v2.options;
             });
@@ -47,7 +47,6 @@ export const createConfiguration = (configurationOptions) => {
     return result;
 }
 
-export const saveConfiguration = async (configObj) => makeHTTPRequest('settings/set', 'POST', configObj);
 
 /***
  * Gets ids associated with each configuration object.
@@ -63,21 +62,17 @@ export const saveConfiguration = async (configObj) => makeHTTPRequest('settings/
 /*
     result = {
         sections: {
-            section1 (ie Pose Configuration): {
-                title: Pose Configuration
+            section1 (ie pose_configuration): {
                 options: [{
                     property: value
                 }]
             },
-            section2 (ie Communication Method): {
-                title: Communication Method,
+            section2 (ie communication_method): {
                 options: [
                     {
-                        title: Bluetooth
                         property: value
                     },
                     {
-                        title: Serial
                         property: value
                     },
                 ]
@@ -86,53 +81,49 @@ export const saveConfiguration = async (configObj) => makeHTTPRequest('settings/
     }
  */
 export const parseConfiguration = (configObj) => {
+    console.log(configObj);
     const result = {};
     result[primaryConfigurationSection] = {
+        title: configuration_options.sections[primaryConfigurationSection],
         options: {},
     };
 
     Object.entries(configObj[primaryConfigurationSection]).forEach(([k, v]) => {
-        const sectionHasOptions = configObj[primaryConfigurationSection][Symbol.for(`after:${k}`)];
-        if (sectionHasOptions) {
+        const sectionHasOptions = configuration_options.__sections.includes(k);
+        if (sectionHasOptions)
             result[k] = {
-                title: parseComment(sectionHasOptions[0].value).title,
+                title: configuration_options.sections[k],
                 options: []
             };
-        }
-
-        if(k === '__title')
-            result[primaryConfigurationSection].title = v;
-        else
-            result[primaryConfigurationSection].options[k] = v;
-
+        result[primaryConfigurationSection].options[k] = v;
     });
-    delete configObj[primaryConfigurationSection];
 
     Object.entries(configObj).forEach(([k, v]) => {
 
         //trim properties for options
-        const {__type, __title, ...options} = v;
+        const {__type, ...options} = v;
 
         if ('__type' in v) {
             const parsed = parseComment(v['__type'], false);
             result[Object.keys(parsed)[0]].options[Object.values(parsed)[0]] = {
-                title: configObj[k]['__title'],
                 key: k,
                 options,
             };
+
         } else {
             result[k] = {
-                title: v.__title,
+                title: configuration_options.sections[k],
                 options,
             };
         }
 
     });
+
     return result;
 };
 
 const parseComment = (comment, whitespace = true) => {
-    if(!whitespace) comment = comment.replaceAll(' ', '');
+    if (!whitespace) comment = comment.replaceAll(' ', '');
     const split = comment.replace(/\/\//g, '').split(',');
 
     let result = {};

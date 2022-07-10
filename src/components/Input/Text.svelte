@@ -14,11 +14,11 @@
 <div class="flex flex-col flex-grow py-1">
     <div class="flex flex-row">
         <p class="block text-sm font-medium  ">
-            {configurationOptionStrings[label]?.title ?? prettyPrintLabel(label)}
+            {configurationOptionStrings.keys?.[label]?.title ?? prettyPrintLabel(label)}
         </p>
-        {#if configurationOptionStrings[label]?.description}
+        {#if configurationOptionStrings.keys?.[label]?.description}
             <div class="px-1">
-                <ToolTip text={configurationOptionStrings[label].description}>
+                <ToolTip text={configurationOptionStrings.keys?.[label]?.description}>
                     <Fa icon={faQuestionCircle} color="grey"/>
                 </ToolTip>
             </div>

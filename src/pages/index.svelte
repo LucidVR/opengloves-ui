@@ -21,6 +21,8 @@
     import Init from "../splashscreens/Init.svelte";
     import {getLocalStorageKey, setLocalStorageKey} from "../utils/storage";
 
+    import configuration_options from "../strings/configuration_options.json";
+
     const state = writable({
         loading: true,
         successfullyLoaded: false,
@@ -108,7 +110,7 @@
                                         $state.configurationOptions[primaryConfigurationSection].options[key] = selectedKey;
                                     }}
                                             options={Object.entries(value.options).map(([k, v]) => ({
-                                        title: v.title,
+                                        title: configuration_options.options[v.key],
                                         value: parseInt(k),
                                     }))}
                                             defaultValue={$state.configurationOptions[primaryConfigurationSection].options[key]}

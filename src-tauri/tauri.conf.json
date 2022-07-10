@@ -29,18 +29,6 @@
       "category": "DeveloperTool",
       "shortDescription": "",
       "longDescription": "",
-      "deb": {
-        "depends": [],
-        "useBootstrapper": false
-      },
-      "macOS": {
-        "frameworks": [],
-        "minimumSystemVersion": "",
-        "useBootstrapper": false,
-        "exceptionDomain": "",
-        "signingIdentity": null,
-        "entitlements": null
-      },
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
@@ -53,17 +41,26 @@
     "allowlist": {
       "all": false,
       "fs": {
-        "readTextFile": true,
+        "readFile": true,
         "writeFile": true,
         "readDir": true
       },
       "shell": {
-        "open": true,
-        "execute": true
+        "sidecar": true,
+        "scope": [
+          {
+            "name": "sidecar",
+            "sidecar": true
+          }
+        ],
+        "open": true
       },
       "http": {
         "all": true,
-        "request": true
+        "request": true,
+        "scope": [
+          "http://localhost:18080/*"
+        ]
       },
       "window": {
         "all": true

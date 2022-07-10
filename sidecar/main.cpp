@@ -1,9 +1,7 @@
 //clang-format off
-#define CROW_MAIN
 #define CROW_LOG_LEVEL 0
 #define CROW_ENFORCE_WS_SPEC
 #include "crow_all.h"
-
 //clang-format on
 
 #include <windows.h>
@@ -284,8 +282,8 @@ int main() {
   CROW_ROUTE(app, "/")([]() { return "Pong"; });
 
   CROW_ROUTE(app, "/ws")
-      .websocket()
-      .onaccept([&](const crow::request&) { return true; })
+      .websocket(&app)
+      .onaccept([&](const crow::request& req, void** userdata) { return true; })
       .onopen([&](crow::websocket::connection& conn) {
         std::cout << "user connected" << std::endl;
         std::lock_guard<std::mutex> _(connectionMutex);
@@ -295,6 +293,11 @@ int main() {
         CROW_LOG_INFO << "websocket connection closed: " << reason;
         std::lock_guard<std::mutex> _(connectionMutex);
         connections.erase(&conn);
+        isRunning = false;
+
+        close();
+
+        exit(0);
       })
       .onmessage([&](crow::websocket::connection& /*conn*/, const std::string& data, bool is_binary) {
         std::lock_guard<std::mutex> _(connectionMutex);
