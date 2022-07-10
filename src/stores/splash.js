@@ -1,20 +1,22 @@
-import {writable} from "svelte/store";
+import { writable } from "svelte/store";
 
 const CreateSplashScreen = () => {
-    const {subscribe, set, update} = writable([]);
+  const { subscribe, set, update } = writable([]);
 
-    return {
-        subscribe,
-        addSplash: (component, props) => update(e => {
-            e.push({component, props});
-            return e;
-        }),
-        popSplash: () => update(e => {
-            e.shift();
+  return {
+    subscribe,
+    addSplash: (component, props) =>
+      update((e) => {
+        e.push({ component, props });
+        return e;
+      }),
+    popSplash: () =>
+      update((e) => {
+        e.shift();
 
-            return e;
-        }),
-    }
+        return e;
+      }),
+  };
 };
 
 export default CreateSplashScreen();

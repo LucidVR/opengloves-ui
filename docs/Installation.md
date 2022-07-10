@@ -1,4 +1,3 @@
-
 # Installation
 
 This user interface is included in the **[Steam Release]** of our driver.
@@ -13,7 +12,6 @@ The interface can be opened by launching the **OpenGloves** steam app.
 
 The driver has to be started separately, by launching **SteamVR**.
 
-
 <!----------------------------------------------------------------------------->
 
-[Steam Release]: https://store.steampowered.com/app/1574050/
+[steam release]: https://store.steampowered.com/app/1574050/

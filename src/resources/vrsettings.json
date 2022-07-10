@@ -8,23 +8,20 @@
     "device_driver": 1,
     "encoding_protocol": 1
   },
-  "device_lucidgloves":
-  {
+  "device_lucidgloves": {
     "__type": "device_driver:0",
     "left_serial_number": "lucidgloves-left",
     "right_serial_number": "lucidgloves-right"
   },
-  "device_knuckles":
-  {
+  "device_knuckles": {
     "__type": "device_driver:1",
     "left_serial_number": "LHR-E217CD00",
     "right_serial_number": "LHR-E217CD01",
-	"approximate_thumb": true,
-  "index_curl_as_trigger": true
+    "approximate_thumb": true,
+    "index_curl_as_trigger": true
   },
-  "pose_settings":
-  {
-	"hardware_calibration_button_enabled": false,
+  "pose_settings": {
+    "hardware_calibration_button_enabled": false,
     "right_x_offset_position": -0.1,
     "right_y_offset_position": -0.08,
     "right_z_offset_position": -0.03,
@@ -42,30 +39,25 @@
     "controller_override_left": 3,
     "controller_override_right": 4
   },
-  "communication_serial":
-  {
+  "communication_serial": {
     "__type": "communication_protocol:0",
     "left_port": "\\\\.\\COM4",
     "right_port": "\\\\.\\COM5",
     "baud_rate": 115200
   },
-  "communication_btserial":
-  {
+  "communication_btserial": {
     "__type": "communication_protocol:1",
     "left_name": "lucidgloves-left",
     "right_name": "lucidgloves-right"
   },
-  "communication_namedpipe":
-  {
+  "communication_namedpipe": {
     "__type": "communication_protocol:2"
   },
-  "encoding_legacy":
-  {
+  "encoding_legacy": {
     "__type": "encoding_protocol:0",
     "max_analog_value": 4095
   },
-  "encoding_alpha":
-  {
+  "encoding_alpha": {
     "__type": "encoding_protocol: 1",
     "max_analog_value": 4095
   }
