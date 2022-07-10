@@ -40,11 +40,13 @@
     },
     "left_port": {
       "title": "Left Serial Port",
-      "description": "Left serial port for the device.<br>Serial port values should start with a \\\\.\\COM."
+      "description": "Left serial port for the device.<br>Serial port values should start with a \\\\.\\COM.",
+      "prepend": "\\\\.\\COM"
     },
     "right_port": {
       "title": "Right Serial Port",
-      "description": "Right serial port for the device.<br>Serial port values should start with a \\\\.\\COM."
+      "description": "Right serial port for the device.<br>Serial port values should start with a \\\\.\\COM.",
+      "prepend": "\\\\.\\COM"
     },
     "baud_rate": {
       "description": "Baud rate for the device."
