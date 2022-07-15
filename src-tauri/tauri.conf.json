@@ -45,6 +45,9 @@
         "writeFile": true,
         "readDir": true
       },
+      "process": {
+        "relaunch": true
+      },
       "shell": {
         "sidecar": true,
         "scope": [

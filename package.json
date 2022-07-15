@@ -29,7 +29,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@tauri-apps/api": "^1.0.2",
-    "@tauri-apps/cli": "^1.0.3",
+    "@tauri-apps/cli": "^1.0.4",
     "buffer": "^6.0.3",
     "comment-json": "^4.1.0",
     "svelte-fa": "^2.4.0",
