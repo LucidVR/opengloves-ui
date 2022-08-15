@@ -1,8 +1,6 @@
 <script>
   import {
-    getConfiguration,
-    primaryConfigurationSection,
-    saveConfiguration
+    getConfiguration
   } from "../utils/configuration";
   import ToastStore from "../stores/toast";
   import SplashStore from "../stores/splash";
@@ -10,12 +8,12 @@
   import { writable } from "svelte/store";
   import { onMount } from "svelte";
   import Accordion from "../components/Accordion.svelte";
-  import ConfigList from "../components/Config/ConfigList.svelte";
   import OrangeButton from "../components/Input/Button/OrangeButton.svelte";
 
   import SuspenseButton from "../components/Input/Button/SuspenseButton.svelte";
   import Suspense from "../components/Suspense.svelte";
   import ConfigItem from "../components/Config/ConfigItem.svelte";
+  import { getDescriptionForKey, prettyPrintKey, prettyPrintSection } from "../utils/string";
 
   const state = writable({
     loading: true,
@@ -94,15 +92,16 @@
         <Suspense suspense={$state.loading} message="Getting configuration...">
           {#if $state.successfullyLoaded}
             {#each Object.entries($state.configurationOptions) as [sectionKey, sectionValues], i}
-              <Accordion title={sectionKey}>
+              <Accordion title={prettyPrintSection(sectionKey)}>
                 {#each Object.entries(sectionValues) as [configKey, configValue]}
-                  <ConfigItem title={configKey} bind:value={configValue} />
+                  <ConfigItem label={prettyPrintKey(sectionKey, configKey)}
+                              description={getDescriptionForKey(sectionKey, configKey)} bind:value={configValue} />
                 {/each}
               </Accordion>
             {/each}
             <div class="flex flex-row w-full">
-              <OrangeButton onClick={copyConfigurationToClipboard}
-              >Copy Config to Clipboard
+              <OrangeButton onClick={copyConfigurationToClipboard}>
+                Copy Config to Clipboard
               </OrangeButton>
               <div class="flex-grow"></div>
               <SuspenseButton onClick={onFormSubmit}>Save</SuspenseButton>

@@ -20,7 +20,7 @@
     <div
       in:slide={{ duration: 200 }}
       out:slide={{ duration: outAnimation ? 200 : 0 }}
-      on:click={(e) => e.stopPropagation()}
+      on:mousedown={(e) => e.stopPropagation()}
       class="mb-5 cursor-default"
     >
       <slot />

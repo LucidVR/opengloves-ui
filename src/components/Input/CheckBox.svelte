@@ -2,10 +2,9 @@
   import Fa from "svelte-fa";
   import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
   import ToolTip from "../ToolTip.svelte";
-  import configurationOptionStrings from "../../strings/configuration_options.json";
-  import { prettyPrintLabel } from "../../utils/string";
 
   export let label = "";
+  export let description;
   export let checked = false;
 </script>
 
@@ -17,14 +16,11 @@
       name="checkbox"
       class="form-tick appearance-none h-5 w-5 dark:bg-gray-600 dark:border-gray-600 border border-gray-300 rounded-md checked:bg-blue-600 dark:checked:bg-blue-800 checked:border-transparent focus:outline-none cursor-pointer"
     />
-    <span class="font-medium text-sm"
-      >{configurationOptionStrings.keys?.[label]?.title ??
-        prettyPrintLabel(label)}</span
-    >
+    <span class="font-medium text-sm">{label}</span>
   </label>
-  {#if configurationOptionStrings.keys?.[label]?.description}
+  {#if description}
     <div class="p-2">
-      <ToolTip text={configurationOptionStrings.keys?.[label]?.description}>
+      <ToolTip text={description}>
         <Fa icon={faQuestionCircle} color="grey" />
       </ToolTip>
     </div>

@@ -3,11 +3,12 @@
   import CheckBox from "../Input/CheckBox.svelte";
 
   export let value;
-  export let title;
+  export let label;
+  export let description;
 </script>
 
 {#if typeof value === "boolean"}
-  <CheckBox bind:checked={value} label={title} />
+  <CheckBox bind:checked={value} label={label} description={description} />
 {:else}
-  <TextInput bind:value label={title} />
+  <TextInput bind:value label={label} description={description} />
 {/if}
