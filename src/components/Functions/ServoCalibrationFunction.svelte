@@ -15,7 +15,7 @@
   const servoTest = async (extend) => {
     try {
       $state.loading = true;
-      const result = await makeHTTPRequest("functions/servo_test", "POST", {
+      const result = await makeHTTPRequest("/functions/servo_test", "POST", {
         extend,
         right_hand: $state.form.rightHand,
       });

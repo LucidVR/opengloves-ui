@@ -21,7 +21,7 @@
     $state.timer = $state.form.calibrationTimer;
 
     try {
-      await makeHTTPRequest("functions/pose_calibration", "POST", {
+      await makeHTTPRequest("/functions/pose_calibration", "POST", {
         start: true,
         right_hand: $state.form.rightHand,
       });

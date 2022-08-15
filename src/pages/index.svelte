@@ -1,74 +1,49 @@
 <script>
   import {
-    createConfiguration,
     getConfiguration,
     primaryConfigurationSection,
-    saveConfiguration,
+    saveConfiguration
   } from "../utils/configuration";
   import ToastStore from "../stores/toast";
   import SplashStore from "../stores/splash";
 
-  import Select from "../components/Input/Select.svelte";
   import { writable } from "svelte/store";
   import { onMount } from "svelte";
   import Accordion from "../components/Accordion.svelte";
   import ConfigList from "../components/Config/ConfigList.svelte";
   import OrangeButton from "../components/Input/Button/OrangeButton.svelte";
 
-  import { writeText } from "@tauri-apps/api/clipboard";
   import SuspenseButton from "../components/Input/Button/SuspenseButton.svelte";
   import Suspense from "../components/Suspense.svelte";
-  import Init from "../splashscreens/Init.svelte";
-  import { getLocalStorageKey, setLocalStorageKey } from "../utils/storage";
-
-  import configuration_options from "../strings/configuration_options.json";
+  import ConfigItem from "../components/Config/ConfigItem.svelte";
 
   const state = writable({
     loading: true,
     successfullyLoaded: false,
     sidecarProcess: null,
-    configurationOptions: [],
+    configurationOptions: []
   });
 
   const onFormSubmit = async () => {
-    try {
-      const result = createConfiguration($state.configurationOptions);
-      await saveConfiguration(result);
-      ToastStore.addToast(
-        ToastStore.severity.SUCCESS,
-        "Success saving configuration and applied changes to driver!"
-      );
-    } catch (e) {
-      console.trace(e);
-      if (Array.isArray(e))
-        e.forEach((v) => ToastStore.addToast(ToastStore.severity.ERROR, v));
-      else ToastStore.addToast(ToastStore.severity.ERROR, e);
-    }
+    // try {
+    //   const result = createConfiguration($state.configurationOptions);
+    //   await saveConfiguration(result);
+    //   ToastStore.addToast(
+    //     ToastStore.severity.SUCCESS,
+    //     "Success saving configuration and applied changes to driver!"
+    //   );
+    // } catch (e) {
+    //   console.trace(e);
+    //   if (Array.isArray(e))
+    //     e.forEach((v) => ToastStore.addToast(ToastStore.severity.ERROR, v));
+    //   else ToastStore.addToast(ToastStore.severity.ERROR, e);
+    // }
   };
 
   const init = async () => {
     $state.loading = true;
     try {
-      $state.configurationOptions = await getConfiguration();
-
-      const driver_openglove =
-        $state.configurationOptions.driver_openglove.options;
-
-      if (
-        !(getLocalStorageKey("initialised") === "true") &&
-        !driver_openglove.left_enabled &&
-        !driver_openglove.right_enabled
-      ) {
-        SplashStore.addSplash(Init, {
-          onActivate: async () => {
-            setLocalStorageKey("initialised", true);
-            driver_openglove.left_enabled = true;
-            driver_openglove.right_enabled = true;
-            await onFormSubmit();
-            SplashStore.popSplash();
-          },
-        });
-      }
+      $state.configurationOptions = JSON.parse(await getConfiguration());
 
       ToastStore.addToast(
         ToastStore.severity.SUCCESS,
@@ -84,15 +59,13 @@
     }
   };
 
-  onMount(async () => {
-    await init();
-  });
+  onMount(init);
 
   const copyConfigurationToClipboard = () => {
     try {
-      const result = createConfiguration($state.configurationOptions);
+      //const result = createConfiguration($state.configurationOptions);
 
-      writeText(JSON.stringify(result));
+      //writeText(JSON.stringify(result));
 
       ToastStore.addToast(
         ToastStore.severity.SUCCESS,
@@ -120,44 +93,18 @@
       >
         <Suspense suspense={$state.loading} message="Getting configuration...">
           {#if $state.successfullyLoaded}
-            {#each Object.entries($state.configurationOptions) as [key, value], i}
-              <Accordion title={value.title}>
-                {#if Array.isArray(value.options)}
-                  <Select
-                    onSelectItemChanged={(selectedKey) => {
-                      $state.configurationOptions[
-                        primaryConfigurationSection
-                      ].options[key] = selectedKey;
-                    }}
-                    options={Object.entries(value.options).map(([k, v]) => ({
-                      title: configuration_options.options[v.key],
-                      value: parseInt(k),
-                    }))}
-                    defaultValue={$state.configurationOptions[
-                      primaryConfigurationSection
-                    ].options[key]}
-                  />
-                  <ConfigList
-                    bind:configItems={value.options[
-                      $state.configurationOptions[primaryConfigurationSection]
-                        .options[key]
-                    ].options}
-                  />
-                {:else}
-                  <ConfigList
-                    hiddenKeys={Object.keys($state.configurationOptions).map(
-                      (k) => k
-                    )}
-                    bind:configItems={$state.configurationOptions[key].options}
-                  />
-                {/if}
+            {#each Object.entries($state.configurationOptions) as [sectionKey, sectionValues], i}
+              <Accordion title={sectionKey}>
+                {#each Object.entries(sectionValues) as [configKey, configValue]}
+                  <ConfigItem title={configKey} bind:value={configValue} />
+                {/each}
               </Accordion>
             {/each}
             <div class="flex flex-row w-full">
               <OrangeButton onClick={copyConfigurationToClipboard}
-                >Copy Config to Clipboard
+              >Copy Config to Clipboard
               </OrangeButton>
-              <div class="flex-grow" />
+              <div class="flex-grow"></div>
               <SuspenseButton onClick={onFormSubmit}>Save</SuspenseButton>
             </div>
           {:else}

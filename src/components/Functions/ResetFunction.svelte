@@ -1,19 +1,15 @@
 <script>
   import SuspenseButton from "../Input/Button/SuspenseButton.svelte";
-  import {
-    readDefaultConfiguration,
-    saveConfiguration,
-  } from "../../utils/configuration";
   import ToastStore from "../../stores/toast";
   import { setLocalStorageKey } from "../../utils/storage";
   import { process } from "@tauri-apps/api";
 
   const resetConfiguration = async () => {
     try {
-      const defaultConfig = await readDefaultConfiguration();
-
-      await saveConfiguration(defaultConfig);
-      setLocalStorageKey("initialised", false);
+      // const defaultConfig = await readDefaultConfiguration();
+      //
+      // await saveConfiguration(defaultConfig);
+      // setLocalStorageKey("initialised", false);
 
       ToastStore.addToast(
         ToastStore.severity.SUCCESS,

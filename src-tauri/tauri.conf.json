@@ -22,9 +22,6 @@
         "icons/icon.ico"
       ],
       "resources": [],
-      "externalBin": [
-        "sidecar"
-      ],
       "copyright": "",
       "category": "DeveloperTool",
       "shortDescription": "",
@@ -49,20 +46,13 @@
         "relaunch": true
       },
       "shell": {
-        "sidecar": true,
-        "scope": [
-          {
-            "name": "sidecar",
-            "sidecar": true
-          }
-        ],
         "open": true
       },
       "http": {
         "all": true,
         "request": true,
         "scope": [
-          "http://localhost:18080/*"
+          "http://localhost:52060/*"
         ]
       },
       "window": {

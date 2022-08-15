@@ -10,7 +10,8 @@
 
 <div
   class="bg-white dark:bg-gray-800 w-full rounded-lg px-6 border border-gray-300 dark:border-gray-800 hover:shadow-xl  cursor-pointer"
-  on:click={() => (expanded = !expanded)}
+  on:mousedown={() => {
+    expanded = !expanded}}
 >
   <div class="flex flex-row justify-start py-3">
     <h3 class="font-medium text-sm">{title}</h3>
@@ -28,7 +29,7 @@
 </div>
 
 <style>
-  div :global(.icon) {
-    font-size: 5px;
-  }
+    div :global(.icon) {
+        font-size: 5px;
+    }
 </style>
