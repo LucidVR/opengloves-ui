@@ -1,26 +1,9 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Bower dependency directory (https://bower.io/)
-bower_components
-
-# Dependency directories
-node_modules/
-jspm_packages/
-
-dist/
-
-private
-
 .DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
 .idea/
-build/
-bin/
-
-src-tauri/sidecar-x86_64-pc-windows-msvc.exe
-src-tauri/openvr_api.dll
-.routify/
