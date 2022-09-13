@@ -65,7 +65,7 @@
 	});
 </script>
 
-<div class="fixed right-0 top-0 m-5 z-50">
+<div class="fixed right-0 top-0 m-5 z-50 w-2/3">
 	{#each $state.visible_toasts as toast, index (toast.id)}
 		<div in:receive={{ key: toast.id }} out:send={{ key: toast.id }} animate:flip>
 			<Toast message={toast.message} severity={toast.severity} />

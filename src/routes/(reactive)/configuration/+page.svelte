@@ -52,7 +52,18 @@
 		}
 	};
 
-	const save_configuration = async () => {};
+	const save_configuration = async () => {
+		try {
+			await make_http_request({ path: '/settings', method: 'POST', body: $state.configuration });
+
+			ToastStore.add_toast(
+				Severity.SUCCESS,
+				'Successfully saved configuration. Please restart SteamVR for the changes to take effect.'
+			);
+		} catch (e) {
+			ToastStore.add_toast(Severity.ERROR, e);
+		}
+	};
 
 	onMount(async () => {
 		await load();
@@ -62,7 +73,7 @@
 <div class="h-full w-full flex items-center justify-center flex-col mb-10">
 	<Suspense suspense={$state.status === 'loading'} message="Loading...">
 		{#if $state.status === 'error'}
-			<OrangeButton on_click={load}>Retry Load</OrangeButton>
+			<button class="btn btn-warning" on:click={load}>Retry Load</button>
 		{:else}
 			<h2 class="mb-5 text-center text-3xl font-extrabold mt-3">Driver Configuration</h2>
 			<div class="w-3/4 space-y-6 overflow-auto max-w-md">
@@ -79,8 +90,8 @@
 				{/each}
 				<div class="flex flex-row w-full">
 					<OrangeButton on_click={copy_configuration_to_clipboard}
-						>Copy Config to Clipboard</OrangeButton
-					>
+						>Copy Config to Clipboard
+					</OrangeButton>
 					<div class="flex-grow" />
 					<SuspenseButton on_click={save_configuration}>Save</SuspenseButton>
 				</div>

@@ -17,13 +17,15 @@
 		<h3 class="font-medium text-sm">{title}</h3>
 	</div>
 	{#if expanded}
-		<div
-			in:slide={{ duration: 200 }}
-			out:slide={{ duration: out_animation ? 200 : 0 }}
-			on:click={(e) => e.stopPropagation()}
-			class="mb-5 cursor-default"
-		>
-			<slot />
+		<div on:mousedown={(e) => e.stopPropagation()}>
+			<div
+				in:slide={{ duration: 200 }}
+				out:slide={{ duration: out_animation ? 200 : 0 }}
+				on:click={(e) => e.stopPropagation()}
+				class="mb-5 cursor-default"
+			>
+				<slot />
+			</div>
 		</div>
 	{/if}
 </div>

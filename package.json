@@ -41,6 +41,7 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@tauri-apps/api": "^1.0.2",
+    "daisyui": "^2.27.0",
     "svelte-fa": "^3.0.3",
     "svelte-loading-spinners": "^0.1.7"
   }

@@ -3,11 +3,7 @@
 	export let options: { title: string; value: boolean | string }[];
 
 	export let selected_index = 0;
-	export let selected_value = options[selected_index];
-
-	$: {
-		selected_value = options[selected_value];
-	}
+	export let selected_value = options[selected_index].value;
 
 	let visible = false;
 </script>
@@ -19,7 +15,7 @@
 	<div class="mt-1 w-full relative">
 		<button
 			type="button"
-			on:click={() => (visible = !visible)}
+			on:mousedown={() => (visible = !visible)}
 			class="relative w-full bg-white border border-gray-300 dark:border-gray-600 dark:bg-gray-600 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 			aria-haspopup="listbox"
 			aria-expanded="true"
@@ -58,7 +54,7 @@
 							id="listbox-option-0"
 							on:click={() => {
 								selected_index = i;
-								selected_value = options[selected_index];
+								selected_value = options[selected_index].value;
 								visible = false;
 							}}
 							role="option"

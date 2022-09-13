@@ -1,9 +1,18 @@
 <script>
-	import PoseCalibration from '../components/Functions/PoseCalibrationFunction.svelte';
-	import ServoCalibration from '../components/Functions/ServoCalibrationFunction.svelte';
-	import Reset from '../components/Functions/ResetFunction.svelte';
+	import PoseCalibration, {
+		title as pose_title,
+		description as pose_description
+	} from '$lib/functions/PoseCalibration.svelte';
 
-	const function_list = [Reset, PoseCalibration, ServoCalibration];
+	import ServoCalibration, {
+		title as servo_title,
+		description as servo_description
+	} from '$lib/functions/ServoCalibration.svelte';
+
+	import Reset, {
+		title as reset_title,
+		description as reset_description
+	} from '$lib/functions/Reset.svelte';
 </script>
 
 <div class="flex-grow my-10">
@@ -35,9 +44,29 @@
 						</tr>
 					</thead>
 					<tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-500 dark:bg-gray-700">
-						{#each functionList as functionItem}
-							<svelte:component this={functionItem} />
-						{/each}
+						<tr>
+							<td class="px-6 py-4 whitespace-nowrap text-sm"> {reset_title} </td>
+							<td class="px-6 py-4 text-sm">{reset_description}</td>
+							<td class="px-6 py-4 whitespace-nowrap text-sm flex flex-col">
+								<Reset />
+							</td>
+						</tr>
+
+						<tr>
+							<td class="px-6 py-4 whitespace-nowrap text-sm"> {pose_title} </td>
+							<td class="px-6 py-4 text-sm">{pose_description}</td>
+							<td class="px-6 py-4 whitespace-nowrap text-sm flex flex-col">
+								<PoseCalibration />
+							</td>
+						</tr>
+
+						<tr>
+							<td class="px-6 py-4 whitespace-nowrap text-sm"> {servo_title} </td>
+							<td class="px-6 py-4 text-sm">{servo_description}</td>
+							<td class="px-6 py-4 whitespace-nowrap text-sm flex flex-col">
+								<ServoCalibration />
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
