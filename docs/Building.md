@@ -2,6 +2,10 @@
 
 We use **Tauri** which requires **_[some extra setup]_**.
 
+Be sure to clone this repo with **submodules:**
+  * `git clone --recurse-submodules https://github.com/LucidVR/opengloves-ui.git` 
+  * If this doesn't clone the submodules correctly, or to download them after cloning the repo, try `git submodule update --init --recursive`   
+
 ## Sidecar
 
 The interface uses **Sidecar** as it's backend for communication <br>
