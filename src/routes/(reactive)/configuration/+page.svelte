@@ -77,13 +77,13 @@
 		{:else}
 			<h2 class="mb-5 text-center text-3xl font-extrabold mt-3">Driver Configuration</h2>
 			<div class="w-3/4 space-y-6 overflow-auto max-w-md">
-				{#each Object.entries($state.configuration) as [section_key, section_properties], i}
+				{#each Object.keys($state.configuration) as section_key, i}
 					<Accordion title={pretty_print_section(section_key)}>
-						{#each Object.entries(section_properties) as [config_key, config_value]}
+						{#each Object.keys($state.configuration[section_key]) as config_key}
 							<ConfigItem
 								label={pretty_print_key(section_key, config_key)}
 								description={get_description_for_key(section_key, config_key)}
-								bind:value={config_value}
+								bind:value={$state.configuration[section_key][config_key]}
 							/>
 						{/each}
 					</Accordion>

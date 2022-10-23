@@ -27,7 +27,11 @@
 				path,
 				method: 'POST',
 				body: {
-					amount: $state.form.amount
+					thumb: $state.form.amount,
+					index: $state.form.amount,
+					middle: $state.form.amount,
+					ring: $state.form.amount,
+					pinky: $state.form.amount
 				}
 			});
 
