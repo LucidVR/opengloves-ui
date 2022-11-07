@@ -1,0 +1,71 @@
+{
+  "sections": {
+    "driver_opengloves": "OpenGloves Configuration",
+    "pose_settings": "Pose Settings",
+    "communication_serial": "Serial Communication",
+    "communication_btserial": "Bluetooth Serial Communication",
+    "communication_namedpipe": "Named Pipe Communication"
+  },
+  "keys": {
+    "driver_opengloves": {
+      "enable": {
+        "label": "Enable Driver",
+        "description": "Enable or disable the driver on a SteamVR level. This option disables/enables the driver in SteamVR - equivalent to enabling/disabling within SteamVR settings > startup shutdown > manage addons."
+      },
+      "left_enabled": {
+        "label": "Left Hand Enabled"
+      },
+      "right_enabled": {
+        "label": "Right Hand Enabled"
+      },
+      "feedback_enabled": {
+        "label": "Feedback Enabled",
+        "description": "Whether the driver should send back information (like force feedback data) to the glove. You should make sure that the firmware is not expecting data to be sent from the driver if you disable this option."
+      }
+    },
+    "pose_settings": {
+      "controller_override_left": {
+        "label": "Left Controller Override Id",
+        "description": "If the driver isn't picking up your default controllers correctly,<br>you can override it by entering the steamvr id of the controller here."
+      },
+      "controller_override_right": {
+        "label": "Right Controller Override Id",
+        "description": "If the driver isn't picking up your default controllers correctly,<br>you can override it by entering the steamvr id of the controller here."
+      },
+      "controller_override": {
+        "label": "Enable Controller Override",
+        "description": "If the driver isn't picking up your default controllers correctly,<br>enable this and set the ids of your default controllers."
+      },
+      "hardware_calibration_button_enabled": {
+        "label": "Enable Hardware Button Calibration",
+        "description": "Whether the hardware calibration button should also calibrate the pose.<br>The pose can also be calibrated in the functions section in this UI."
+      },
+      "pose_time_offset": {
+        "label": "Predicted Pose Time Offset",
+        "description": "The amount of time in the future to predict where the controller is.<br>If your glove is lagging behind your controller, try changing this value."
+      }
+    },
+    "communication_serial": {
+      "left_port": {
+        "label": "Left Serial Port",
+        "description": "Left serial port for the device.<br>Serial port values should start with a \\\\.\\COM.",
+        "prepend": "\\\\.\\COM"
+      },
+      "right_port": {
+        "label": "Right Serial Port",
+        "description": "Right serial port for the device.<br>Serial port values should start with a \\\\.\\COM.",
+        "prepend": "\\\\.\\COM"
+      },
+      "baud_rate": {
+        "label": "Baud Rate",
+        "description": "Baud rate for the device."
+      }
+    },
+    "encoding": {
+      "max_analog_value": {
+        "label": "Maximum Analog Value",
+        "description": "Maximum analog value.<br>For an ESP32, the maximum value should be 4095.<br>For an Arduino Nano, the maximum value should be 1023."
+      }
+    }
+  }
+}

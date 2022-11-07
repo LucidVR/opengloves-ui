@@ -2,35 +2,6 @@
 
 We use **Tauri** which requires **_[some extra setup]_**.
 
-Be sure to clone this repo with **submodules:**
-  * `git clone --recurse-submodules https://github.com/LucidVR/opengloves-ui.git` 
-  * If this doesn't clone the submodules correctly, or to download them after cloning the repo, try `git submodule update --init --recursive`   
-
-## Sidecar
-
-The interface uses **Sidecar** as it's backend for communication <br>
-with **OpenVR** and must be built first for the project to run.
-
-1. Navigate to `/sidecar/`.
-
-2. **Create** & **Enter** a folder named `build`.
-
-3. Run CMake with:
-
-   ```sh
-   cmake ..
-   ```
-
-4. Open the generated **Visual Studio** project.
-
-5. **Build** the project in a `Release` / `MinSizeRel` mode.
-
-6. Copy the build **Artifacts** into `/src-tauri/`.
-   - `sidecar-x86_64-pc-windows-msvc.exe`
-   - `openvr_api.dll`
-
-<br>
-
 ## Building the Application
 
 1. Have **[Sidecar]** built.

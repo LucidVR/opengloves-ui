@@ -1,19 +1,38 @@
 {
-  "package": {
-    "productName": "openglove-ui",
-    "version": "0.0.3"
-  },
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "distDir": "../public",
+    "beforeBuildCommand": "npm run kit-build",
+    "beforeDevCommand": "npm run kit-dev",
     "devPath": "http://localhost:5000",
-    "beforeDevCommand": "",
-    "beforeBuildCommand": ""
+    "distDir": "../build"
+  },
+  "package": {
+    "productName": "opengloves-ui",
+    "version": "0.1.0"
   },
   "tauri": {
+    "allowlist": {
+      "http": {
+        "request": true,
+        "scope": [
+          "http://localhost:52060/*"
+        ]
+      },
+      "shell": {
+        "open": true
+      },
+      "clipboard": {
+        "writeText": true
+      }
+    },
     "bundle": {
       "active": true,
-      "targets": "all",
-      "identifier": "com.danwillm.opengloveui",
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -21,65 +40,38 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": [],
-      "externalBin": [
-        "sidecar"
-      ],
-      "copyright": "",
-      "category": "DeveloperTool",
-      "shortDescription": "",
+      "identifier": "com.lucidvr.opengloves-ui",
       "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
         "timestampUrl": ""
       }
     },
+    "security": {
+      "csp": null
+    },
     "updater": {
       "active": false
     },
-    "allowlist": {
-      "all": false,
-      "fs": {
-        "readFile": true,
-        "writeFile": true,
-        "readDir": true
-      },
-      "process": {
-        "relaunch": true
-      },
-      "shell": {
-        "sidecar": true,
-        "scope": [
-          {
-            "name": "sidecar",
-            "sidecar": true
-          }
-        ],
-        "open": true
-      },
-      "http": {
-        "all": true,
-        "request": true,
-        "scope": [
-          "http://localhost:18080/*"
-        ]
-      },
-      "window": {
-        "all": true
-      }
-    },
     "windows": [
       {
-        "title": "OpenGloves UI",
-        "width": 800,
+        "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "fullscreen": false
+        "title": "OpenGloves UI",
+        "width": 800
       }
-    ],
-    "security": {
-      "csp": "default-src blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
-    }
+    ]
   }
 }
