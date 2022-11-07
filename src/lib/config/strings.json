@@ -3,7 +3,8 @@
     "driver_opengloves": "OpenGloves Configuration",
     "pose_settings": "Pose Settings",
     "communication_serial": "Serial Communication",
-    "communication_btserial": "Bluetooth Serial Communication"
+    "communication_btserial": "Bluetooth Serial Communication",
+    "communication_namedpipe": "Named Pipe Communication"
   },
   "keys": {
     "driver_opengloves": {
