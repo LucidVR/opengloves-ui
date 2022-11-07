@@ -1,38 +1,32 @@
-# create-svelte
+# OpenGloves UI [![Steam Badge]][steam] [![Discord Badge]][discord]
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+_This repository contains the_ **_User Interface_** _of the_ **_[OpenGloves]_** _driver._
 
-## Creating a project
+The UI is shipped along with the OpenGloves driver on Steam,<br>
+and has a number of tools available to configure the driver.
 
-If you're seeing this, you've probably already done this step. Congrats!
+While this **UI** is not required, it is strongly <br>
+recommended for use with the driver.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+---
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+**⸢ [Installation] ⸥ ⸢ [Building] ⸥**
 
-## Developing
+## Contributions
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+**Pull requests are very welcome.**
 
-```bash
-npm run dev
+_For major changes, please open_ <br>
+_an_ **_[Issue]_** _first to discuss what_ <br>
+_would like to change._
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+<!----------------------------------------------------------------------------->
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+[steam badge]: https://img.shields.io/badge/Steam-000000?style=for-the-badge&logo=steam&logoColor=white
+[discord badge]: https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white
+[discord]: https://discord.gg/lucidvr
+[steam]: https://store.steampowered.com/app/1574050/OpenGloves
+[opengloves]: https://github.com/LucidVR/opengloves-driver
+[installation]: docs/Installation.md
+[building]: docs/Building.md
+[issue]: https://github.com/LucidVR/opengloves-ui/issues
