@@ -4,18 +4,16 @@ We use **Tauri** which requires **_[some extra setup]_**.
 
 ## Building the Application
 
-1. Have **[Sidecar]** built.
-
 2. Install dependencies with:
 
    ```sh
-   yarn install
+   npm install
    ```
 
 3. Launch the development server with:
 
    ```sh
-   yarn run dev
+   npm run dev
    ```
 
    _The initial run may take a significant amount of time._
@@ -23,7 +21,7 @@ We use **Tauri** which requires **_[some extra setup]_**.
 4. Build the interface with:
 
    ```sh
-   yarn run build
+   npm run build
    ```
 
    **_Artifacts_** _will be placed in `src-tauri/targets/release`._ <br>
