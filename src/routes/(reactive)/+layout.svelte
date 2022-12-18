@@ -21,10 +21,6 @@
 				{
 					title: 'Functions',
 					href: '/functions'
-				},
-				{
-					title: 'UI Settings',
-					href: '/settings'
 				}
 			]}
 			bind:index_active={$state.current_page}
