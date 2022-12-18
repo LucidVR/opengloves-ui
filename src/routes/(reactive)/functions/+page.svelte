@@ -33,36 +33,27 @@
 								scope="col"
 								class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
 							>
-								Description
-							</th>
-							<th
-								scope="col"
-								class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-							>
 								Action
 							</th>
 						</tr>
 					</thead>
 					<tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-500 dark:bg-gray-700">
 						<tr>
-							<td class="px-6 py-4 whitespace-nowrap text-sm"> {reset_title} </td>
-							<td class="px-6 py-4 text-sm">{reset_description}</td>
+							<td class="px-6 py-4 text-sm"> <strong>{reset_title}</strong> <br><br> {reset_description}</td>
 							<td class="px-6 py-4 whitespace-nowrap text-sm flex flex-col">
 								<Reset />
 							</td>
 						</tr>
 
 						<tr>
-							<td class="px-6 py-4 whitespace-nowrap text-sm"> {pose_title} </td>
-							<td class="px-6 py-4 text-sm">{pose_description}</td>
+							<td class="px-6 py-4 text-sm"> <strong>{pose_title}</strong> <br><br> {pose_description}</td>
 							<td class="px-6 py-4 whitespace-nowrap text-sm flex flex-col">
 								<PoseCalibration />
 							</td>
 						</tr>
 
 						<tr>
-							<td class="px-6 py-4 whitespace-nowrap text-sm"> {servo_title} </td>
-							<td class="px-6 py-4 text-sm">{servo_description}</td>
+							<td class="px-6 py-4 text-sm"> <strong>{servo_title}</strong> <br><br> {servo_description}</td>
 							<td class="px-6 py-4 whitespace-nowrap text-sm flex flex-col">
 								<ServoCalibration />
 							</td>
