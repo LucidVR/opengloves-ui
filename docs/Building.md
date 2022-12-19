@@ -1,29 +1,27 @@
 # Building
 
-We use **Tauri** which requires **_[some extra setup]_**.
+The UI uses Tauri which requires these steps to install: https://tauri.studio/en/docs/get-started/intro
 
 ## Building the Application
 
-1. Have **[Sidecar]** built.
-
-2. Install dependencies with:
+1. Install dependencies with:
 
    ```sh
-   yarn install
+   npm install
    ```
 
-3. Launch the development server with:
+2. Launch the development server with:
 
    ```sh
-   yarn run dev
+   npm run dev
    ```
 
    _The initial run may take a significant amount of time._
 
-4. Build the interface with:
+3. Build the interface with:
 
    ```sh
-   yarn run build
+   npm run build
    ```
 
    **_Artifacts_** _will be placed in `src-tauri/targets/release`._ <br>
@@ -35,11 +33,10 @@ We use **Tauri** which requires **_[some extra setup]_**.
 
 Using the **Installer** will automatically install `Webview2`.
 
-If you only plan on distributing the **UI** & **Sidecar** <br>
+If you only plan on distributing the **UI** <br>
 binaries, you will have to manually install [`Webview2`].
 
 <!----------------------------------------------------------------------------->
 
-[sidecar]: #Sidecar
-[some extra setup]: https://tauri.studio/en/docs/get-started/intro
+[some extra setup]: 
 [`webview2`]: https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
