@@ -5,6 +5,8 @@
 	export let selected_index = 0;
 	export let selected_value = options[selected_index].value;
 
+	$: selected_index = options.findIndex(e => e.value === selected_value);
+
 	let visible = false;
 </script>
 
