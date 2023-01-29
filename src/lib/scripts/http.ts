@@ -25,4 +25,6 @@ export const make_http_request = async ({
 		responseType: 2
 	});
 	if (response.status === 200) return response.data;
+
+	throw new Error(response.data as string);
 };

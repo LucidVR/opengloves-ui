@@ -39,12 +39,7 @@
 		} catch (e) {
 			console.trace(e);
 
-			if (e.includes('os error 10061')) {
-				ToastStore.add_toast(
-					Severity.ERROR,
-					'No device exists to service this request. Are you sure the driver and hand you have selected are enabled?'
-				);
-			} else ToastStore.add_toast(Severity.ERROR, e);
+			ToastStore.add_toast(Severity.ERROR, e);
 		} finally {
 			$state.loading = false;
 		}
