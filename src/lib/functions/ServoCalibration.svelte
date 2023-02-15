@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	export let title = 'Servo Calibration';
 	export let description =
-		'Move servos to test force feedback functionality. RETRACTING servos fully means they should not apply any force on your fingers throughout curling your finger, while EXTENDING them fully means you should not be able to curl your fingers at all.';
+		'Move servos to test force feedback functionality. RETRACTING servos fully means that the servos should not apply any force, and you should be able to fully curl your fingers. EXTENDING them fully means that the servos will keep your hand fully open, and you should not be able to curl your fingers at all.';
 </script>
 
 <script lang="ts">
